@@ -615,10 +615,19 @@
         <label>Test Patient Display Name</label>
         <input type="text" id="configTestPatientDisplay" value="Grover Cleveland" />
       </div>
+      <div class="config-field" style="grid-column: 1 / -1">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+          <input type="checkbox" id="configSimulateCBO" style="width:auto;margin:0" />
+          <span>Simulate CBO Workflow (Testing Only)</span>
+        </label>
+        <p style="font-size:0.72rem;color:var(--gray-600);margin-top:0.25rem">
+          When enabled, automatically completes CBO steps (accepted → in-progress → completed + Procedure). Leave disabled for real referral workflows where CBOs manage Tasks manually.
+        </p>
+      </div>
     </div>
     <button class="config-save" onclick="saveConfig()">Save Configuration</button>
     <p style="font-size:0.75rem;color:var(--gray-600);margin-top:0.75rem">
-      💡 <strong>Scenario 1 Individual Self-Referral:</strong> Use "Create New Patient" mode for realistic self-referrals where each person creates their own patient record. Use "Test Patient" mode only for Connectathon testing with pre-seeded patients.
+      💡 <strong>Scenario 1 Individual Self-Referral:</strong> This portal creates IG-compliant FHIR resources (Patient, QuestionnaireResponse, ServiceRequest, Task) and submits them to the CP Server. Tasks start with status "requested" for CBOs to manage, unless CBO simulation is enabled for testing.
     </p>
   </div>
 </div>
@@ -772,7 +781,7 @@
   Gravity Project SDOH Connectathon — Scenario 1: Individual Self-Referral<br>
   <span style="font-size:0.75rem;opacity:0.6">
     Integrated with Coordination Platform Server via FHIR R4 |
-    Creates Task, QuestionnaireResponse, and Procedure resources
+    Creates Patient, QuestionnaireResponse, ServiceRequest, and Task resources per SDOH IG
   </span>
 </footer>
 
@@ -786,7 +795,11 @@ const FHIR_CONFIG = {
   // Mode: 'test-patient' uses pre-seeded patient, 'create-patient' creates new patient from form data
   mode: "create-patient",
   testPatientId: "gravity-patient-grover-cleveland",
-  testPatientDisplay: "Grover Cleveland"
+  testPatientDisplay: "Grover Cleveland",
+  // CBO workflow simulation: if true, automatically completes CBO steps (for testing)
+  simulateCBOWorkflow: false,
+  cboOrgId: "cbo-org-example",
+  cboOrgDisplay: "Community Based Organization"
 };
 
 const SERVICES = [
@@ -891,6 +904,17 @@ function generateId(prefix) {
   return `${prefix}-${timestamp}-${random}`;
 }
 
+function getCategoryCodeForService(serviceCat) {
+  const mapping = {
+    "food": "food-insecurity",
+    "housing": "housing-instability",
+    "mental-health": "mental-health",
+    "transportation": "transportation-insecurity",
+    "parenting": "social-connection"
+  };
+  return mapping[serviceCat] || "sdoh-category-unspecified";
+}
+
 function toggleConfig() {
   const panel = document.getElementById("configPanel");
   panel.classList.toggle("open");
@@ -905,6 +929,7 @@ function loadConfigToUI() {
   document.getElementById("configMode").value = FHIR_CONFIG.mode;
   document.getElementById("configTestPatientId").value = FHIR_CONFIG.testPatientId;
   document.getElementById("configTestPatientDisplay").value = FHIR_CONFIG.testPatientDisplay;
+  document.getElementById("configSimulateCBO").checked = FHIR_CONFIG.simulateCBOWorkflow || false;
   toggleTestPatientFields();
 }
 
@@ -927,6 +952,7 @@ function saveConfig() {
   FHIR_CONFIG.mode = document.getElementById("configMode").value;
   FHIR_CONFIG.testPatientId = document.getElementById("configTestPatientId").value.trim();
   FHIR_CONFIG.testPatientDisplay = document.getElementById("configTestPatientDisplay").value.trim();
+  FHIR_CONFIG.simulateCBOWorkflow = document.getElementById("configSimulateCBO").checked;
 
   // Save to localStorage for persistence
   localStorage.setItem('fhirConfig', JSON.stringify(FHIR_CONFIG));
@@ -1047,9 +1073,10 @@ async function submitForm() {
 
   try {
     // Generate IDs for FHIR resources
-    const taskId = generateId("ccc-task-ahc-hrsn");
+    const taskId = generateId("ccc-task-referral");
     const qrId = generateId("ccc-qr-ahc-hrsn");
     const patientId = generateId("ccc-patient");
+    const serviceRequestId = generateId("ccc-servicerequest");
     const ref = "CCC-" + Math.random().toString(36).substr(2,4).toUpperCase() + "-" + Date.now().toString().slice(-4);
 
     // Store submission data
@@ -1137,70 +1164,7 @@ async function submitForm() {
       actualPatientDisplay = FHIR_CONFIG.testPatientDisplay;
     }
 
-    // Step 2: Create TaskForPatient (Request AHC HRSN Assessment)
-    const task = {
-      resourceType: "Task",
-      id: taskId,
-      meta: {
-        profile: ["http://hl7.org/fhir/us/sdoh-clinicalcare/StructureDefinition/SDOHCC-TaskForPatient"]
-      },
-      intent: "order",
-      status: "ready",
-      priority: "routine",
-      code: {
-        coding: [{
-          system: "http://hl7.org/fhir/uv/sdc/CodeSystem/temp",
-          code: "complete-questionnaire",
-          display: "Complete Questionnaire"
-        }]
-      },
-      for: {
-        reference: `Patient/${actualPatientId}`,
-        display: actualPatientDisplay
-      },
-      requester: {
-        reference: `Organization/${FHIR_CONFIG.orgId}`,
-        display: FHIR_CONFIG.orgDisplay
-      },
-      owner: {
-        reference: `Patient/${actualPatientId}`,
-        display: actualPatientDisplay
-      },
-      input: [
-        {
-          type: {
-            coding: [{
-              system: "http://hl7.org/fhir/uv/sdc/CodeSystem/temp",
-              code: "questionnaire",
-              display: "Questionnaire"
-            }]
-          },
-          valueCanonical: FHIR_CONFIG.ahcHrsnQuestionnaireUrl
-        },
-        {
-          type: {
-            coding: [{
-              system: "http://hl7.org/fhir/us/sdoh-clinicalcare/CodeSystem/SDOHCC-CodeSystemTemporaryCodes",
-              code: "questionnaire-category",
-              display: "Questionnaire Category"
-            }]
-          },
-          valueCodeableConcept: {
-            coding: [{
-              system: "http://hl7.org/fhir/us/sdoh-clinicalcare/CodeSystem/SDOHCC-CodeSystemTemporaryCodes",
-              code: "risk-questionnaire",
-              display: "Risk Questionnaire"
-            }]
-          }
-        }
-      ]
-    };
-
-    console.log("Creating Task...", task);
-    const taskResponse = await createFHIRResource("Task", task);
-    console.log("Task created:", taskResponse);
-
-    // Step 3: Create QuestionnaireResponse (Completed AHC HRSN Assessment)
+    // Step 2: Create QuestionnaireResponse (Completed AHC HRSN Assessment)
     const questionnaireResponse = {
       resourceType: "QuestionnaireResponse",
       id: qrId,
@@ -1286,38 +1250,168 @@ async function submitForm() {
     const qrResponse = await createFHIRResource("QuestionnaireResponse", questionnaireResponse);
     console.log("QuestionnaireResponse created:", qrResponse);
 
-    // Step 3: Complete the Task (PATCH to mark as completed)
-    const taskPatch = [
-      {
-        op: "replace",
-        path: "/status",
-        value: "completed"
+    // Step 3: Create ServiceRequest (SDOH IG Self-Referral Workflow)
+    const serviceRequest = {
+      resourceType: "ServiceRequest",
+      id: serviceRequestId,
+      meta: {
+        profile: ["http://hl7.org/fhir/us/sdoh-clinicalcare/StructureDefinition/SDOHCC-ServiceRequest"]
       },
-      {
-        op: "add",
-        path: "/output",
-        value: [{
+      status: "active",
+      intent: "order",
+      category: [{
+        coding: [{
+          system: "http://hl7.org/fhir/us/sdoh-clinicalcare/CodeSystem/SDOHCC-CodeSystemTemporaryCodes",
+          code: getCategoryCodeForService(selectedService.cat),
+          display: CAT_CONFIG[selectedService.cat].label
+        }]
+      }],
+      code: {
+        text: selectedService.name
+      },
+      subject: {
+        reference: `Patient/${actualPatientId}`,
+        display: actualPatientDisplay
+      },
+      authoredOn: new Date().toISOString(),
+      requester: {
+        reference: `Organization/${FHIR_CONFIG.orgId}`,
+        display: FHIR_CONFIG.orgDisplay
+      }
+    };
+
+    console.log("Creating ServiceRequest...", serviceRequest);
+    const srResponse = await createFHIRResource("ServiceRequest", serviceRequest);
+    console.log("ServiceRequest created:", srResponse);
+
+    // Step 4: Create Task for Referral Management (SDOH IG Profile)
+    const task = {
+      resourceType: "Task",
+      id: taskId,
+      meta: {
+        profile: ["http://hl7.org/fhir/us/sdoh-clinicalcare/StructureDefinition/SDOHCC-Task-For-Referral-Management"]
+      },
+      status: "requested", // Per SDOH IG: starts as requested, CBO will update
+      intent: "order",
+      priority: "routine",
+      code: {
+        coding: [{
+          system: "http://hl7.org/fhir/CodeSystem/task-code",
+          code: "fulfill",
+          display: "Fulfill the focal request"
+        }]
+      },
+      for: {
+        reference: `Patient/${actualPatientId}`,
+        display: actualPatientDisplay
+      },
+      authoredOn: new Date().toISOString(),
+      requester: {
+        reference: `Organization/${FHIR_CONFIG.orgId}`,
+        display: FHIR_CONFIG.orgDisplay
+      },
+      owner: {
+        reference: `Organization/${FHIR_CONFIG.cboOrgId}`,
+        display: FHIR_CONFIG.cboOrgDisplay
+      },
+      input: [
+        {
           type: {
             coding: [{
-              system: "http://hl7.org/fhir/uv/sdc/CodeSystem/temp",
-              code: "questionnaire-response",
-              display: "Questionnaire Response"
+              system: "http://hl7.org/fhir/us/sdoh-clinicalcare/CodeSystem/SDOHCC-CodeSystemTemporaryCodes",
+              code: "service-request"
+            }]
+          },
+          valueReference: {
+            reference: `ServiceRequest/${serviceRequestId}`
+          }
+        },
+        {
+          type: {
+            coding: [{
+              system: "http://hl7.org/fhir/us/sdoh-clinicalcare/CodeSystem/SDOHCC-CodeSystemTemporaryCodes",
+              code: "questionnaire-response"
             }]
           },
           valueReference: {
             reference: `QuestionnaireResponse/${qrId}`
           }
-        }]
-      }
-    ];
+        }
+      ]
+    };
 
-    console.log("Completing Task...");
-    const completedTask = await patchFHIRResource("Task", taskId, taskPatch);
-    console.log("Task completed:", completedTask);
+    console.log("Creating Task (status: requested)...", task);
+    const taskResponse = await createFHIRResource("Task", task);
+    console.log("Task created:", taskResponse);
+
+    // Optional: Simulate CBO Workflow (for testing only)
+    if (FHIR_CONFIG.simulateCBOWorkflow) {
+      console.log("Simulating CBO workflow...");
+
+      // Update Task to "accepted"
+      await patchFHIRResource("Task", taskId, [
+        { op: "replace", path: "/status", value: "accepted" }
+      ]);
+      console.log("Task status updated to: accepted");
+
+      // Update Task to "in-progress"
+      await patchFHIRResource("Task", taskId, [
+        { op: "replace", path: "/status", value: "in-progress" }
+      ]);
+      console.log("Task status updated to: in-progress");
+
+      // Create Procedure (service delivered)
+      const procedureId = generateId("ccc-procedure");
+      const procedure = {
+        resourceType: "Procedure",
+        id: procedureId,
+        status: "completed",
+        category: {
+          coding: [{
+            system: "http://snomed.info/sct",
+            code: "410606002",
+            display: "Social service procedure"
+          }]
+        },
+        code: {
+          text: `${selectedService.name} - Service Delivered`
+        },
+        subject: {
+          reference: `Patient/${actualPatientId}`,
+          display: actualPatientDisplay
+        },
+        performedDateTime: new Date().toISOString()
+      };
+
+      const procedureResponse = await createFHIRResource("Procedure", procedure);
+      console.log("Procedure created:", procedureResponse);
+
+      // Update Task to "completed" with Procedure output
+      await patchFHIRResource("Task", taskId, [
+        { op: "replace", path: "/status", value: "completed" },
+        {
+          op: "add",
+          path: "/output",
+          value: [{
+            type: {
+              coding: [{
+                system: "http://hl7.org/fhir/us/sdoh-clinicalcare/CodeSystem/SDOHCC-CodeSystemTemporaryCodes",
+                code: "resulting-activity"
+              }]
+            },
+            valueReference: {
+              reference: `Procedure/${procedureId}`
+            }
+          }]
+        }
+      ]);
+      console.log("Task completed with Procedure output");
+    }
 
     // Update UI with success
     let fhirResourcesHtml = `
-      Task ID: ${taskId}<br>
+      ServiceRequest ID: ${serviceRequestId}<br>
+      Task ID: ${taskId} (status: ${FHIR_CONFIG.simulateCBOWorkflow ? 'completed' : 'requested'})<br>
       QuestionnaireResponse ID: ${qrId}
     `;
     if (FHIR_CONFIG.mode === "create-patient") {
