@@ -1,383 +1,788 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Community Care Connect</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <header class="site-header">
-      <nav class="nav" aria-label="Primary">
-        <a class="brand" href="#top" aria-label="Community Care Connect home">
-          <span class="brand-mark" aria-hidden="true">C</span>
-          <span>Community Care Connect</span>
-        </a>
-        <a class="crisis-link" href="tel:988">Need immediate help? Call 988</a>
-      </nav>
-    </header>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Community Care Connect — Find Social Services</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal-50: #E1F5EE;
+    --teal-100: #9FE1CB;
+    --teal-400: #1D9E75;
+    --teal-600: #0F6E56;
+    --teal-800: #085041;
+    --blue-50: #E6F1FB;
+    --blue-400: #378ADD;
+    --blue-600: #185FA5;
+    --amber-50: #FAEEDA;
+    --amber-400: #BA7517;
+    --coral-50: #FAECE7;
+    --coral-400: #D85A30;
+    --purple-50: #EEEDFE;
+    --purple-400: #7F77DD;
+    --gray-50: #F1EFE8;
+    --gray-100: #D3D1C7;
+    --gray-400: #888780;
+    --gray-600: #5F5E5A;
+    --gray-800: #444441;
+    --white: #ffffff;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+  }
 
-    <main id="top">
-      <section class="hero">
-        <div class="hero-content">
-          <p class="eyebrow">Gravity Project Scenario 1: Individual Self-Referral</p>
-          <h1>Find food, housing, transportation, and mental health support near you.</h1>
-          <p class="hero-copy">
-            Search trusted community services, choose the support that fits your situation, and submit a private self-referral request for follow-up from a community-based organization.
-          </p>
-          <div class="hero-actions" aria-label="Primary actions">
-            <a class="button primary" href="#services">Find services</a>
-            <a class="button secondary" href="#screening">Preview screening questions</a>
-          </div>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #f7f9f8;
+    color: #1a1a18;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--teal-600);
+    color: white;
+    padding: 0 1.5rem;
+  }
+  .header-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1.25rem 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .logo-mark {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.18);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .header-text h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .header-text p {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    margin-top: 2px;
+  }
+
+  /* HERO BAND */
+  .hero {
+    background: linear-gradient(135deg, var(--teal-800) 0%, var(--teal-600) 100%);
+    color: white;
+    padding: 2.5rem 1.5rem 3rem;
+    text-align: center;
+  }
+  .hero h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+  }
+  .hero p {
+    font-size: 1rem;
+    opacity: 0.85;
+    max-width: 520px;
+    margin: 0 auto 1.75rem;
+    line-height: 1.6;
+  }
+
+  /* SEARCH BAR */
+  .search-wrap {
+    max-width: 500px;
+    margin: 0 auto;
+    display: flex;
+    gap: 8px;
+  }
+  .search-wrap input {
+    flex: 1;
+    padding: 0.7rem 1rem;
+    border-radius: var(--radius-sm);
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    background: white;
+    color: #1a1a18;
+  }
+  .search-wrap button {
+    padding: 0.7rem 1.2rem;
+    background: var(--teal-400);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .search-wrap button:hover { background: #17875f; }
+
+  /* MAIN LAYOUT */
+  .main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* CATEGORY FILTERS */
+  .filters-label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gray-600);
+    margin-bottom: 0.75rem;
+  }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 2rem;
+  }
+  .filter-btn {
+    padding: 0.45rem 1rem;
+    border-radius: 999px;
+    border: 1.5px solid var(--gray-100);
+    background: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--gray-600);
+    transition: all 0.15s;
+  }
+  .filter-btn:hover {
+    border-color: var(--teal-400);
+    color: var(--teal-600);
+  }
+  .filter-btn.active {
+    background: var(--teal-50);
+    border-color: var(--teal-400);
+    color: var(--teal-600);
+  }
+  .filter-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* RESULTS GRID */
+  .results-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .results-count {
+    font-size: 0.85rem;
+    color: var(--gray-600);
+  }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .service-card {
+    background: white;
+    border-radius: var(--radius);
+    border: 1px solid #e8e6df;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: box-shadow 0.15s, border-color 0.15s;
+    cursor: default;
+  }
+  .service-card:hover {
+    box-shadow: var(--shadow);
+    border-color: var(--teal-100);
+  }
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .card-icon {
+    width: 36px; height: 36px;
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .card-title-area h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1a1a18;
+    line-height: 1.3;
+  }
+  .cat-badge {
+    display: inline-block;
+    margin-top: 3px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 500;
+  }
+  .card-desc {
+    font-size: 0.84rem;
+    color: var(--gray-600);
+    line-height: 1.55;
+  }
+  .card-meta {
+    font-size: 0.8rem;
+    color: var(--gray-400);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .card-meta span { display: flex; align-items: center; gap: 5px; }
+  .referral-btn {
+    margin-top: auto;
+    padding: 0.55rem 1rem;
+    background: var(--teal-50);
+    color: var(--teal-600);
+    border: 1.5px solid var(--teal-100);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+  }
+  .referral-btn:hover {
+    background: var(--teal-400);
+    color: white;
+    border-color: var(--teal-400);
+  }
+
+  /* MODAL OVERLAY */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15,30,25,0.55);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: white;
+    border-radius: var(--radius);
+    max-width: 520px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 2rem;
+    position: relative;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  }
+  .modal-close {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    background: var(--gray-50);
+    border: none;
+    border-radius: 50%;
+    width: 32px; height: 32px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gray-600);
+  }
+  .modal-close:hover { background: var(--gray-100); }
+  .modal h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    font-weight: 400;
+    margin-bottom: 0.25rem;
+    padding-right: 2rem;
+  }
+  .modal-subtitle {
+    font-size: 0.84rem;
+    color: var(--gray-600);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #ece9e0;
+  }
+  .form-section-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--teal-600);
+    margin: 1.25rem 0 0.75rem;
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+  .form-group label {
+    font-size: 0.83rem;
+    font-weight: 500;
+    color: var(--gray-800);
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.55rem 0.75rem;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid #ddd;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: #1a1a18;
+    outline: none;
+    transition: border-color 0.15s;
+    background: white;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--teal-400);
+  }
+  .hrsn-question {
+    background: var(--teal-50);
+    border-radius: var(--radius-sm);
+    padding: 0.85rem 1rem;
+    margin-bottom: 10px;
+  }
+  .hrsn-question p {
+    font-size: 0.87rem;
+    font-weight: 500;
+    color: var(--teal-800);
+    margin-bottom: 0.6rem;
+    line-height: 1.45;
+  }
+  .radio-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .radio-option {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+  }
+  .radio-option input[type="radio"] { accent-color: var(--teal-400); }
+  .radio-option span {
+    font-size: 0.83rem;
+    color: var(--gray-600);
+  }
+  .submit-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--teal-600);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    transition: background 0.15s;
+  }
+  .submit-btn:hover { background: var(--teal-400); }
+
+  /* CONFIRMATION */
+  .confirmation {
+    display: none;
+    text-align: center;
+    padding: 1rem 0;
+  }
+  .confirmation.show { display: block; }
+  .confirm-icon {
+    width: 64px; height: 64px;
+    background: var(--teal-50);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 1.25rem;
+  }
+  .confirmation h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+    color: var(--teal-800);
+  }
+  .confirmation p {
+    font-size: 0.9rem;
+    color: var(--gray-600);
+    line-height: 1.6;
+    max-width: 360px;
+    margin: 0 auto 0.75rem;
+  }
+  .ref-number {
+    display: inline-block;
+    background: var(--teal-50);
+    color: var(--teal-600);
+    border-radius: var(--radius-sm);
+    padding: 0.4rem 0.9rem;
+    font-size: 0.83rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin: 0.5rem 0 1.25rem;
+  }
+  .close-confirm-btn {
+    padding: 0.6rem 1.5rem;
+    background: var(--teal-600);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--gray-800);
+    color: rgba(255,255,255,0.7);
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 0.8rem;
+    line-height: 1.7;
+  }
+  footer strong { color: rgba(255,255,255,0.9); }
+
+  /* NO RESULTS */
+  .no-results {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--gray-400);
+  }
+  .no-results p { font-size: 0.95rem; }
+
+  @media (max-width: 480px) {
+    .form-row { grid-template-columns: 1fr; }
+    .modal { padding: 1.5rem; }
+    .hero { padding: 2rem 1rem 2.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-mark">🤝</div>
+    <div class="header-text">
+      <h1>Community Care Connect</h1>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <h2>Find help near you</h2>
+  <p>Search for food assistance, housing support, mental health services, transportation, and more — all available in your community.</p>
+  <div class="search-wrap">
+    <input type="text" id="searchInput" placeholder="Search by service name or keyword…" oninput="filterServices()" />
+    <button onclick="filterServices()">Search</button>
+  </div>
+</div>
+
+<main class="main">
+  <p class="filters-label">Browse by category</p>
+  <div class="filters" id="filterBtns">
+    <button class="filter-btn active" onclick="setCategory('all', this)">
+      <span class="filter-dot" style="background:#888780"></span>All services
+    </button>
+    <button class="filter-btn" onclick="setCategory('food', this)">
+      <span class="filter-dot" style="background:#1D9E75"></span>Food Assistance
+    </button>
+    <button class="filter-btn" onclick="setCategory('housing', this)">
+      <span class="filter-dot" style="background:#378ADD"></span>Housing
+    </button>
+    <button class="filter-btn" onclick="setCategory('mental-health', this)">
+      <span class="filter-dot" style="background:#7F77DD"></span>Mental Health
+    </button>
+    <button class="filter-btn" onclick="setCategory('transportation', this)">
+      <span class="filter-dot" style="background:#BA7517"></span>Transportation
+    </button>
+    <button class="filter-btn" onclick="setCategory('parenting', this)">
+      <span class="filter-dot" style="background:#D85A30"></span>Parenting &amp; Family
+    </button>
+  </div>
+
+  <div class="results-header">
+    <span class="results-count" id="resultsCount">Showing all services</span>
+  </div>
+
+  <div class="services-grid" id="servicesGrid"></div>
+  <div class="no-results" id="noResults" style="display:none">
+    <p>No services match your search. Try a different keyword or category.</p>
+  </div>
+</main>
+
+<!-- REFERRAL MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBackground(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+
+    <!-- FORM VIEW -->
+    <div id="formView">
+      <h2 id="modalTitle">Request a referral</h2>
+      <p class="modal-subtitle" id="modalSubtitle">Fill out this short form and a care coordinator will contact you within 2 business days.</p>
+
+      <p class="form-section-label">Your contact information</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName">First name *</label>
+          <input type="text" id="firstName" placeholder="Jane" required />
         </div>
-      </section>
-
-      <section class="quick-help" aria-label="Urgent help options">
-        <article>
-          <strong>Food tonight</strong>
-          <span>Start with Mimi's Pantry, Harvester, or local churches and pantries.</span>
-        </article>
-        <article>
-          <strong>Housing support</strong>
-          <span>Find housing authority, Section 8, and transitional living options.</span>
-        </article>
-        <article>
-          <strong>Crisis care</strong>
-          <span>Call or text 988 for crisis support. Mobile crisis teams may also help.</span>
-        </article>
-      </section>
-
-      <section class="services-section" id="services">
-        <div class="section-heading">
-          <p class="eyebrow">Service Search</p>
-          <h2>Choose a category</h2>
-          <p>These resources reflect priorities from the Missouri 7th Judicial Circuit upstream mapping work: food insecurity, housing instability, transportation, and behavioral health access.</p>
-        </div>
-
-        <div class="filters" role="group" aria-label="Filter services by category">
-          <button class="filter-button active" type="button" data-filter="all">All</button>
-          <button class="filter-button" type="button" data-filter="food">Food</button>
-          <button class="filter-button" type="button" data-filter="housing">Housing</button>
-          <button class="filter-button" type="button" data-filter="transportation">Transportation</button>
-          <button class="filter-button" type="button" data-filter="mental-health">Mental Health</button>
-        </div>
-
-        <div class="results-summary" aria-live="polite">
-          <span id="resultCount"></span>
-        </div>
-
-        <div class="service-grid" id="serviceGrid"></div>
-      </section>
-
-      <section class="screening-section" id="screening">
-        <div>
-          <p class="eyebrow">AHC HRSN-Informed Intake</p>
-          <h2>What the self-referral asks</h2>
-          <p>
-            The intake asks for basic contact details, contact preference, and brief health-related social needs questions about food, housing, and transportation. You can choose "Prefer not to answer" for any screening question.
-          </p>
-        </div>
-        <ol class="question-preview">
-          <li>In the past 12 months, did you worry that your food would run out before you had money to buy more?</li>
-          <li>Do you have housing that is stable and safe?</li>
-          <li>Do you have difficulty getting transportation to appointments or services?</li>
-        </ol>
-      </section>
-    </main>
-
-    <div class="modal-backdrop" id="referralModal" hidden>
-      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-        <button class="close-button" type="button" id="closeModal" aria-label="Close referral form">&times;</button>
-        <div id="formPanel">
-          <p class="eyebrow">Self-Referral</p>
-          <h2 id="modalTitle">Request follow-up</h2>
-          <p class="selected-service" id="selectedService"></p>
-
-          <form id="referralForm">
-            <input type="hidden" id="serviceName" name="serviceName" />
-            <div class="form-row">
-              <label for="firstName">First name</label>
-              <input id="firstName" name="firstName" autocomplete="given-name" required />
-            </div>
-            <div class="form-row">
-              <label for="lastName">Last name</label>
-              <input id="lastName" name="lastName" autocomplete="family-name" required />
-            </div>
-            <div class="form-row">
-              <label for="zipCode">ZIP code</label>
-              <input id="zipCode" name="zipCode" inputmode="numeric" pattern="[0-9]{5}" autocomplete="postal-code" required />
-            </div>
-            <div class="form-row">
-              <label for="contactInfo">Phone or email</label>
-              <input id="contactInfo" name="contactInfo" autocomplete="email" required />
-            </div>
-            <fieldset>
-              <legend>Preferred contact method</legend>
-              <label><input type="radio" name="contactPreference" value="Call" required /> Call</label>
-              <label><input type="radio" name="contactPreference" value="Text" /> Text</label>
-              <label><input type="radio" name="contactPreference" value="Email" /> Email</label>
-            </fieldset>
-            <fieldset>
-              <legend>Screening questions</legend>
-              <div class="question">
-                <p>In the past 12 months, did you worry that your food would run out before you had money to buy more?</p>
-                <label><input type="radio" name="foodWorry" value="Yes" required /> Yes</label>
-                <label><input type="radio" name="foodWorry" value="No" /> No</label>
-                <label><input type="radio" name="foodWorry" value="Prefer not to answer" /> Prefer not to answer</label>
-              </div>
-              <div class="question">
-                <p>Do you have housing that is stable and safe?</p>
-                <label><input type="radio" name="stableHousing" value="Yes" required /> Yes</label>
-                <label><input type="radio" name="stableHousing" value="No" /> No</label>
-                <label><input type="radio" name="stableHousing" value="Prefer not to answer" /> Prefer not to answer</label>
-              </div>
-              <div class="question">
-                <p>Do you have difficulty getting transportation to appointments or services?</p>
-                <label><input type="radio" name="transportationDifficulty" value="Yes" required /> Yes</label>
-                <label><input type="radio" name="transportationDifficulty" value="No" /> No</label>
-                <label><input type="radio" name="transportationDifficulty" value="Prefer not to answer" /> Prefer not to answer</label>
-              </div>
-            </fieldset>
-            <button class="button primary full-width" type="submit">Submit self-referral</button>
-          </form>
-        </div>
-
-        <div class="confirmation" id="confirmationPanel" hidden>
-          <div class="confirmation-icon" aria-hidden="true">✓</div>
-          <h2>Thank you</h2>
-          <p>Thank you — a care coordinator will contact you within 2 business days using your preferred method.</p>
-          <button class="button primary" type="button" id="doneButton">Done</button>
+        <div class="form-group">
+          <label for="lastName">Last name *</label>
+          <input type="text" id="lastName" placeholder="Smith" required />
         </div>
       </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="zipCode">ZIP code *</label>
+          <input type="text" id="zipCode" placeholder="00100" maxlength="5" required />
+        </div>
+        <div class="form-group">
+          <label for="dob">Date of birth</label>
+          <input type="date" id="dob" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="phone">Phone number</label>
+          <input type="tel" id="phone" placeholder="(555) 000-0000" />
+        </div>
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" id="email" placeholder="jane@email.com" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="contactPref">Preferred contact method *</label>
+        <select id="contactPref">
+          <option value="">— select —</option>
+          <option>Phone call</option>
+          <option>Text message</option>
+          <option>Email</option>
+        </select>
+      </div>
+
+      <p class="form-section-label">Health-related social needs screening</p>
+      <p style="font-size:0.82rem;color:var(--gray-600);margin-bottom:0.85rem;line-height:1.5">These brief questions help us connect you with the right resources. All responses are confidential.</p>
+
+      <div class="hrsn-question">
+        <p>1. In the past 12 months, did you worry that your food would run out before you had money to buy more?</p>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="q1" value="yes"><span>Yes</span></label>
+          <label class="radio-option"><input type="radio" name="q1" value="no"><span>No</span></label>
+          <label class="radio-option"><input type="radio" name="q1" value="prefer-not"><span>Prefer not to answer</span></label>
+        </div>
+      </div>
+
+      <div class="hrsn-question">
+        <p>2. Do you have housing that is stable and safe?</p>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="q2" value="yes"><span>Yes</span></label>
+          <label class="radio-option"><input type="radio" name="q2" value="no"><span>No</span></label>
+          <label class="radio-option"><input type="radio" name="q2" value="prefer-not"><span>Prefer not to answer</span></label>
+        </div>
+      </div>
+
+      <div class="hrsn-question">
+        <p>3. Do you have difficulty getting transportation to appointments or services?</p>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="q3" value="yes"><span>Yes</span></label>
+          <label class="radio-option"><input type="radio" name="q3" value="no"><span>No</span></label>
+          <label class="radio-option"><input type="radio" name="q3" value="prefer-not"><span>Prefer not to answer</span></label>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top:0.5rem">
+        <label for="notes">Anything else you'd like us to know? (optional)</label>
+        <textarea id="notes" rows="2" placeholder="Additional context or questions…" style="resize:vertical"></textarea>
+      </div>
+
+      <button class="submit-btn" onclick="submitForm()">Submit referral request</button>
     </div>
 
-    <footer class="site-footer">
-      <p>Community Care Connect is a demonstration portal for Gravity Project SDOH Connectathon Scenario 1. For emergencies, call 911. For mental health crisis support, call or text 988.</p>
-    </footer>
+    <!-- CONFIRMATION VIEW -->
+    <div class="confirmation" id="confirmView">
+      <div class="confirm-icon">✅</div>
+      <h3>You're all set!</h3>
+      <p>Thank you — a care coordinator will contact you within <strong>2 business days</strong> using your preferred contact method.</p>
+      <div class="ref-number" id="refNumber"></div>
+      <p style="font-size:0.82rem">If you need immediate help, call <strong>988</strong> (mental health crisis) or contact your local food pantry directly.</p>
+      <br>
+      <button class="close-confirm-btn" onclick="closeModal()">Done</button>
+    </div>
+  </div>
+</div>
 
-    <script>
-const services = [
-  {
-    name: "Mimi's Pantry",
-    category: "food",
-    description: "Food pantry support for households experiencing food insecurity in the Clay County area.",
-    phone: "(816) 555-0101",
-    address: "Clay County, MO"
-  },
-  {
-    name: "Turning Point",
-    category: "food",
-    description: "Community resource support, including connections to food assistance and household stability services.",
-    phone: "(816) 555-0102",
-    address: "Kansas City Northland area"
-  },
-  {
-    name: "Harvester",
-    category: "food",
-    description: "Regional food bank network connecting families to pantry locations and nutrition assistance.",
-    phone: "(816) 929-3000",
-    address: "Regional service network"
-  },
-  {
-    name: "Local Food Pantries and Churches",
-    category: "food",
-    description: "Multiple local pantries and church-based food ministries offer emergency groceries and referrals.",
-    phone: "(816) 555-0103",
-    address: "Various Missouri 7th Judicial Circuit locations"
-  },
-  {
-    name: "HUD Housing Authority",
-    category: "housing",
-    description: "Public housing and affordable housing information for residents seeking stable housing support.",
-    phone: "(816) 555-0201",
-    address: "Clay County, MO"
-  },
-  {
-    name: "Section 8 Housing Choice Voucher Support",
-    category: "housing",
-    description: "Voucher program navigation and referrals for eligible households needing rental assistance.",
-    phone: "(816) 555-0202",
-    address: "Regional housing offices"
-  },
-  {
-    name: "Transitional Living",
-    category: "housing",
-    description: "Short-term housing and stabilization support for people moving toward permanent housing.",
-    phone: "(816) 555-0203",
-    address: "Community-based housing providers"
-  },
-  {
-    name: "Beacon Mental Health",
-    category: "mental-health",
-    description: "School-based services, crisis therapy, and community-based behavioral health support.",
-    phone: "(816) 468-0400",
-    address: "Kansas City Northland area"
-  },
-  {
-    name: "Synergy Services",
-    category: "mental-health",
-    description: "Crisis services, teen support, youth shelter, and family stabilization services.",
-    phone: "(816) 587-4100",
-    address: "400 E 6th St, Parkville, MO"
-  },
-  {
-    name: "Preferred Family Healthcare",
-    category: "mental-health",
-    description: "Behavioral health, substance use, and community support services for individuals and families.",
-    phone: "(816) 555-0301",
-    address: "Regional service locations"
-  },
-  {
-    name: "988 Crisis Line",
-    category: "mental-health",
-    description: "Immediate mental health crisis support available by calling or texting 988.",
-    phone: "988",
-    address: "Available 24/7"
-  },
-  {
-    name: "Mobile Crisis Response Team",
-    category: "mental-health",
-    description: "Mobile response for behavioral health crises when in-person stabilization support may be needed.",
-    phone: "(816) 555-0302",
-    address: "Regional crisis response"
-  },
-  {
-    name: "ATA Bus",
-    category: "transportation",
-    description: "Public bus service for appointments, work, school, shopping, and community services.",
-    phone: "(816) 221-0660",
-    address: "Kansas City regional routes"
-  },
-  {
-    name: "Medicaid Transportation",
-    category: "transportation",
-    description: "Non-emergency medical transportation for eligible Medicaid members.",
-    phone: "(866) 269-5927",
-    address: "Statewide transportation benefit"
-  },
-  {
-    name: "Excelsior Springs Bus System",
-    category: "transportation",
-    description: "Local transportation option for residents traveling within the Excelsior Springs area.",
-    phone: "(816) 555-0401",
-    address: "Excelsior Springs, MO"
-  },
-  {
-    name: "Lyft and Uber",
-    category: "transportation",
-    description: "Ride-share options that may help with time-sensitive trips when public transit is unavailable.",
-    phone: "Use mobile app",
-    address: "Available by service area"
-  },
-  {
-    name: "IRIS",
-    category: "transportation",
-    description: "On-demand transit option for flexible local transportation needs.",
-    phone: "(816) 205-8221",
-    address: "Kansas City regional service"
-  }
+<footer>
+  <strong>Community Care Connect</strong><br>
+  This portal is part of the Gravity Project SDOH Connectathon Scenario 1: Individual Self-Referral.<br>
+</footer>
+
+<script>
+const SERVICES = [
+  // FOOD
+  { id: 1, name: "Mimi's Pantry", cat: "food", desc: "Community food pantry providing groceries and household essentials to families in need.", phone: "Contact local office", address: "Bumblefield County, WB" },
+  { id: 2, name: "Turning Point", cat: "food", desc: "Food assistance and wraparound support services for individuals and families experiencing hardship.", phone: "Contact local office", address: "Bumblefield County, WB" },
+  { id: 3, name: "Harvester Community Food Network", cat: "food", desc: "Regional food bank network connecting families with food pantries and nutrition programs across the area.", phone: "(555) 929-3000", address: "Wobbleton Metro" },
+  { id: 4, name: "Church Food Pantries", cat: "food", desc: "Multiple faith-based food pantries throughout Bumblefield County offering weekly distributions — no paperwork required.", phone: "Varies by location", address: "Multiple Bumblefield County locations" },
+  // HOUSING
+  { id: 5, name: "HUD Housing Authority", cat: "housing", desc: "Federal housing assistance programs including public housing units and rental vouchers for income-eligible families.", phone: "(555) 968-4100", address: "Wobbleton Housing Authority" },
+  { id: 6, name: "Section 8 / Housing Choice Voucher", cat: "housing", desc: "Rental assistance voucher program helping low-income families afford safe private-market housing.", phone: "(555) 968-4100", address: "Bumblefield County, WB" },
+  { id: 7, name: "Transitional Living Program", cat: "housing", desc: "Short-term transitional housing with support services to help individuals and families achieve housing stability.", phone: "Contact local office", address: "Bumblefield County, WB" },
+  { id: 8, name: "Love Unconditional", cat: "housing", desc: "Emergency shelter and housing navigation support for families at risk of homelessness.", phone: "Contact local office", address: "Bumblefield County, WB" },
+  // MENTAL HEALTH
+  { id: 9, name: "Beacon Mental Health", cat: "mental-health", desc: "School-based, community-based, and crisis therapy services. Also provides expressive services, case management, and a Sexual Assault Center.", phone: "(555) 468-0400", address: "Bumblefield County, WB" },
+  { id: 10, name: "Synergy Services", cat: "mental-health", desc: "Crisis services, teen support programs, youth shelter, and school-based therapy for children and families.", phone: "(555) 587-4100", address: "Noodleburg, WB" },
+  { id: 11, name: "Preferred Family Healthcare", cat: "mental-health", desc: "Behavioral health and substance use treatment including outpatient counseling, medication management, and recovery support.", phone: "(555) 587-3949", address: "Bumblefield County, WB" },
+  { id: 12, name: "988 Suicide & Crisis Lifeline", cat: "mental-health", desc: "Free, confidential 24/7 crisis counseling by phone or text. Call or text 988 anytime — for any mental health crisis.", phone: "Call or text 988", address: "Available 24/7 statewide" },
+  { id: 13, name: "Mobile Crisis Response Team", cat: "mental-health", desc: "Trained crisis teams that come to you — providing in-person mental health crisis response in the community.", phone: "Call 988 to activate", address: "Bumblefield County, WB" },
+  { id: 14, name: "Marillac", cat: "mental-health", desc: "Comprehensive behavioral health services including outpatient therapy, psychiatric services, and residential care.", phone: "(555) 384-1348", address: "Wobbleton Metro" },
+  { id: 15, name: "Crittenton Center", cat: "mental-health", desc: "Residential care, substance use treatment, and behavioral health services for youth and families.", phone: "(555) 765-6600", address: "Wobbleton, WB" },
+  // TRANSPORTATION
+  { id: 16, name: "ATA Bus (Wobbleton Area Transit)", cat: "transportation", desc: "Fixed-route public bus service across the Wobbleton metro. Note: does not cover all parts of Bumblefield County.", phone: "(555) 221-0660", address: "Metro-wide routes" },
+  { id: 17, name: "Medicaid Non-Emergency Transportation", cat: "transportation", desc: "Free rides to medical appointments for Medicaid-enrolled individuals. Must be scheduled in advance.", phone: "1-866-269-5927", address: "Statewide (WB)" },
+  { id: 18, name: "Snorkelton Bus System", cat: "transportation", desc: "Local transit service within Snorkelton serving residents needing transport to appointments and services.", phone: "Contact City of Snorkelton", address: "Snorkelton, WB" },
+  { id: 19, name: "IRIS Transportation", cat: "transportation", desc: "Community-based transportation assistance connecting residents to services. Contact social worker for referral.", phone: "Contact local office", address: "Bumblefield County, WB" },
+  { id: 20, name: "Lyft / Uber", cat: "transportation", desc: "Rideshare apps available in the Wobbleton metro area. Some programs offer transportation vouchers — ask your case worker.", phone: "App-based service", address: "Metro Wobbleton" },
+  // PARENTING & FAMILY
+  { id: 21, name: "Parents as Teachers", cat: "parenting", desc: "Home visiting program supporting parents from pregnancy through kindergarten with child development coaching and family support.", phone: "Contact local school district", address: "Bumblefield County, WB" },
+  { id: 22, name: "Easterseals Midwest", cat: "parenting", desc: "Disability services including early intervention, developmental screenings, and family support programs.", phone: "(555) 227-6200", address: "Wobbleshire statewide" },
+  { id: 23, name: "Head Start / Early Head Start", cat: "parenting", desc: "Free early childhood education and family services for income-eligible children from birth to age 5.", phone: "Contact local program", address: "Bumblefield County, WB" },
+  { id: 24, name: "Children's Mercy — Peers Program", cat: "parenting", desc: "Peer support program connecting families navigating complex medical and social challenges with trained community peers.", phone: "(555) 234-3000", address: "Wobbleton, WB" },
+  { id: 25, name: "Family Advocacy Outreach Network", cat: "parenting", desc: "Wraparound advocacy and support for families at risk, including safety planning and connections to local resources.", phone: "Contact local office", address: "Bumblefield County, WB" },
 ];
 
-const categoryLabels = {
-  food: "Food",
-  housing: "Housing",
-  transportation: "Transportation",
-  "mental-health": "Mental Health"
+const CAT_CONFIG = {
+  food:            { color: "#1D9E75", bg: "#E1F5EE", icon: "🥦", label: "Food Assistance" },
+  housing:         { color: "#185FA5", bg: "#E6F1FB", icon: "🏠", label: "Housing" },
+  "mental-health": { color: "#534AB7", bg: "#EEEDFE", icon: "💬", label: "Mental Health" },
+  transportation:  { color: "#854F0B", bg: "#FAEEDA", icon: "🚌", label: "Transportation" },
+  parenting:       { color: "#993C1D", bg: "#FAECE7", icon: "👨‍👩‍👧", label: "Parenting & Family" },
 };
 
-const serviceGrid = document.querySelector("#serviceGrid");
-const resultCount = document.querySelector("#resultCount");
-const filterButtons = document.querySelectorAll(".filter-button");
-const modal = document.querySelector("#referralModal");
-const closeModal = document.querySelector("#closeModal");
-const doneButton = document.querySelector("#doneButton");
-const referralForm = document.querySelector("#referralForm");
-const formPanel = document.querySelector("#formPanel");
-const confirmationPanel = document.querySelector("#confirmationPanel");
-const selectedService = document.querySelector("#selectedService");
-const serviceNameInput = document.querySelector("#serviceName");
+let currentCategory = "all";
+let selectedService = null;
 
-let activeFilter = "all";
+function setCategory(cat, btn) {
+  currentCategory = cat;
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  renderServices();
+}
+
+function filterServices() { renderServices(); }
 
 function renderServices() {
-  const filteredServices = activeFilter === "all"
-    ? services
-    : services.filter((service) => service.category === activeFilter);
-
-  resultCount.textContent = `${filteredServices.length} service${filteredServices.length === 1 ? "" : "s"} shown`;
-  serviceGrid.innerHTML = "";
-
-  filteredServices.forEach((service) => {
-    const phoneDigits = service.phone.replace(/[^\d+]/g, "");
-    const contactMarkup = phoneDigits
-      ? `<a class="phone" href="tel:${phoneDigits}">${service.phone}</a>`
-      : `<span class="phone">${service.phone}</span>`;
-
-    const card = document.createElement("article");
-    card.className = "service-card";
-    card.innerHTML = `
-      <span class="tag">${categoryLabels[service.category]}</span>
-      <h3>${service.name}</h3>
-      <p>${service.description}</p>
-      ${contactMarkup}
-      <address>${service.address}</address>
-      <button class="button primary" type="button">Start self-referral</button>
-    `;
-
-    card.querySelector("button").addEventListener("click", () => openReferral(service.name));
-    serviceGrid.appendChild(card);
+  const query = document.getElementById("searchInput").value.toLowerCase().trim();
+  let filtered = SERVICES.filter(s => {
+    const matchCat = currentCategory === "all" || s.cat === currentCategory;
+    const matchQuery = !query ||
+      s.name.toLowerCase().includes(query) ||
+      s.desc.toLowerCase().includes(query) ||
+      (s.address && s.address.toLowerCase().includes(query));
+    return matchCat && matchQuery;
   });
+
+  const grid = document.getElementById("servicesGrid");
+  const noResults = document.getElementById("noResults");
+  const count = document.getElementById("resultsCount");
+
+  if (filtered.length === 0) {
+    grid.innerHTML = "";
+    noResults.style.display = "block";
+    count.textContent = "No results found";
+    return;
+  }
+  noResults.style.display = "none";
+  count.textContent = `Showing ${filtered.length} service${filtered.length !== 1 ? "s" : ""}`;
+
+  grid.innerHTML = filtered.map(s => {
+    const cfg = CAT_CONFIG[s.cat];
+    return `
+      <div class="service-card">
+        <div class="card-top">
+          <div class="card-icon" style="background:${cfg.bg};font-size:1.1rem">${cfg.icon}</div>
+          <div class="card-title-area">
+            <h3>${s.name}</h3>
+            <span class="cat-badge" style="background:${cfg.bg};color:${cfg.color}">${cfg.label}</span>
+          </div>
+        </div>
+        <p class="card-desc">${s.desc}</p>
+        <div class="card-meta">
+          ${s.phone ? `<span>📞 ${s.phone}</span>` : ""}
+          ${s.address ? `<span>📍 ${s.address}</span>` : ""}
+        </div>
+        <button class="referral-btn" onclick="openModal(${s.id})">Request referral →</button>
+      </div>`;
+  }).join("");
 }
 
-function openReferral(serviceName) {
-  selectedService.textContent = `Selected service: ${serviceName}`;
-  serviceNameInput.value = serviceName;
-  formPanel.hidden = false;
-  confirmationPanel.hidden = true;
-  modal.hidden = false;
+function openModal(serviceId) {
+  selectedService = SERVICES.find(s => s.id === serviceId);
+  document.getElementById("modalTitle").textContent = "Request a referral — " + selectedService.name;
+  document.getElementById("modalSubtitle").textContent =
+    "Fill out this short form and a care coordinator from " + selectedService.name + " will contact you within 2 business days.";
+  document.getElementById("formView").style.display = "block";
+  document.getElementById("confirmView").classList.remove("show");
+  document.getElementById("modalOverlay").classList.add("open");
   document.body.style.overflow = "hidden";
-  document.querySelector("#firstName").focus();
 }
 
-function closeReferral() {
-  modal.hidden = true;
+function closeModal() {
+  document.getElementById("modalOverlay").classList.remove("open");
   document.body.style.overflow = "";
-  referralForm.reset();
 }
 
-filterButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    activeFilter = button.dataset.filter;
-    filterButtons.forEach((filterButton) => filterButton.classList.remove("active"));
-    button.classList.add("active");
-    renderServices();
-  });
-});
+function closeModalOnBackground(e) {
+  if (e.target === document.getElementById("modalOverlay")) closeModal();
+}
 
-closeModal.addEventListener("click", closeReferral);
-doneButton.addEventListener("click", closeReferral);
-
-modal.addEventListener("click", (event) => {
-  if (event.target === modal) {
-    closeReferral();
+function submitForm() {
+  const first = document.getElementById("firstName").value.trim();
+  const last = document.getElementById("lastName").value.trim();
+  const zip = document.getElementById("zipCode").value.trim();
+  const pref = document.getElementById("contactPref").value;
+  if (!first || !last || !zip || !pref) {
+    alert("Please fill in all required fields (marked with *).");
+    return;
   }
-});
+  const ref = "CCC-" + Math.random().toString(36).substr(2,4).toUpperCase() + "-" + Date.now().toString().slice(-4);
+  document.getElementById("refNumber").textContent = "Reference: " + ref;
+  document.getElementById("formView").style.display = "none";
+  document.getElementById("confirmView").classList.add("show");
+}
 
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && !modal.hidden) {
-    closeReferral();
-  }
-});
-
-referralForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  formPanel.hidden = true;
-  confirmationPanel.hidden = false;
-  confirmationPanel.querySelector("button").focus();
-});
-
+// Init
 renderServices();
-
-    </script>
-  </body>
+</script>
+</body>
 </html>
