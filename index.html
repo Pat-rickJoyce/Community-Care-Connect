@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Community Care Connect</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="Primary">
+        <a class="brand" href="#top" aria-label="Community Care Connect home">
+          <span class="brand-mark" aria-hidden="true">C</span>
+          <span>Community Care Connect</span>
+        </a>
+        <a class="crisis-link" href="tel:988">Need immediate help? Call 988</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-content">
+          <p class="eyebrow">Gravity Project Scenario 1: Individual Self-Referral</p>
+          <h1>Find food, housing, transportation, and mental health support near you.</h1>
+          <p class="hero-copy">
+            Search trusted community services, choose the support that fits your situation, and submit a private self-referral request for follow-up from a community-based organization.
+          </p>
+          <div class="hero-actions" aria-label="Primary actions">
+            <a class="button primary" href="#services">Find services</a>
+            <a class="button secondary" href="#screening">Preview screening questions</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="quick-help" aria-label="Urgent help options">
+        <article>
+          <strong>Food tonight</strong>
+          <span>Start with Mimi's Pantry, Harvester, or local churches and pantries.</span>
+        </article>
+        <article>
+          <strong>Housing support</strong>
+          <span>Find housing authority, Section 8, and transitional living options.</span>
+        </article>
+        <article>
+          <strong>Crisis care</strong>
+          <span>Call or text 988 for crisis support. Mobile crisis teams may also help.</span>
+        </article>
+      </section>
+
+      <section class="services-section" id="services">
+        <div class="section-heading">
+          <p class="eyebrow">Service Search</p>
+          <h2>Choose a category</h2>
+          <p>These resources reflect priorities from the Missouri 7th Judicial Circuit upstream mapping work: food insecurity, housing instability, transportation, and behavioral health access.</p>
+        </div>
+
+        <div class="filters" role="group" aria-label="Filter services by category">
+          <button class="filter-button active" type="button" data-filter="all">All</button>
+          <button class="filter-button" type="button" data-filter="food">Food</button>
+          <button class="filter-button" type="button" data-filter="housing">Housing</button>
+          <button class="filter-button" type="button" data-filter="transportation">Transportation</button>
+          <button class="filter-button" type="button" data-filter="mental-health">Mental Health</button>
+        </div>
+
+        <div class="results-summary" aria-live="polite">
+          <span id="resultCount"></span>
+        </div>
+
+        <div class="service-grid" id="serviceGrid"></div>
+      </section>
+
+      <section class="screening-section" id="screening">
+        <div>
+          <p class="eyebrow">AHC HRSN-Informed Intake</p>
+          <h2>What the self-referral asks</h2>
+          <p>
+            The intake asks for basic contact details, contact preference, and brief health-related social needs questions about food, housing, and transportation. You can choose "Prefer not to answer" for any screening question.
+          </p>
+        </div>
+        <ol class="question-preview">
+          <li>In the past 12 months, did you worry that your food would run out before you had money to buy more?</li>
+          <li>Do you have housing that is stable and safe?</li>
+          <li>Do you have difficulty getting transportation to appointments or services?</li>
+        </ol>
+      </section>
+    </main>
+
+    <div class="modal-backdrop" id="referralModal" hidden>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <button class="close-button" type="button" id="closeModal" aria-label="Close referral form">&times;</button>
+        <div id="formPanel">
+          <p class="eyebrow">Self-Referral</p>
+          <h2 id="modalTitle">Request follow-up</h2>
+          <p class="selected-service" id="selectedService"></p>
+
+          <form id="referralForm">
+            <input type="hidden" id="serviceName" name="serviceName" />
+            <div class="form-row">
+              <label for="firstName">First name</label>
+              <input id="firstName" name="firstName" autocomplete="given-name" required />
+            </div>
+            <div class="form-row">
+              <label for="lastName">Last name</label>
+              <input id="lastName" name="lastName" autocomplete="family-name" required />
+            </div>
+            <div class="form-row">
+              <label for="zipCode">ZIP code</label>
+              <input id="zipCode" name="zipCode" inputmode="numeric" pattern="[0-9]{5}" autocomplete="postal-code" required />
+            </div>
+            <div class="form-row">
+              <label for="contactInfo">Phone or email</label>
+              <input id="contactInfo" name="contactInfo" autocomplete="email" required />
+            </div>
+            <fieldset>
+              <legend>Preferred contact method</legend>
+              <label><input type="radio" name="contactPreference" value="Call" required /> Call</label>
+              <label><input type="radio" name="contactPreference" value="Text" /> Text</label>
+              <label><input type="radio" name="contactPreference" value="Email" /> Email</label>
+            </fieldset>
+            <fieldset>
+              <legend>Screening questions</legend>
+              <div class="question">
+                <p>In the past 12 months, did you worry that your food would run out before you had money to buy more?</p>
+                <label><input type="radio" name="foodWorry" value="Yes" required /> Yes</label>
+                <label><input type="radio" name="foodWorry" value="No" /> No</label>
+                <label><input type="radio" name="foodWorry" value="Prefer not to answer" /> Prefer not to answer</label>
+              </div>
+              <div class="question">
+                <p>Do you have housing that is stable and safe?</p>
+                <label><input type="radio" name="stableHousing" value="Yes" required /> Yes</label>
+                <label><input type="radio" name="stableHousing" value="No" /> No</label>
+                <label><input type="radio" name="stableHousing" value="Prefer not to answer" /> Prefer not to answer</label>
+              </div>
+              <div class="question">
+                <p>Do you have difficulty getting transportation to appointments or services?</p>
+                <label><input type="radio" name="transportationDifficulty" value="Yes" required /> Yes</label>
+                <label><input type="radio" name="transportationDifficulty" value="No" /> No</label>
+                <label><input type="radio" name="transportationDifficulty" value="Prefer not to answer" /> Prefer not to answer</label>
+              </div>
+            </fieldset>
+            <button class="button primary full-width" type="submit">Submit self-referral</button>
+          </form>
+        </div>
+
+        <div class="confirmation" id="confirmationPanel" hidden>
+          <div class="confirmation-icon" aria-hidden="true">✓</div>
+          <h2>Thank you</h2>
+          <p>Thank you — a care coordinator will contact you within 2 business days using your preferred method.</p>
+          <button class="button primary" type="button" id="doneButton">Done</button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <p>Community Care Connect is a demonstration portal for Gravity Project SDOH Connectathon Scenario 1. For emergencies, call 911. For mental health crisis support, call or text 988.</p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
