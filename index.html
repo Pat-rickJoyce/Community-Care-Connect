@@ -449,6 +449,84 @@
     letter-spacing: 0.04em;
     margin: 0.5rem 0 1.25rem;
   }
+  .verification-panel {
+    text-align: left;
+    border: 1px solid #ddd;
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    margin: 1rem 0 1.25rem;
+    background: white;
+  }
+  .verification-panel h4 {
+    margin: 0 0 0.75rem;
+    color: var(--gray-800);
+    font-size: 0.95rem;
+  }
+  .verification-grid {
+    display: grid;
+    grid-template-columns: minmax(145px, 0.7fr) minmax(0, 1.3fr);
+    gap: 0.4rem 0.75rem;
+    font-size: 0.78rem;
+    margin-bottom: 0.85rem;
+  }
+  .verification-grid dt {
+    color: var(--gray-600);
+    font-weight: 700;
+  }
+  .verification-grid dd {
+    margin: 0;
+    color: var(--gray-800);
+    overflow-wrap: anywhere;
+  }
+  .verify-btn {
+    padding: 0.5rem 0.85rem;
+    background: var(--teal-600);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .verify-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+  .verification-results {
+    margin-top: 0.9rem;
+    display: grid;
+    gap: 0.65rem;
+  }
+  .verification-result {
+    border: 1px solid #e3e3e3;
+    border-radius: var(--radius-sm);
+    padding: 0.7rem;
+    background: #fafafa;
+  }
+  .verification-result strong {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: var(--gray-800);
+  }
+  .verification-result dl {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 0.25rem 0.6rem;
+    margin: 0;
+    font-size: 0.76rem;
+  }
+  .verification-result dt {
+    color: var(--gray-600);
+    font-weight: 700;
+  }
+  .verification-result dd {
+    margin: 0;
+    color: var(--gray-800);
+    overflow-wrap: anywhere;
+  }
+  .verify-ok { color: #157347; font-weight: 700; }
+  .verify-bad { color: #b42318; font-weight: 700; }
   .close-confirm-btn {
     padding: 0.6rem 1.5rem;
     background: var(--teal-600);
@@ -725,33 +803,69 @@
         </select>
       </div>
 
-      <p class="form-section-label">Health-related social needs screening</p>
-      <p style="font-size:0.82rem;color:var(--gray-600);margin-bottom:0.85rem;line-height:1.5">These brief questions help us connect you with the right resources. All responses are confidential.</p>
+      <p class="form-section-label">PRAPARE health-related social needs screening</p>
 
       <div class="hrsn-question">
-        <p>1. In the past 12 months, did you worry that your food would run out before you had money to buy more?</p>
+        <p>1. What is your housing situation today?</p>
         <div class="radio-group">
-          <label class="radio-option"><input type="radio" name="q1" value="yes"><span>Yes</span></label>
-          <label class="radio-option"><input type="radio" name="q1" value="no"><span>No</span></label>
-          <label class="radio-option"><input type="radio" name="q1" value="prefer-not"><span>Prefer not to answer</span></label>
+          <label class="radio-option"><input type="radio" name="q_housing_status" value="LA30189-7" data-display="I have housing"><span>I have housing</span></label>
+          <label class="radio-option"><input type="radio" name="q_housing_status" value="LA30190-5" data-display="I do not have housing (staying with others, in a hotel, in a shelter, living outside on the street, on a beach, in a car, or in a park)"><span>I do not have housing</span></label>
+          <label class="radio-option"><input type="radio" name="q_housing_status" value="LA30122-8" data-display="I choose not to answer this question"><span>I choose not to answer</span></label>
         </div>
       </div>
 
       <div class="hrsn-question">
-        <p>2. Do you have housing that is stable and safe?</p>
+        <p>2. Are you worried about losing your housing?</p>
         <div class="radio-group">
-          <label class="radio-option"><input type="radio" name="q2" value="yes"><span>Yes</span></label>
-          <label class="radio-option"><input type="radio" name="q2" value="no"><span>No</span></label>
-          <label class="radio-option"><input type="radio" name="q2" value="prefer-not"><span>Prefer not to answer</span></label>
+          <label class="radio-option"><input type="radio" name="q_housing_worry" value="LA33-6" data-display="Yes"><span>Yes</span></label>
+          <label class="radio-option"><input type="radio" name="q_housing_worry" value="LA32-8" data-display="No"><span>No</span></label>
+          <label class="radio-option"><input type="radio" name="q_housing_worry" value="LA30122-8" data-display="I choose not to answer this question"><span>I choose not to answer</span></label>
         </div>
       </div>
 
       <div class="hrsn-question">
-        <p>3. Do you have difficulty getting transportation to appointments or services?</p>
+        <p>3. In the past year, have you or any family members you live with been unable to get any of the following when it was really needed?</p>
         <div class="radio-group">
-          <label class="radio-option"><input type="radio" name="q3" value="yes"><span>Yes</span></label>
-          <label class="radio-option"><input type="radio" name="q3" value="no"><span>No</span></label>
-          <label class="radio-option"><input type="radio" name="q3" value="prefer-not"><span>Prefer not to answer</span></label>
+          <label class="radio-option"><input type="checkbox" name="q_material_need" value="LA30125-1" data-display="Food"><span>Food</span></label>
+          <label class="radio-option"><input type="checkbox" name="q_material_need" value="LA30126-9" data-display="Clothing"><span>Clothing</span></label>
+          <label class="radio-option"><input type="checkbox" name="q_material_need" value="LA30124-4" data-display="Utilities"><span>Utilities</span></label>
+          <label class="radio-option"><input type="checkbox" name="q_material_need" value="LA30127-7" data-display="Child care"><span>Child care</span></label>
+          <label class="radio-option"><input type="checkbox" name="q_material_need" value="LA30128-5" data-display="Medicine or Any Health Care (Medical, Dental, Mental Health, Vision)"><span>Medicine or any health care</span></label>
+          <label class="radio-option"><input type="checkbox" name="q_material_need" value="LA30129-3" data-display="Phone"><span>Phone</span></label>
+          <label class="radio-option"><input type="checkbox" name="q_material_need" value="LA46-8" data-display="Other"><span>Other</span></label>
+          <label class="radio-option"><input type="checkbox" name="q_material_need" value="LA30122-8" data-display="I choose not to answer this question"><span>I choose not to answer</span></label>
+        </div>
+      </div>
+
+      <div class="hrsn-question">
+        <p>4. Has lack of transportation kept you from medical appointments, meetings, work, or from getting things needed for daily living?</p>
+        <div class="radio-group">
+          <label class="radio-option"><input type="checkbox" name="q_transport" value="LA30133-5" data-display="Yes, it has kept me from medical appointments or from getting my medications"><span>Yes, medical appointments or medications</span></label>
+          <label class="radio-option"><input type="checkbox" name="q_transport" value="LA30134-3" data-display="Yes, it has kept me from non-medical meetings, appointments, work, or from getting things that I need"><span>Yes, non-medical needs, meetings, work, or daily living</span></label>
+          <label class="radio-option"><input type="checkbox" name="q_transport" value="LA32-8" data-display="No"><span>No</span></label>
+          <label class="radio-option"><input type="checkbox" name="q_transport" value="LA30257-2" data-display="Patient unable to respond"><span>Unable to respond</span></label>
+        </div>
+      </div>
+
+      <div class="hrsn-question">
+        <p>5. Stress is when someone feels tense, nervous, anxious or can't sleep at night because their mind is troubled. How stressed are you?</p>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="q_stress" value="LA6568-5" data-display="Not at all"><span>Not at all</span></label>
+          <label class="radio-option"><input type="radio" name="q_stress" value="LA13863-8" data-display="A little bit"><span>A little bit</span></label>
+          <label class="radio-option"><input type="radio" name="q_stress" value="LA13909-9" data-display="Somewhat"><span>Somewhat</span></label>
+          <label class="radio-option"><input type="radio" name="q_stress" value="LA13902-4" data-display="Quite a bit"><span>Quite a bit</span></label>
+          <label class="radio-option"><input type="radio" name="q_stress" value="LA13914-9" data-display="Very much"><span>Very much</span></label>
+          <label class="radio-option"><input type="radio" name="q_stress" value="LA30122-8" data-display="I choose not to answer this question"><span>I choose not to answer</span></label>
+        </div>
+      </div>
+
+      <div class="hrsn-question">
+        <p>6. Do you feel physically and emotionally safe where you currently live?</p>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="q_safe" value="LA33-6" data-display="Yes"><span>Yes</span></label>
+          <label class="radio-option"><input type="radio" name="q_safe" value="LA32-8" data-display="No"><span>No</span></label>
+          <label class="radio-option"><input type="radio" name="q_safe" value="LA14072-5" data-display="Unsure"><span>Unsure</span></label>
+          <label class="radio-option"><input type="radio" name="q_safe" value="LA30122-8" data-display="I choose not to answer this question"><span>I choose not to answer</span></label>
         </div>
       </div>
 
@@ -769,6 +883,21 @@
       <h3>You're all set!</h3>
       <p>Thank you — a care coordinator will contact you within <strong>2 business days</strong> using your preferred contact method.</p>
       <div class="ref-number" id="refNumber"></div>
+      <div class="verification-panel" id="verificationPanel" style="display:none">
+        <h4>FHIR verification</h4>
+        <dl class="verification-grid">
+          <dt>Patient ID</dt>
+          <dd id="verifyPatientId">--</dd>
+          <dt>QuestionnaireResponse ID</dt>
+          <dd id="verifyQuestionnaireResponseId">--</dd>
+          <dt>ServiceRequest ID</dt>
+          <dd id="verifyServiceRequestId">--</dd>
+          <dt>Task ID</dt>
+          <dd id="verifyTaskId">--</dd>
+        </dl>
+        <button class="verify-btn" id="verifyOnServerBtn" onclick="verifySubmittedResources()">Verify on server</button>
+        <div class="verification-results" id="verificationResults"></div>
+      </div>
       <p style="font-size:0.82rem">If you need immediate help, call <strong>988</strong> (mental health crisis) or contact your local food pantry directly.</p>
       <br>
       <button class="close-confirm-btn" onclick="closeModal()">Done</button>
@@ -791,7 +920,7 @@ const FHIR_CONFIG = {
   cpServerBase: "https://sdoh-cp-server.victoriousbay-86ce63e0.southcentralus.azurecontainerapps.io/fhir",
   orgId: "SDOHCC-OrganizationCoordinationPlatformExample",
   orgDisplay: "ABC Coordination Platform",
-  ahcHrsnQuestionnaireUrl: "http://example.org/fhir/Questionnaire/AHC-HRSN",
+  prapareQuestionnaireUrl: "http://hl7.org/fhir/us/sdoh-clinicalcare/Questionnaire/SDOHCC-QuestionnairePRAPARE",
   // Mode: 'test-patient' uses pre-seeded patient, 'create-patient' creates new patient from form data
   mode: "create-patient",
   testPatientId: "gravity-patient-grover-cleveland",
@@ -873,6 +1002,31 @@ async function createFHIRResource(resourceType, resource, method = 'PUT') {
   }
 }
 
+async function searchFHIRResources(resourceType, params) {
+  const query = new URLSearchParams(params);
+  const url = `${FHIR_CONFIG.cpServerBase}/${resourceType}?${query.toString()}`;
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/fhir+json'
+      }
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.warn(`FHIR search failed for ${resourceType}:`, errorText);
+      return [];
+    }
+
+    const bundle = await response.json();
+    return (bundle.entry || []).map(entry => entry.resource).filter(Boolean);
+  } catch (error) {
+    console.warn(`Error searching ${resourceType}:`, error);
+    return [];
+  }
+}
+
 async function patchFHIRResource(resourceType, id, patchOps) {
   const url = `${FHIR_CONFIG.cpServerBase}/${resourceType}/${id}`;
   try {
@@ -902,6 +1056,99 @@ function generateId(prefix) {
   const timestamp = Date.now();
   const random = Math.random().toString(36).substring(2, 8);
   return `${prefix}-${timestamp}-${random}`;
+}
+
+function normalizeText(value) {
+  return (value || "").trim().toLowerCase();
+}
+
+function normalizePhone(value) {
+  return (value || "").replace(/\D/g, "").slice(-10);
+}
+
+function patientDisplay(patient, fallback) {
+  const officialName = (patient.name || [])[0];
+  if (!officialName) return fallback;
+
+  const given = (officialName.given || []).join(" ");
+  return `${given} ${officialName.family || ""}`.trim() || fallback;
+}
+
+function patientHasName(patient, first, last) {
+  return (patient.name || []).some(name => {
+    const familyMatches = normalizeText(name.family) === normalizeText(last);
+    const givenMatches = (name.given || []).some(given => normalizeText(given) === normalizeText(first));
+    return familyMatches && givenMatches;
+  });
+}
+
+function patientHasTelecom(patient, system, value) {
+  if (!value) return false;
+  return (patient.telecom || []).some(telecom => {
+    if (telecom.system !== system) return false;
+    if (system === "phone") return normalizePhone(telecom.value) === normalizePhone(value);
+    return normalizeText(telecom.value) === normalizeText(value);
+  });
+}
+
+function patientHasPostalCode(patient, zip) {
+  if (!zip) return false;
+  return (patient.address || []).some(address => normalizeText(address.postalCode) === normalizeText(zip));
+}
+
+function isStrongPatientMatch(patient, formData) {
+  if (!patientHasName(patient, formData.first, formData.last)) return false;
+
+  if (formData.dob && patient.birthDate === formData.dob) return true;
+  if (formData.email && patientHasTelecom(patient, "email", formData.email)) return true;
+  if (formData.phone && patientHasTelecom(patient, "phone", formData.phone)) return true;
+  if (formData.zip && patientHasPostalCode(patient, formData.zip)) return true;
+
+  return false;
+}
+
+async function findExistingPatient(formData) {
+  const params = {
+    family: formData.last,
+    given: formData.first
+  };
+  if (formData.dob) params.birthdate = formData.dob;
+
+  let patients = await searchFHIRResources("Patient", params);
+  if (formData.dob && patients.length === 0) {
+    patients = await searchFHIRResources("Patient", {
+      family: formData.last,
+      given: formData.first
+    });
+  }
+
+  return patients.find(patient => isStrongPatientMatch(patient, formData)) || null;
+}
+
+async function ensureReferralOrganizations() {
+  const coordinationPlatform = {
+    resourceType: "Organization",
+    id: FHIR_CONFIG.orgId,
+    active: true,
+    name: FHIR_CONFIG.orgDisplay,
+    type: [{
+      text: "Coordination Platform"
+    }]
+  };
+
+  const cbo = {
+    resourceType: "Organization",
+    id: FHIR_CONFIG.cboOrgId,
+    active: true,
+    name: FHIR_CONFIG.cboOrgDisplay,
+    type: [{
+      text: "Community Based Organization"
+    }]
+  };
+
+  await createFHIRResource("Organization", coordinationPlatform);
+  await createFHIRResource("Organization", cbo);
+  return { coordinationPlatform, cbo };
 }
 
 function getCategoryCodeForService(serviceCat) {
@@ -1048,6 +1295,23 @@ function closeModalOnBackground(e) {
   if (e.target === document.getElementById("modalOverlay")) closeModal();
 }
 
+function initExclusiveCheckboxGroup(name, exclusiveCodes) {
+  const inputs = Array.from(document.querySelectorAll(`input[name="${name}"]`));
+  inputs.forEach(input => {
+    input.addEventListener("change", () => {
+      if (!input.checked) return;
+
+      const isExclusive = exclusiveCodes.includes(input.value);
+      inputs.forEach(other => {
+        if (other === input) return;
+        if (isExclusive || exclusiveCodes.includes(other.value)) {
+          other.checked = false;
+        }
+      });
+    });
+  });
+}
+
 async function submitForm() {
   const first = document.getElementById("firstName").value.trim();
   const last = document.getElementById("lastName").value.trim();
@@ -1058,9 +1322,22 @@ async function submitForm() {
   const email = document.getElementById("email").value.trim();
   const notes = document.getElementById("notes").value.trim();
 
-  const q1 = document.querySelector('input[name="q1"]:checked')?.value;
-  const q2 = document.querySelector('input[name="q2"]:checked')?.value;
-  const q3 = document.querySelector('input[name="q3"]:checked')?.value;
+  const toLoincCoding = input => input ? ({
+    system: "http://loinc.org",
+    code: input.value,
+    display: input.dataset.display || input.value
+  }) : null;
+  const checkedCoding = name => toLoincCoding(document.querySelector(`input[name="${name}"]:checked`));
+  const checkedCodings = name => Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(toLoincCoding);
+  const answerFromCoding = coding => coding ? [{ valueCoding: coding }] : [{ valueString: "not-answered" }];
+  const answerFromCodings = codings => codings.length ? codings.map(coding => ({ valueCoding: coding })) : [{ valueString: "not-answered" }];
+
+  const housingStatus = checkedCoding("q_housing_status");
+  const housingWorry = checkedCoding("q_housing_worry");
+  const materialNeeds = checkedCodings("q_material_need");
+  const transportationBarriers = checkedCodings("q_transport");
+  const stressLevel = checkedCoding("q_stress");
+  const safety = checkedCoding("q_safe");
 
   if (!first || !last || !zip || !pref) {
     alert("Please fill in all required fields (marked with *).");
@@ -1072,9 +1349,12 @@ async function submitForm() {
   submitBtn.textContent = "Submitting to FHIR server...";
 
   try {
+    // Ensure referenced Organizations exist before ServiceRequest and Task point at them.
+    await ensureReferralOrganizations();
+
     // Generate IDs for FHIR resources
     const taskId = generateId("ccc-task-referral");
-    const qrId = generateId("ccc-qr-ahc-hrsn");
+    const qrId = generateId("ccc-qr-prapare");
     const patientId = generateId("ccc-patient");
     const serviceRequestId = generateId("ccc-servicerequest");
     const ref = "CCC-" + Math.random().toString(36).substr(2,4).toUpperCase() + "-" + Date.now().toString().slice(-4);
@@ -1089,9 +1369,12 @@ async function submitForm() {
       email: email,
       contactPref: pref,
       notes: notes,
-      q1: q1,
-      q2: q2,
-      q3: q3,
+      housingStatus: housingStatus,
+      housingWorry: housingWorry,
+      materialNeeds: materialNeeds,
+      transportationBarriers: transportationBarriers,
+      stressLevel: stressLevel,
+      safety: safety,
       service: selectedService.name,
       referenceNumber: ref,
       taskId: taskId,
@@ -1102,76 +1385,90 @@ async function submitForm() {
 
     // Determine which patient to use
     let actualPatientId, actualPatientDisplay;
+    let patientWasReused = false;
 
     if (FHIR_CONFIG.mode === "create-patient") {
-      // Step 1: Create a new Patient resource from form data
-      const patient = {
-        resourceType: "Patient",
-        id: patientId,
-        meta: {
-          profile: ["http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"]
-        },
-        identifier: [{
-          system: "http://community-care-connect.example.org/patient-id",
-          value: ref
-        }],
-        active: true,
-        name: [{
-          use: "official",
-          family: last,
-          given: [first]
-        }],
-        telecom: []
-      };
+      const existingPatient = await findExistingPatient({ first, last, dob, phone, email, zip });
 
-      if (phone) {
-        patient.telecom.push({
-          system: "phone",
-          value: phone,
-          use: "mobile"
-        });
+      if (existingPatient) {
+        actualPatientId = existingPatient.id;
+        actualPatientDisplay = patientDisplay(existingPatient, `${first} ${last}`);
+        patientWasReused = true;
+        console.log("Reusing existing Patient:", existingPatient);
+      } else {
+        // Step 1: Create a new Patient resource from form data
+        const patient = {
+          resourceType: "Patient",
+          id: patientId,
+          meta: {
+            profile: ["http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"]
+          },
+          identifier: [{
+            system: "http://community-care-connect.example.org/patient-id",
+            value: ref
+          }],
+          active: true,
+          name: [{
+            use: "official",
+            family: last,
+            given: [first]
+          }],
+          telecom: []
+        };
+
+        if (phone) {
+          patient.telecom.push({
+            system: "phone",
+            value: phone,
+            use: "mobile"
+          });
+        }
+
+        if (email) {
+          patient.telecom.push({
+            system: "email",
+            value: email,
+            use: "home"
+          });
+        }
+
+        if (dob) {
+          patient.birthDate = dob;
+        }
+
+        if (zip) {
+          patient.address = [{
+            use: "home",
+            postalCode: zip,
+            country: "US"
+          }];
+        }
+
+        console.log("Creating new Patient...", patient);
+        const patientResponse = await createFHIRResource("Patient", patient);
+        console.log("Patient created:", patientResponse);
+
+        actualPatientId = patientId;
+        actualPatientDisplay = `${first} ${last}`;
       }
-
-      if (email) {
-        patient.telecom.push({
-          system: "email",
-          value: email,
-          use: "home"
-        });
-      }
-
-      if (dob) {
-        patient.birthDate = dob;
-      }
-
-      if (zip) {
-        patient.address = [{
-          use: "home",
-          postalCode: zip,
-          country: "US"
-        }];
-      }
-
-      console.log("Creating new Patient...", patient);
-      const patientResponse = await createFHIRResource("Patient", patient);
-      console.log("Patient created:", patientResponse);
-
-      actualPatientId = patientId;
-      actualPatientDisplay = `${first} ${last}`;
     } else {
       // Use pre-configured test patient
       actualPatientId = FHIR_CONFIG.testPatientId;
       actualPatientDisplay = FHIR_CONFIG.testPatientDisplay;
     }
 
-    // Step 2: Create QuestionnaireResponse (Completed AHC HRSN Assessment)
+    submissionData.patientId = actualPatientId;
+    submissionData.patientDisplay = actualPatientDisplay;
+    submissionData.patientWasReused = patientWasReused;
+
+    // Step 2: Create QuestionnaireResponse (Completed PRAPARE Assessment)
     const questionnaireResponse = {
       resourceType: "QuestionnaireResponse",
       id: qrId,
       meta: {
         profile: ["http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaireresponse"]
       },
-      questionnaire: FHIR_CONFIG.ahcHrsnQuestionnaireUrl,
+      questionnaire: FHIR_CONFIG.prapareQuestionnaireUrl,
       status: "completed",
       subject: {
         reference: `Patient/${actualPatientId}`,
@@ -1184,25 +1481,34 @@ async function submitForm() {
       },
       item: [
         {
-          linkId: "food-insecurity",
-          text: "In the past 12 months, did you worry that your food would run out before you had money to buy more?",
-          answer: [{
-            valueString: q1 || "not-answered"
-          }]
+          linkId: "/93042-0/71802-3",
+          text: "Housing status",
+          answer: answerFromCoding(housingStatus)
         },
         {
-          linkId: "housing-stability",
-          text: "Do you have housing that is stable and safe?",
-          answer: [{
-            valueString: q2 || "not-answered"
-          }]
+          linkId: "/93042-0/93033-9",
+          text: "Are you worried about losing your housing?",
+          answer: answerFromCoding(housingWorry)
         },
         {
-          linkId: "transportation-access",
-          text: "Do you have difficulty getting transportation to appointments or services?",
-          answer: [{
-            valueString: q3 || "not-answered"
-          }]
+          linkId: "/93041-2/93031-3",
+          text: "In the past year, have you or any family members you live with been unable to get any of the following when it was really needed?",
+          answer: answerFromCodings(materialNeeds)
+        },
+        {
+          linkId: "/93041-2/93030-5",
+          text: "Has lack of transportation kept you from medical appointments, meetings, work, or from getting things needed for daily living?",
+          answer: answerFromCodings(transportationBarriers)
+        },
+        {
+          linkId: "/93040-4/93038-8",
+          text: "Stress is when someone feels tense, nervous, anxious or can't sleep at night because their mind is troubled. How stressed are you?",
+          answer: answerFromCoding(stressLevel)
+        },
+        {
+          linkId: "/93039-6/93026-3",
+          text: "Do you feel physically and emotionally safe where you currently live?",
+          answer: answerFromCoding(safety)
         },
         {
           linkId: "contact-info",
@@ -1441,6 +1747,8 @@ async function submitForm() {
 // Init
 loadConfigFromStorage();
 renderServices();
+initExclusiveCheckboxGroup("q_material_need", ["LA30122-8"]);
+initExclusiveCheckboxGroup("q_transport", ["LA32-8", "LA30257-2"]);
 </script>
 </body>
 </html>
