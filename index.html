@@ -645,10 +645,334 @@
     .modal { padding: 1.5rem; }
     .hero { padding: 2rem 1rem 2.5rem; }
   }
+
+  /* ============================================================
+     CBO PORTAL
+     ============================================================ */
+  #cboPortal { display: none; }
+  #cboPortal.active { display: block; }
+
+  .cbo-header {
+    background: linear-gradient(135deg, #1a3a5c 0%, #185FA5 100%);
+    color: white;
+    padding: 0 1.5rem;
+  }
+  .cbo-header-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1.25rem 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .cbo-badge {
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+  .cbo-header-text h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    font-weight: 400;
+  }
+  .cbo-header-text p {
+    font-size: 0.78rem;
+    opacity: 0.8;
+    margin-top: 2px;
+  }
+  .back-to-patient-btn {
+    margin-left: auto;
+    padding: 0.4rem 0.9rem;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.35);
+    color: white;
+    border-radius: var(--radius-sm);
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .back-to-patient-btn:hover { background: rgba(255,255,255,0.28); }
+
+  .cbo-main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  @media (max-width: 740px) {
+    .cbo-main { grid-template-columns: 1fr; }
+  }
+
+  .cbo-panel {
+    background: white;
+    border-radius: var(--radius);
+    border: 1px solid #e8e6df;
+    padding: 1.5rem;
+  }
+  .cbo-panel + .cbo-panel { margin-top: 1.25rem; }
+
+  .cbo-panel-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.05rem;
+    font-weight: 400;
+    color: var(--teal-800);
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #ece9e0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cbo-kv {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 0.35rem 0.75rem;
+    font-size: 0.85rem;
+  }
+  .cbo-kv dt {
+    color: var(--gray-600);
+    font-weight: 600;
+  }
+  .cbo-kv dd {
+    margin: 0;
+    color: var(--gray-800);
+    overflow-wrap: anywhere;
+  }
+
+  .cbo-section-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue-600);
+    margin: 1.25rem 0 0.6rem;
+  }
+
+  /* Task status flow */
+  .task-status-flow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+  }
+  .status-step {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 999px;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .status-step.completed-step {
+    background: var(--teal-50);
+    border-color: var(--teal-400);
+    color: var(--teal-600);
+  }
+  .status-step.current-step {
+    background: var(--blue-600);
+    border-color: var(--blue-600);
+    color: white;
+  }
+  .status-step.pending-step {
+    background: white;
+    border-color: var(--gray-100);
+    color: var(--gray-400);
+  }
+  .status-arrow {
+    color: var(--gray-400);
+    font-size: 0.8rem;
+  }
+
+  .task-action-btn {
+    width: 100%;
+    padding: 0.65rem 1rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 0.5rem;
+  }
+  .task-action-btn.accept {
+    background: var(--blue-50);
+    color: var(--blue-600);
+    border: 1.5px solid var(--blue-400);
+  }
+  .task-action-btn.accept:hover { background: var(--blue-400); color: white; }
+  .task-action-btn.in-progress {
+    background: var(--amber-50);
+    color: var(--amber-400);
+    border: 1.5px solid var(--amber-400);
+  }
+  .task-action-btn.in-progress:hover { background: var(--amber-400); color: white; }
+  .task-action-btn.complete {
+    background: var(--teal-50);
+    color: var(--teal-600);
+    border: 1.5px solid var(--teal-400);
+  }
+  .task-action-btn.complete:hover { background: var(--teal-400); color: white; }
+  .task-action-btn.cancel {
+    background: var(--coral-50);
+    color: var(--coral-400);
+    border: 1.5px solid var(--coral-400);
+  }
+  .task-action-btn.cancel:hover { background: var(--coral-400); color: white; }
+  .task-action-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .task-status-badge {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+  .status-requested { background: var(--gray-50); color: var(--gray-600); }
+  .status-accepted { background: var(--blue-50); color: var(--blue-600); }
+  .status-in-progress { background: var(--amber-50); color: var(--amber-400); }
+  .status-completed { background: var(--teal-50); color: var(--teal-600); }
+  .status-cancelled { background: var(--coral-50); color: var(--coral-400); }
+
+  /* Procedure form */
+  .procedure-form {
+    display: none;
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--teal-50);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--teal-100);
+  }
+  .procedure-form.show { display: block; }
+  .procedure-form h4 {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--teal-800);
+    margin-bottom: 0.75rem;
+  }
+  .procedure-form .form-group label { font-size: 0.8rem; }
+  .procedure-form .form-group input,
+  .procedure-form .form-group select,
+  .procedure-form .form-group textarea {
+    font-size: 0.85rem;
+    padding: 0.45rem 0.65rem;
+  }
+
+  .cbo-alert {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.84rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+    display: none;
+  }
+  .cbo-alert.show { display: block; }
+  .cbo-alert.success {
+    background: var(--teal-50);
+    border: 1px solid var(--teal-100);
+    color: var(--teal-800);
+  }
+  .cbo-alert.error {
+    background: var(--coral-50);
+    border: 1px solid var(--coral-400);
+    color: #7a1a0a;
+  }
+  .cbo-alert.info {
+    background: var(--blue-50);
+    border: 1px solid var(--blue-400);
+    color: var(--blue-600);
+  }
+
+  .prapare-item {
+    padding: 0.6rem 0;
+    border-bottom: 1px solid #f0ede5;
+    font-size: 0.84rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem;
+    align-items: start;
+  }
+  .prapare-item:last-child { border-bottom: none; }
+  .prapare-q { color: var(--gray-600); line-height: 1.4; }
+  .prapare-a { color: var(--gray-800); font-weight: 600; text-align: right; }
+
+  .resource-id-chip {
+    display: inline-block;
+    background: #f0ede5;
+    color: var(--gray-600);
+    font-size: 0.7rem;
+    font-family: monospace;
+    padding: 2px 7px;
+    border-radius: 4px;
+    overflow-wrap: anywhere;
+  }
+
+  .cbo-timeline {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: relative;
+  }
+  .cbo-timeline::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background: #e8e6df;
+  }
+  .cbo-timeline li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+    position: relative;
+  }
+  .tl-dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    position: relative;
+    z-index: 1;
+  }
+  .tl-dot.done { background: var(--teal-50); border: 2px solid var(--teal-400); color: var(--teal-600); }
+  .tl-dot.pending { background: white; border: 2px solid var(--gray-100); color: var(--gray-400); }
+  .tl-text { font-size: 0.82rem; padding-top: 2px; }
+  .tl-text strong { display: block; color: var(--gray-800); }
+  .tl-text span { color: var(--gray-400); font-size: 0.78rem; }
 </style>
 </head>
 <body>
 
+<div id="patientPortal">
 <header>
   <div class="header-inner">
     <div class="logo-mark">🤝</div>
@@ -669,6 +993,10 @@
       <div class="config-field">
         <label>CP Server Base URL</label>
         <input type="text" id="configCpBase" value="https://sdoh-cp-server.victoriousbay-86ce63e0.southcentralus.azurecontainerapps.io/fhir" />
+      </div>
+      <div class="config-field">
+        <label>CBO Server Base URL</label>
+        <input type="text" id="configCboServerBase" value="https://sdoh-ehr-server.victoriousbay-86ce63e0.southcentralus.azurecontainerapps.io/fhir" />
       </div>
       <div class="config-field">
         <label>Organization ID</label>
@@ -693,13 +1021,45 @@
         <label>Test Patient Display Name</label>
         <input type="text" id="configTestPatientDisplay" value="Grover Cleveland" />
       </div>
+      <div class="config-field" id="testPatientFirstField" style="display:none">
+        <label>Test Patient First Name</label>
+        <input type="text" id="configTestPatientFirst" value="Grover" />
+      </div>
+      <div class="config-field" id="testPatientLastField" style="display:none">
+        <label>Test Patient Last Name</label>
+        <input type="text" id="configTestPatientLast" value="Cleveland" />
+      </div>
+      <div class="config-field" id="testPatientZipField" style="display:none">
+        <label>Test Patient ZIP Code</label>
+        <input type="text" id="configTestPatientZip" value="64105" />
+      </div>
+      <div class="config-field" id="testPatientDOBField" style="display:none">
+        <label>Test Patient Date of Birth</label>
+        <input type="date" id="configTestPatientDOB" value="1837-03-18" />
+      </div>
+      <div class="config-field" id="testPatientPhoneField" style="display:none">
+        <label>Test Patient Phone</label>
+        <input type="tel" id="configTestPatientPhone" value="(816) 555-0100" />
+      </div>
+      <div class="config-field" id="testPatientEmailField" style="display:none">
+        <label>Test Patient Email</label>
+        <input type="email" id="configTestPatientEmail" value="grover.cleveland@example.com" />
+      </div>
+      <div class="config-field" id="testPatientContactPrefField" style="display:none">
+        <label>Test Patient Contact Preference</label>
+        <select id="configTestPatientContactPref">
+          <option value="Phone call">Phone call</option>
+          <option value="Text message">Text message</option>
+          <option value="Email">Email</option>
+        </select>
+      </div>
       <div class="config-field" style="grid-column: 1 / -1">
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
           <input type="checkbox" id="configSimulateCBO" style="width:auto;margin:0" />
           <span>Simulate CBO Workflow (Testing Only)</span>
         </label>
         <p style="font-size:0.72rem;color:var(--gray-600);margin-top:0.25rem">
-          When enabled, automatically completes CBO steps (accepted → in-progress → completed + Procedure). Leave disabled for real referral workflows where CBOs manage Tasks manually.
+          When enabled, after submitting a referral the page reloads as the <strong>CBO Referral Inbox</strong> — allowing you to act on the referral as the receiving CBO (accept, work, complete, create Procedure). Leave disabled for real referral workflows where CBOs manage Tasks via their own system.
         </p>
       </div>
     </div>
@@ -913,11 +1273,230 @@
     Creates Patient, QuestionnaireResponse, ServiceRequest, and Task resources per SDOH IG
   </span>
 </footer>
+</div><!-- end #patientPortal -->
+
+<!-- ================================================================
+     CBO PORTAL  (shown after submit when simulateCBOWorkflow = true)
+     ================================================================ -->
+<div id="cboPortal">
+
+  <header class="cbo-header">
+    <div class="cbo-header-inner">
+      <div class="logo-mark" style="background:rgba(255,255,255,0.18)">🏢</div>
+      <div class="cbo-header-text">
+        <h1 id="cboOrgName">CBO Referral Inbox</h1>
+        <p>Gravity SDOH — Referral Recipient View</p>
+      </div>
+      <span class="cbo-badge">CBO Portal</span>
+      <button class="back-to-patient-btn" onclick="exitCBOPortal()">← Back to Patient Portal</button>
+    </div>
+  </header>
+
+  <div style="background:var(--blue-50);border-bottom:2px solid var(--blue-400);padding:0.6rem 1.5rem;">
+    <div style="max-width:960px;margin:0 auto;font-size:0.82rem;color:var(--blue-600);display:flex;align-items:center;gap:8px;">
+      <span>🧪</span>
+      <strong>Simulation Mode:</strong> <span id="cboSimulationBanner">You are now acting as the CBO receiving this referral.</span> Manage the Task and document services below.
+    </div>
+  </div>
+
+  <div class="cbo-main">
+
+    <!-- LEFT COLUMN: referral details -->
+    <div>
+      <!-- Task Status Panel -->
+      <div class="cbo-panel">
+        <div class="cbo-panel-title" id="cboTaskPanelTitle">📋 Referral Task — Status Management</div>
+
+        <div class="cbo-alert info" id="cboAlert" style="display:none"></div>
+
+        <div style="margin-bottom:1rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span style="font-size:0.82rem;color:var(--gray-600);font-weight:500">Current status:</span>
+          <span class="task-status-badge status-requested" id="taskStatusBadge">requested</span>
+          <span style="font-size:0.75rem;color:var(--gray-400)" id="taskIdChip"></span>
+        </div>
+
+        <div class="task-status-flow" id="taskStatusFlow">
+          <div class="status-step current-step" id="step-requested">📨 Requested</div>
+          <span class="status-arrow">›</span>
+          <div class="status-step pending-step" id="step-accepted">✅ Accepted</div>
+          <span class="status-arrow">›</span>
+          <div class="status-step pending-step" id="step-in-progress">⚙️ In Progress</div>
+          <span class="status-arrow">›</span>
+          <div class="status-step pending-step" id="step-completed">🏁 Completed</div>
+        </div>
+
+        <button class="task-action-btn accept" id="btnAccept" onclick="cboUpdateTaskStatus('accepted')">
+          ✅ Accept Referral (requested → accepted)
+        </button>
+        <button class="task-action-btn in-progress" id="btnInProgress" onclick="cboUpdateTaskStatus('in-progress')" disabled>
+          ⚙️ Begin Services (accepted → in-progress)
+        </button>
+        <button class="task-action-btn complete" id="btnComplete" onclick="showProcedureForm()" disabled>
+          🏁 Complete &amp; Document Services
+        </button>
+        <button class="task-action-btn cancel" id="btnCancel" onclick="cboUpdateTaskStatus('cancelled')">
+          ✕ Decline / Cancel Referral
+        </button>
+
+        <!-- Procedure + completion form -->
+        <div class="procedure-form" id="procedureForm">
+          <h4>📝 Document Services Rendered (Procedure)</h4>
+          <div class="form-group">
+            <label>Service description *</label>
+            <input type="text" id="procDesc" placeholder="e.g., Food box distributed; 3-day emergency supply" />
+          </div>
+          <div class="form-group">
+            <label>Service delivery date *</label>
+            <input type="date" id="procDate" />
+          </div>
+          <div class="form-group">
+            <label>Outcome notes (optional)</label>
+            <textarea id="procNotes" rows="2" placeholder="Any additional notes about the service delivered…" style="resize:vertical"></textarea>
+          </div>
+          <button class="task-action-btn complete" id="btnSubmitCompletion" onclick="cboCompleteReferral()" style="margin-top:0.5rem">
+            Submit &amp; Complete Referral
+          </button>
+          <button style="width:100%;padding:0.5rem;background:none;border:none;color:var(--gray-400);font-size:0.82rem;cursor:pointer;margin-top:2px" onclick="hideProcedureForm()">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Patient info -->
+      <div class="cbo-panel">
+        <div class="cbo-panel-title">👤 Patient Information</div>
+        <dl class="cbo-kv" id="cboPatientKV">
+          <dt>Name</dt><dd id="cboPatientName">—</dd>
+          <dt>Date of birth</dt><dd id="cboPatientDOB">—</dd>
+          <dt>Phone</dt><dd id="cboPatientPhone">—</dd>
+          <dt>Email</dt><dd id="cboPatientEmail">—</dd>
+          <dt>ZIP code</dt><dd id="cboPatientZip">—</dd>
+          <dt>Preferred contact</dt><dd id="cboPatientContactPref">—</dd>
+          <dt>Patient FHIR ID</dt><dd id="cboPatientId">—</dd>
+        </dl>
+      </div>
+
+      <!-- ServiceRequest info -->
+      <div class="cbo-panel">
+        <div class="cbo-panel-title">📄 ServiceRequest Details</div>
+        <dl class="cbo-kv" id="cboSRKV">
+          <dt>Service requested</dt><dd id="cboSRService">—</dd>
+          <dt>Category</dt><dd id="cboSRCategory">—</dd>
+          <dt>Status</dt><dd id="cboSRStatus">—</dd>
+          <dt>Intent</dt><dd id="cboSRIntent">order</dd>
+          <dt>Authored on</dt><dd id="cboSRAuthored">—</dd>
+          <dt>Requester</dt><dd id="cboSRRequester">—</dd>
+          <dt>ServiceRequest ID</dt><dd id="cboSRId">—</dd>
+        </dl>
+      </div>
+
+      <!-- PRAPARE Screening results -->
+      <div class="cbo-panel">
+        <div class="cbo-panel-title">📊 PRAPARE Screening Results</div>
+        <div id="prapareSummary">
+          <div class="prapare-item">
+            <span class="prapare-q">Housing situation today</span>
+            <span class="prapare-a" id="pp-housing">—</span>
+          </div>
+          <div class="prapare-item">
+            <span class="prapare-q">Worried about losing housing?</span>
+            <span class="prapare-a" id="pp-housing-worry">—</span>
+          </div>
+          <div class="prapare-item">
+            <span class="prapare-q">Unable to get material needs in past year</span>
+            <span class="prapare-a" id="pp-material">—</span>
+          </div>
+          <div class="prapare-item">
+            <span class="prapare-q">Transportation barriers</span>
+            <span class="prapare-a" id="pp-transport">—</span>
+          </div>
+          <div class="prapare-item">
+            <span class="prapare-q">Stress level</span>
+            <span class="prapare-a" id="pp-stress">—</span>
+          </div>
+          <div class="prapare-item" style="border-bottom:none">
+            <span class="prapare-q">Feels safe at home?</span>
+            <span class="prapare-a" id="pp-safety">—</span>
+          </div>
+        </div>
+        <div style="margin-top:0.75rem">
+          <span style="font-size:0.75rem;color:var(--gray-400)">QuestionnaireResponse ID: </span>
+          <span class="resource-id-chip" id="cboQRId">—</span>
+        </div>
+        <div id="cboNotesRow" style="display:none;margin-top:0.5rem;font-size:0.84rem">
+          <span style="font-weight:600;color:var(--gray-600)">Notes from patient: </span>
+          <span id="cboNotes" style="color:var(--gray-800)"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: timeline + task details -->
+    <div>
+      <div class="cbo-panel">
+        <div class="cbo-panel-title">📅 Referral Timeline</div>
+        <ul class="cbo-timeline" id="cboTimeline">
+          <li>
+            <div class="tl-dot done">📨</div>
+            <div class="tl-text">
+              <strong>Referral submitted</strong>
+              <span id="tl-submitted-time">—</span>
+            </div>
+          </li>
+          <li>
+            <div class="tl-dot pending" id="tl-dot-accepted">✅</div>
+            <div class="tl-text">
+              <strong>Accepted by CBO</strong>
+              <span id="tl-accepted-time">Pending</span>
+            </div>
+          </li>
+          <li>
+            <div class="tl-dot pending" id="tl-dot-inprogress">⚙️</div>
+            <div class="tl-text">
+              <strong>Services in progress</strong>
+              <span id="tl-inprogress-time">Pending</span>
+            </div>
+          </li>
+          <li>
+            <div class="tl-dot pending" id="tl-dot-completed">🏁</div>
+            <div class="tl-text">
+              <strong>Referral completed</strong>
+              <span id="tl-completed-time">Pending</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="cbo-panel" style="margin-top:1.25rem">
+        <div class="cbo-panel-title">🔗 FHIR Resource IDs</div>
+        <dl class="cbo-kv">
+          <dt>Task</dt><dd><span class="resource-id-chip" id="cboFhirTaskId">—</span></dd>
+          <dt>ServiceRequest</dt><dd><span class="resource-id-chip" id="cboFhirSRId">—</span></dd>
+          <dt>Patient</dt><dd><span class="resource-id-chip" id="cboFhirPatientId">—</span></dd>
+          <dt>QR (PRAPARE)</dt><dd><span class="resource-id-chip" id="cboFhirQRId">—</span></dd>
+          <dt>Procedure</dt><dd><span class="resource-id-chip" id="cboFhirProcId">—</span></dd>
+        </dl>
+        <div style="margin-top:0.75rem">
+          <a id="cboServerLink" href="#" target="_blank" style="font-size:0.78rem;color:var(--teal-600);text-decoration:none">🔍 Browse Task on FHIR server ↗</a>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer>
+    <strong>Community Care Connect — CBO Portal</strong><br>
+    Gravity Project SDOH Connectathon — Scenario 1: Individual Self-Referral<br>
+    <span style="font-size:0.75rem;opacity:0.6">
+      Acting as Referral Recipient | Updates Task status and creates Procedure per SDOH IG
+    </span>
+  </footer>
+
+</div><!-- end #cboPortal -->
 
 <script>
 // FHIR Configuration for Gravity SDOH Connectathon
 const FHIR_CONFIG = {
   cpServerBase: "https://sdoh-cp-server.victoriousbay-86ce63e0.southcentralus.azurecontainerapps.io/fhir",
+  cboServerBase: "https://sdoh-ehr-server.victoriousbay-86ce63e0.southcentralus.azurecontainerapps.io/fhir",
   orgId: "SDOHCC-OrganizationCoordinationPlatformExample",
   orgDisplay: "ABC Coordination Platform",
   prapareQuestionnaireUrl: "http://hl7.org/fhir/us/sdoh-clinicalcare/Questionnaire/SDOHCC-QuestionnairePRAPARE",
@@ -925,6 +1504,13 @@ const FHIR_CONFIG = {
   mode: "create-patient",
   testPatientId: "gravity-patient-grover-cleveland",
   testPatientDisplay: "Grover Cleveland",
+  testPatientFirst: "Grover",
+  testPatientLast: "Cleveland",
+  testPatientZip: "64105",
+  testPatientDOB: "1837-03-18",
+  testPatientPhone: "(816) 555-0100",
+  testPatientEmail: "grover.cleveland@example.com",
+  testPatientContactPref: "Phone call",
   // CBO workflow simulation: if true, automatically completes CBO steps (for testing)
   simulateCBOWorkflow: false,
   cboOrgId: "cbo-org-example",
@@ -933,35 +1519,35 @@ const FHIR_CONFIG = {
 
 const SERVICES = [
   // FOOD
-  { id: 1, name: "Mimi's Pantry", cat: "food", desc: "Community food pantry providing groceries and household essentials to families in need.", phone: "Contact local office", address: "Bumblefield County, WB" },
-  { id: 2, name: "Turning Point", cat: "food", desc: "Food assistance and wraparound support services for individuals and families experiencing hardship.", phone: "Contact local office", address: "Bumblefield County, WB" },
-  { id: 3, name: "Harvester Community Food Network", cat: "food", desc: "Regional food bank network connecting families with food pantries and nutrition programs across the area.", phone: "(555) 929-3000", address: "Wobbleton Metro" },
-  { id: 4, name: "Church Food Pantries", cat: "food", desc: "Multiple faith-based food pantries throughout Bumblefield County offering weekly distributions — no paperwork required.", phone: "Varies by location", address: "Multiple Bumblefield County locations" },
+  { id: 1, name: "Mimi's Pantry", cat: "food", cboOrgId: "SDOHCC-OrganizationMimisPantry", desc: "Community food pantry providing groceries and household essentials to families in need.", phone: "Contact local office", address: "Bumblefield County, WB" },
+  { id: 2, name: "Turning Point", cat: "food", cboOrgId: "SDOHCC-OrganizationTurningPoint", desc: "Food assistance and wraparound support services for individuals and families experiencing hardship.", phone: "Contact local office", address: "Bumblefield County, WB" },
+  { id: 3, name: "Harvester Community Food Network", cat: "food", cboOrgId: "SDOHCC-OrganizationHarvesterCommunityFoodNetwork", desc: "Regional food bank network connecting families with food pantries and nutrition programs across the area.", phone: "(555) 929-3000", address: "Wobbleton Metro" },
+  { id: 4, name: "Church Food Pantries", cat: "food", cboOrgId: "SDOHCC-OrganizationChurchFoodPantries", desc: "Multiple faith-based food pantries throughout Bumblefield County offering weekly distributions — no paperwork required.", phone: "Varies by location", address: "Multiple Bumblefield County locations" },
   // HOUSING
-  { id: 5, name: "HUD Housing Authority", cat: "housing", desc: "Federal housing assistance programs including public housing units and rental vouchers for income-eligible families.", phone: "(555) 968-4100", address: "Wobbleton Housing Authority" },
-  { id: 6, name: "Section 8 / Housing Choice Voucher", cat: "housing", desc: "Rental assistance voucher program helping low-income families afford safe private-market housing.", phone: "(555) 968-4100", address: "Bumblefield County, WB" },
-  { id: 7, name: "Transitional Living Program", cat: "housing", desc: "Short-term transitional housing with support services to help individuals and families achieve housing stability.", phone: "Contact local office", address: "Bumblefield County, WB" },
-  { id: 8, name: "Love Unconditional", cat: "housing", desc: "Emergency shelter and housing navigation support for families at risk of homelessness.", phone: "Contact local office", address: "Bumblefield County, WB" },
+  { id: 5, name: "HUD Housing Authority", cat: "housing", cboOrgId: "SDOHCC-OrganizationHUDHousingAuthority", desc: "Federal housing assistance programs including public housing units and rental vouchers for income-eligible families.", phone: "(555) 968-4100", address: "Wobbleton Housing Authority" },
+  { id: 6, name: "Section 8 / Housing Choice Voucher", cat: "housing", cboOrgId: "SDOHCC-OrganizationSection8HousingChoiceVoucher", desc: "Rental assistance voucher program helping low-income families afford safe private-market housing.", phone: "(555) 968-4100", address: "Bumblefield County, WB" },
+  { id: 7, name: "Transitional Living Program", cat: "housing", cboOrgId: "SDOHCC-OrganizationTransitionalLivingProgram", desc: "Short-term transitional housing with support services to help individuals and families achieve housing stability.", phone: "Contact local office", address: "Bumblefield County, WB" },
+  { id: 8, name: "Love Unconditional", cat: "housing", cboOrgId: "SDOHCC-OrganizationLoveUnconditional", desc: "Emergency shelter and housing navigation support for families at risk of homelessness.", phone: "Contact local office", address: "Bumblefield County, WB" },
   // MENTAL HEALTH
-  { id: 9, name: "Beacon Mental Health", cat: "mental-health", desc: "School-based, community-based, and crisis therapy services. Also provides expressive services, case management, and a Sexual Assault Center.", phone: "(555) 468-0400", address: "Bumblefield County, WB" },
-  { id: 10, name: "Synergy Services", cat: "mental-health", desc: "Crisis services, teen support programs, youth shelter, and school-based therapy for children and families.", phone: "(555) 587-4100", address: "Noodleburg, WB" },
-  { id: 11, name: "Preferred Family Healthcare", cat: "mental-health", desc: "Behavioral health and substance use treatment including outpatient counseling, medication management, and recovery support.", phone: "(555) 587-3949", address: "Bumblefield County, WB" },
-  { id: 12, name: "988 Suicide & Crisis Lifeline", cat: "mental-health", desc: "Free, confidential 24/7 crisis counseling by phone or text. Call or text 988 anytime — for any mental health crisis.", phone: "Call or text 988", address: "Available 24/7 statewide" },
-  { id: 13, name: "Mobile Crisis Response Team", cat: "mental-health", desc: "Trained crisis teams that come to you — providing in-person mental health crisis response in the community.", phone: "Call 988 to activate", address: "Bumblefield County, WB" },
-  { id: 14, name: "Marillac", cat: "mental-health", desc: "Comprehensive behavioral health services including outpatient therapy, psychiatric services, and residential care.", phone: "(555) 384-1348", address: "Wobbleton Metro" },
-  { id: 15, name: "Crittenton Center", cat: "mental-health", desc: "Residential care, substance use treatment, and behavioral health services for youth and families.", phone: "(555) 765-6600", address: "Wobbleton, WB" },
+  { id: 9, name: "Beacon Mental Health", cat: "mental-health", cboOrgId: "SDOHCC-OrganizationBeaconMentalHealth", desc: "School-based, community-based, and crisis therapy services. Also provides expressive services, case management, and a Sexual Assault Center.", phone: "(555) 468-0400", address: "Bumblefield County, WB" },
+  { id: 10, name: "Synergy Services", cat: "mental-health", cboOrgId: "SDOHCC-OrganizationSynergyServices", desc: "Crisis services, teen support programs, youth shelter, and school-based therapy for children and families.", phone: "(555) 587-4100", address: "Noodleburg, WB" },
+  { id: 11, name: "Preferred Family Healthcare", cat: "mental-health", cboOrgId: "SDOHCC-OrganizationPreferredFamilyHealthcare", desc: "Behavioral health and substance use treatment including outpatient counseling, medication management, and recovery support.", phone: "(555) 587-3949", address: "Bumblefield County, WB" },
+  { id: 12, name: "988 Suicide & Crisis Lifeline", cat: "mental-health", cboOrgId: "SDOHCC-Organization988SuicideCrisisLifeline", desc: "Free, confidential 24/7 crisis counseling by phone or text. Call or text 988 anytime — for any mental health crisis.", phone: "Call or text 988", address: "Available 24/7 statewide" },
+  { id: 13, name: "Mobile Crisis Response Team", cat: "mental-health", cboOrgId: "SDOHCC-OrganizationMobileCrisisResponseTeam", desc: "Trained crisis teams that come to you — providing in-person mental health crisis response in the community.", phone: "Call 988 to activate", address: "Bumblefield County, WB" },
+  { id: 14, name: "Marillac", cat: "mental-health", cboOrgId: "SDOHCC-OrganizationMarillac", desc: "Comprehensive behavioral health services including outpatient therapy, psychiatric services, and residential care.", phone: "(555) 384-1348", address: "Wobbleton Metro" },
+  { id: 15, name: "Crittenton Center", cat: "mental-health", cboOrgId: "SDOHCC-OrganizationCrittentonCenter", desc: "Residential care, substance use treatment, and behavioral health services for youth and families.", phone: "(555) 765-6600", address: "Wobbleton, WB" },
   // TRANSPORTATION
-  { id: 16, name: "ATA Bus (Wobbleton Area Transit)", cat: "transportation", desc: "Fixed-route public bus service across the Wobbleton metro. Note: does not cover all parts of Bumblefield County.", phone: "(555) 221-0660", address: "Metro-wide routes" },
-  { id: 17, name: "Medicaid Non-Emergency Transportation", cat: "transportation", desc: "Free rides to medical appointments for Medicaid-enrolled individuals. Must be scheduled in advance.", phone: "1-866-269-5927", address: "Statewide (WB)" },
-  { id: 18, name: "Snorkelton Bus System", cat: "transportation", desc: "Local transit service within Snorkelton serving residents needing transport to appointments and services.", phone: "Contact City of Snorkelton", address: "Snorkelton, WB" },
-  { id: 19, name: "IRIS Transportation", cat: "transportation", desc: "Community-based transportation assistance connecting residents to services. Contact social worker for referral.", phone: "Contact local office", address: "Bumblefield County, WB" },
-  { id: 20, name: "Lyft / Uber", cat: "transportation", desc: "Rideshare apps available in the Wobbleton metro area. Some programs offer transportation vouchers — ask your case worker.", phone: "App-based service", address: "Metro Wobbleton" },
+  { id: 16, name: "ATA Bus (Wobbleton Area Transit)", cat: "transportation", cboOrgId: "SDOHCC-OrganizationATABusWobbletonAreaTransit", desc: "Fixed-route public bus service across the Wobbleton metro. Note: does not cover all parts of Bumblefield County.", phone: "(555) 221-0660", address: "Metro-wide routes" },
+  { id: 17, name: "Medicaid Non-Emergency Transportation", cat: "transportation", cboOrgId: "SDOHCC-OrganizationMedicaidNonEmergencyTransportation", desc: "Free rides to medical appointments for Medicaid-enrolled individuals. Must be scheduled in advance.", phone: "1-866-269-5927", address: "Statewide (WB)" },
+  { id: 18, name: "Snorkelton Bus System", cat: "transportation", cboOrgId: "SDOHCC-OrganizationSnorkeltonBusSystem", desc: "Local transit service within Snorkelton serving residents needing transport to appointments and services.", phone: "Contact City of Snorkelton", address: "Snorkelton, WB" },
+  { id: 19, name: "IRIS Transportation", cat: "transportation", cboOrgId: "SDOHCC-OrganizationIRISTransportation", desc: "Community-based transportation assistance connecting residents to services. Contact social worker for referral.", phone: "Contact local office", address: "Bumblefield County, WB" },
+  { id: 20, name: "Lyft / Uber", cat: "transportation", cboOrgId: "SDOHCC-OrganizationLyftUber", desc: "Rideshare apps available in the Wobbleton metro area. Some programs offer transportation vouchers — ask your case worker.", phone: "App-based service", address: "Metro Wobbleton" },
   // PARENTING & FAMILY
-  { id: 21, name: "Parents as Teachers", cat: "parenting", desc: "Home visiting program supporting parents from pregnancy through kindergarten with child development coaching and family support.", phone: "Contact local school district", address: "Bumblefield County, WB" },
-  { id: 22, name: "Easterseals Midwest", cat: "parenting", desc: "Disability services including early intervention, developmental screenings, and family support programs.", phone: "(555) 227-6200", address: "Wobbleshire statewide" },
-  { id: 23, name: "Head Start / Early Head Start", cat: "parenting", desc: "Free early childhood education and family services for income-eligible children from birth to age 5.", phone: "Contact local program", address: "Bumblefield County, WB" },
-  { id: 24, name: "Children's Mercy — Peers Program", cat: "parenting", desc: "Peer support program connecting families navigating complex medical and social challenges with trained community peers.", phone: "(555) 234-3000", address: "Wobbleton, WB" },
-  { id: 25, name: "Family Advocacy Outreach Network", cat: "parenting", desc: "Wraparound advocacy and support for families at risk, including safety planning and connections to local resources.", phone: "Contact local office", address: "Bumblefield County, WB" },
+  { id: 21, name: "Parents as Teachers", cat: "parenting", cboOrgId: "SDOHCC-OrganizationParentsAsTeachers", desc: "Home visiting program supporting parents from pregnancy through kindergarten with child development coaching and family support.", phone: "Contact local school district", address: "Bumblefield County, WB" },
+  { id: 22, name: "Easterseals Midwest", cat: "parenting", cboOrgId: "SDOHCC-OrganizationEastersealsMidwest", desc: "Disability services including early intervention, developmental screenings, and family support programs.", phone: "(555) 227-6200", address: "Wobbleshire statewide" },
+  { id: 23, name: "Head Start / Early Head Start", cat: "parenting", cboOrgId: "SDOHCC-OrganizationHeadStartEarlyHeadStart", desc: "Free early childhood education and family services for income-eligible children from birth to age 5.", phone: "Contact local program", address: "Bumblefield County, WB" },
+  { id: 24, name: "Children's Mercy — Peers Program", cat: "parenting", cboOrgId: "SDOHCC-OrganizationChildrensMercyPeersProgram", desc: "Peer support program connecting families navigating complex medical and social challenges with trained community peers.", phone: "(555) 234-3000", address: "Wobbleton, WB" },
+  { id: 25, name: "Family Advocacy Outreach Network", cat: "parenting", cboOrgId: "SDOHCC-OrganizationFamilyAdvocacyOutreachNetwork", desc: "Wraparound advocacy and support for families at risk, including safety planning and connections to local resources.", phone: "Contact local office", address: "Bumblefield County, WB" },
 ];
 
 const CAT_CONFIG = {
@@ -976,9 +1562,15 @@ let currentCategory = "all";
 let selectedService = null;
 let submissionData = null;
 
+// FHIR Helper Functions
+function getCBOServerBase() {
+  return FHIR_CONFIG.cboServerBase || FHIR_CONFIG.cpServerBase;
+}
+
 // FHIR Client Functions
-async function createFHIRResource(resourceType, resource, method = 'PUT') {
-  const url = `${FHIR_CONFIG.cpServerBase}/${resourceType}/${resource.id}`;
+async function createFHIRResource(resourceType, resource, method = 'PUT', serverBase = null) {
+  const server = serverBase || FHIR_CONFIG.cpServerBase;
+  const url = `${server}/${resourceType}/${resource.id}`;
   try {
     const response = await fetch(url, {
       method: method,
@@ -1027,8 +1619,9 @@ async function searchFHIRResources(resourceType, params) {
   }
 }
 
-async function patchFHIRResource(resourceType, id, patchOps) {
-  const url = `${FHIR_CONFIG.cpServerBase}/${resourceType}/${id}`;
+async function patchFHIRResource(resourceType, id, patchOps, serverBase = null) {
+  const server = serverBase || FHIR_CONFIG.cpServerBase;
+  const url = `${server}/${resourceType}/${id}`;
   try {
     const response = await fetch(url, {
       method: 'PATCH',
@@ -1125,7 +1718,8 @@ async function findExistingPatient(formData) {
   return patients.find(patient => isStrongPatientMatch(patient, formData)) || null;
 }
 
-async function ensureReferralOrganizations() {
+async function ensureReferralOrganizations(selectedService) {
+  // PUT coordination platform to cpServerBase
   const coordinationPlatform = {
     resourceType: "Organization",
     id: FHIR_CONFIG.orgId,
@@ -1136,18 +1730,19 @@ async function ensureReferralOrganizations() {
     }]
   };
 
+  // PUT CBO organization to cboServerBase
   const cbo = {
     resourceType: "Organization",
-    id: FHIR_CONFIG.cboOrgId,
+    id: selectedService.cboOrgId,
     active: true,
-    name: FHIR_CONFIG.cboOrgDisplay,
+    name: selectedService.name,
     type: [{
       text: "Community Based Organization"
     }]
   };
 
-  await createFHIRResource("Organization", coordinationPlatform);
-  await createFHIRResource("Organization", cbo);
+  await createFHIRResource("Organization", coordinationPlatform, 'PUT', FHIR_CONFIG.cpServerBase);
+  await createFHIRResource("Organization", cbo, 'PUT', getCBOServerBase());
   return { coordinationPlatform, cbo };
 }
 
@@ -1162,6 +1757,29 @@ function getCategoryCodeForService(serviceCat) {
   return mapping[serviceCat] || "sdoh-category-unspecified";
 }
 
+function autoFillTestPatient() {
+  // Only auto-fill if in test-patient mode
+  if (FHIR_CONFIG.mode !== "test-patient") return;
+
+  // Fill in the form fields with test patient data
+  const formFields = {
+    firstName: FHIR_CONFIG.testPatientFirst,
+    lastName: FHIR_CONFIG.testPatientLast,
+    zipCode: FHIR_CONFIG.testPatientZip,
+    dob: FHIR_CONFIG.testPatientDOB,
+    phone: FHIR_CONFIG.testPatientPhone,
+    email: FHIR_CONFIG.testPatientEmail,
+    contactPref: FHIR_CONFIG.testPatientContactPref
+  };
+
+  Object.entries(formFields).forEach(([fieldId, value]) => {
+    const field = document.getElementById(fieldId);
+    if (field && value) {
+      field.value = value;
+    }
+  });
+}
+
 function toggleConfig() {
   const panel = document.getElementById("configPanel");
   panel.classList.toggle("open");
@@ -1172,33 +1790,63 @@ function toggleConfig() {
 
 function loadConfigToUI() {
   document.getElementById("configCpBase").value = FHIR_CONFIG.cpServerBase;
+  document.getElementById("configCboServerBase").value = FHIR_CONFIG.cboServerBase || FHIR_CONFIG.cpServerBase;
   document.getElementById("configOrgId").value = FHIR_CONFIG.orgId;
   document.getElementById("configMode").value = FHIR_CONFIG.mode;
   document.getElementById("configTestPatientId").value = FHIR_CONFIG.testPatientId;
   document.getElementById("configTestPatientDisplay").value = FHIR_CONFIG.testPatientDisplay;
+  document.getElementById("configTestPatientFirst").value = FHIR_CONFIG.testPatientFirst || "Grover";
+  document.getElementById("configTestPatientLast").value = FHIR_CONFIG.testPatientLast || "Cleveland";
+  document.getElementById("configTestPatientZip").value = FHIR_CONFIG.testPatientZip || "64105";
+  document.getElementById("configTestPatientDOB").value = FHIR_CONFIG.testPatientDOB || "1837-03-18";
+  document.getElementById("configTestPatientPhone").value = FHIR_CONFIG.testPatientPhone || "(816) 555-0100";
+  document.getElementById("configTestPatientEmail").value = FHIR_CONFIG.testPatientEmail || "grover.cleveland@example.com";
+  document.getElementById("configTestPatientContactPref").value = FHIR_CONFIG.testPatientContactPref || "Phone call";
   document.getElementById("configSimulateCBO").checked = FHIR_CONFIG.simulateCBOWorkflow || false;
   toggleTestPatientFields();
 }
 
 function toggleTestPatientFields() {
   const mode = document.getElementById("configMode").value;
-  const testFields = document.getElementById("testPatientFields");
-  const testDisplayField = document.getElementById("testPatientDisplayField");
+  const fieldIds = [
+    "testPatientFields",
+    "testPatientDisplayField",
+    "testPatientFirstField",
+    "testPatientLastField",
+    "testPatientZipField",
+    "testPatientDOBField",
+    "testPatientPhoneField",
+    "testPatientEmailField",
+    "testPatientContactPrefField"
+  ];
+
+  fieldIds.forEach(id => {
+    const field = document.getElementById(id);
+    if (field) {
+      field.style.display = mode === "test-patient" ? "flex" : "none";
+    }
+  });
+
+  // Call autoFillTestPatient when switching to test-patient mode
   if (mode === "test-patient") {
-    testFields.style.display = "flex";
-    testDisplayField.style.display = "flex";
-  } else {
-    testFields.style.display = "none";
-    testDisplayField.style.display = "none";
+    autoFillTestPatient();
   }
 }
 
 function saveConfig() {
   FHIR_CONFIG.cpServerBase = document.getElementById("configCpBase").value.trim();
+  FHIR_CONFIG.cboServerBase = document.getElementById("configCboServerBase").value.trim();
   FHIR_CONFIG.orgId = document.getElementById("configOrgId").value.trim();
   FHIR_CONFIG.mode = document.getElementById("configMode").value;
   FHIR_CONFIG.testPatientId = document.getElementById("configTestPatientId").value.trim();
   FHIR_CONFIG.testPatientDisplay = document.getElementById("configTestPatientDisplay").value.trim();
+  FHIR_CONFIG.testPatientFirst = document.getElementById("configTestPatientFirst").value.trim();
+  FHIR_CONFIG.testPatientLast = document.getElementById("configTestPatientLast").value.trim();
+  FHIR_CONFIG.testPatientZip = document.getElementById("configTestPatientZip").value.trim();
+  FHIR_CONFIG.testPatientDOB = document.getElementById("configTestPatientDOB").value;
+  FHIR_CONFIG.testPatientPhone = document.getElementById("configTestPatientPhone").value.trim();
+  FHIR_CONFIG.testPatientEmail = document.getElementById("configTestPatientEmail").value.trim();
+  FHIR_CONFIG.testPatientContactPref = document.getElementById("configTestPatientContactPref").value;
   FHIR_CONFIG.simulateCBOWorkflow = document.getElementById("configSimulateCBO").checked;
 
   // Save to localStorage for persistence
@@ -1284,6 +1932,11 @@ function openModal(serviceId) {
   document.getElementById("confirmView").classList.remove("show");
   document.getElementById("modalOverlay").classList.add("open");
   document.body.style.overflow = "hidden";
+
+  // Auto-fill form if in test-patient mode
+  if (FHIR_CONFIG.mode === "test-patient") {
+    autoFillTestPatient();
+  }
 }
 
 function closeModal() {
@@ -1313,14 +1966,23 @@ function initExclusiveCheckboxGroup(name, exclusiveCodes) {
 }
 
 async function submitForm() {
-  const first = document.getElementById("firstName").value.trim();
-  const last = document.getElementById("lastName").value.trim();
-  const zip = document.getElementById("zipCode").value.trim();
-  const pref = document.getElementById("contactPref").value;
+  // Get form values, with test patient fallbacks if in test-patient mode
+  let first = document.getElementById("firstName").value.trim();
+  let last = document.getElementById("lastName").value.trim();
+  let zip = document.getElementById("zipCode").value.trim();
+  let pref = document.getElementById("contactPref").value;
   const dob = document.getElementById("dob").value;
   const phone = document.getElementById("phone").value.trim();
   const email = document.getElementById("email").value.trim();
   const notes = document.getElementById("notes").value.trim();
+
+  // Use test patient data as fallbacks when in test-patient mode
+  if (FHIR_CONFIG.mode === "test-patient") {
+    first = first || FHIR_CONFIG.testPatientFirst;
+    last = last || FHIR_CONFIG.testPatientLast;
+    zip = zip || FHIR_CONFIG.testPatientZip;
+    pref = pref || FHIR_CONFIG.testPatientContactPref;
+  }
 
   const toLoincCoding = input => input ? ({
     system: "http://loinc.org",
@@ -1350,7 +2012,7 @@ async function submitForm() {
 
   try {
     // Ensure referenced Organizations exist before ServiceRequest and Task point at them.
-    await ensureReferralOrganizations();
+    await ensureReferralOrganizations(selectedService);
 
     // Generate IDs for FHIR resources
     const taskId = generateId("ccc-task-referral");
@@ -1376,6 +2038,10 @@ async function submitForm() {
       stressLevel: stressLevel,
       safety: safety,
       service: selectedService.name,
+      serviceCategory: selectedService.cat,
+      cboOrgId: selectedService.cboOrgId,
+      cboOrgDisplay: selectedService.name,
+      serviceRequestId: serviceRequestId,
       referenceNumber: ref,
       taskId: taskId,
       qrId: qrId,
@@ -1617,8 +2283,8 @@ async function submitForm() {
         display: FHIR_CONFIG.orgDisplay
       },
       owner: {
-        reference: `Organization/${FHIR_CONFIG.cboOrgId}`,
-        display: FHIR_CONFIG.cboOrgDisplay
+        reference: `Organization/${selectedService.cboOrgId}`,
+        display: selectedService.name
       },
       input: [
         {
@@ -1647,77 +2313,29 @@ async function submitForm() {
     };
 
     console.log("Creating Task (status: requested)...", task);
-    const taskResponse = await createFHIRResource("Task", task);
+    const taskResponse = await createFHIRResource("Task", task, 'PUT', getCBOServerBase());
     console.log("Task created:", taskResponse);
 
-    // Optional: Simulate CBO Workflow (for testing only)
+    // Optional: Simulate CBO Workflow — switch to CBO portal view
     if (FHIR_CONFIG.simulateCBOWorkflow) {
-      console.log("Simulating CBO workflow...");
+      console.log("CBO simulation mode: switching to CBO portal view...");
 
-      // Update Task to "accepted"
-      await patchFHIRResource("Task", taskId, [
-        { op: "replace", path: "/status", value: "accepted" }
-      ]);
-      console.log("Task status updated to: accepted");
+      // Update submissionData with final patient info before handing off
+      submissionData.patientId = actualPatientId;
+      submissionData.patientDisplay = actualPatientDisplay;
 
-      // Update Task to "in-progress"
-      await patchFHIRResource("Task", taskId, [
-        { op: "replace", path: "/status", value: "in-progress" }
-      ]);
-      console.log("Task status updated to: in-progress");
-
-      // Create Procedure (service delivered)
-      const procedureId = generateId("ccc-procedure");
-      const procedure = {
-        resourceType: "Procedure",
-        id: procedureId,
-        status: "completed",
-        category: {
-          coding: [{
-            system: "http://snomed.info/sct",
-            code: "410606002",
-            display: "Social service procedure"
-          }]
-        },
-        code: {
-          text: `${selectedService.name} - Service Delivered`
-        },
-        subject: {
-          reference: `Patient/${actualPatientId}`,
-          display: actualPatientDisplay
-        },
-        performedDateTime: new Date().toISOString()
-      };
-
-      const procedureResponse = await createFHIRResource("Procedure", procedure);
-      console.log("Procedure created:", procedureResponse);
-
-      // Update Task to "completed" with Procedure output
-      await patchFHIRResource("Task", taskId, [
-        { op: "replace", path: "/status", value: "completed" },
-        {
-          op: "add",
-          path: "/output",
-          value: [{
-            type: {
-              coding: [{
-                system: "http://hl7.org/fhir/us/sdoh-clinicalcare/CodeSystem/SDOHCC-CodeSystemTemporaryCodes",
-                code: "resulting-activity"
-              }]
-            },
-            valueReference: {
-              reference: `Procedure/${procedureId}`
-            }
-          }]
-        }
-      ]);
-      console.log("Task completed with Procedure output");
+      // Close modal, transition to CBO portal
+      closeModal();
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit referral request";
+      switchToCBOPortal(submissionData);
+      return; // Don't show the normal confirmation
     }
 
     // Update UI with success
     let fhirResourcesHtml = `
       ServiceRequest ID: ${serviceRequestId}<br>
-      Task ID: ${taskId} (status: ${FHIR_CONFIG.simulateCBOWorkflow ? 'completed' : 'requested'})<br>
+      Task ID: ${taskId} (status: requested)<br>
       QuestionnaireResponse ID: ${qrId}
     `;
     if (FHIR_CONFIG.mode === "create-patient") {
@@ -1744,6 +2362,307 @@ async function submitForm() {
   }
 }
 
+// ================================================================
+// CBO PORTAL LOGIC
+// ================================================================
+
+let cboReferralData = null; // populated when portal activates
+let cboCurrentTaskStatus = "requested";
+
+function switchToCBOPortal(referralData) {
+  cboReferralData = referralData;
+  cboCurrentTaskStatus = "requested";
+
+  // Populate patient info with actual CBO organization from referral
+  document.getElementById("cboOrgName").textContent = referralData.cboOrgDisplay + " — Referral Inbox";
+  document.getElementById("cboPanelOwner").textContent = `${referralData.cboOrgDisplay} (Organization/${referralData.cboOrgId})`;
+  document.getElementById("cboSimulationBanner").textContent = `You are now acting as ${referralData.cboOrgDisplay} receiving this referral.`;
+  document.getElementById("cboTaskPanelTitle").textContent = `📋 Referral Task for ${referralData.cboOrgDisplay} — Status Management`;
+
+  const d = referralData;
+  document.getElementById("cboPatientName").textContent = `${d.firstName} ${d.lastName}`;
+  document.getElementById("cboPatientDOB").textContent = d.dob || "Not provided";
+  document.getElementById("cboPatientPhone").textContent = d.phone || "Not provided";
+  document.getElementById("cboPatientEmail").textContent = d.email || "Not provided";
+  document.getElementById("cboPatientZip").textContent = d.zip;
+  document.getElementById("cboPatientContactPref").textContent = d.contactPref;
+  document.getElementById("cboPatientId").innerHTML = `<span class="resource-id-chip">${d.patientId}</span>`;
+
+  // ServiceRequest
+  const catLabel = d.service ? (CAT_CONFIG[d.serviceCategory] ? CAT_CONFIG[d.serviceCategory].label : d.serviceCategory) : "—";
+  document.getElementById("cboSRService").textContent = d.service || "—";
+  document.getElementById("cboSRCategory").textContent = catLabel;
+  document.getElementById("cboSRStatus").innerHTML = `<span class="task-status-badge status-requested">active</span>`;
+  document.getElementById("cboSRAuthored").textContent = d.timestamp ? new Date(d.timestamp).toLocaleString() : "—";
+  document.getElementById("cboSRRequester").textContent = FHIR_CONFIG.orgDisplay;
+  document.getElementById("cboSRId").innerHTML = `<span class="resource-id-chip">${d.serviceRequestId || "—"}</span>`;
+
+  // PRAPARE
+  const codingDisplay = (coding) => coding ? coding.display || coding.code : "Not answered";
+  const codingsDisplay = (codings) => codings && codings.length ? codings.map(c => c.display || c.code).join(", ") : "Not answered";
+
+  document.getElementById("pp-housing").textContent = codingDisplay(d.housingStatus);
+  document.getElementById("pp-housing-worry").textContent = codingDisplay(d.housingWorry);
+  document.getElementById("pp-material").textContent = codingsDisplay(d.materialNeeds);
+  document.getElementById("pp-transport").textContent = codingsDisplay(d.transportationBarriers);
+  document.getElementById("pp-stress").textContent = codingDisplay(d.stressLevel);
+  document.getElementById("pp-safety").textContent = codingDisplay(d.safety);
+  document.getElementById("cboQRId").textContent = d.qrId || "—";
+
+  if (d.notes) {
+    document.getElementById("cboNotesRow").style.display = "block";
+    document.getElementById("cboNotes").textContent = d.notes;
+  }
+
+  // Task badge + chips
+  document.getElementById("taskStatusBadge").textContent = "requested";
+  document.getElementById("taskStatusBadge").className = "task-status-badge status-requested";
+  document.getElementById("taskIdChip").innerHTML = `<span class="resource-id-chip">${d.taskId || "—"}</span>`;
+  document.getElementById("tl-submitted-time").textContent = d.timestamp ? new Date(d.timestamp).toLocaleString() : "—";
+
+  // FHIR IDs panel
+  document.getElementById("cboFhirTaskId").textContent = d.taskId || "—";
+  document.getElementById("cboFhirSRId").textContent = d.serviceRequestId || "—";
+  document.getElementById("cboFhirPatientId").textContent = d.patientId || "—";
+  document.getElementById("cboFhirQRId").textContent = d.qrId || "—";
+  document.getElementById("cboFhirProcId").textContent = "—";
+
+  const serverLink = document.getElementById("cboServerLink");
+  serverLink.href = `${getCBOServerBase()}/Task/${d.taskId}`;
+  serverLink.textContent = `🔍 Browse Task/${d.taskId} on FHIR server ↗`;
+
+  // Pre-fill procedure date to today
+  document.getElementById("procDate").value = new Date().toISOString().slice(0, 10);
+  document.getElementById("procDesc").value = `${d.service} — services rendered`;
+
+  // Hide patient portal, show CBO portal
+  document.getElementById("patientPortal").style.display = "none";
+  document.getElementById("cboPortal").classList.add("active");
+  window.scrollTo(0, 0);
+}
+
+function exitCBOPortal() {
+  document.getElementById("cboPortal").classList.remove("active");
+  document.getElementById("patientPortal").style.display = "block";
+  window.scrollTo(0, 0);
+}
+
+function setCBOAlert(msg, type) {
+  const el = document.getElementById("cboAlert");
+  el.textContent = msg;
+  el.className = `cbo-alert ${type} show`;
+}
+
+function clearCBOAlert() {
+  document.getElementById("cboAlert").className = "cbo-alert";
+  document.getElementById("cboAlert").style.display = "none";
+}
+
+function updateTaskStatusFlow(status) {
+  const steps = ["requested", "accepted", "in-progress", "completed"];
+  const currentIdx = steps.indexOf(status);
+  if (status === "cancelled") {
+    // Grey out all steps
+    steps.forEach(s => {
+      const el = document.getElementById(`step-${s}`);
+      if (el) el.className = "status-step pending-step";
+    });
+    return;
+  }
+  steps.forEach((s, i) => {
+    const el = document.getElementById(`step-${s}`);
+    if (!el) return;
+    if (i < currentIdx) el.className = "status-step completed-step";
+    else if (i === currentIdx) el.className = "status-step current-step";
+    else el.className = "status-step pending-step";
+  });
+}
+
+function updateTaskBadge(status) {
+  const badge = document.getElementById("taskStatusBadge");
+  badge.textContent = status;
+  badge.className = `task-status-badge status-${status.replace("-", "-")}`;
+}
+
+function updateTimeline(status) {
+  const now = new Date().toLocaleString();
+  const map = {
+    "accepted":    { dot: "tl-dot-accepted",   time: "tl-accepted-time" },
+    "in-progress": { dot: "tl-dot-inprogress",  time: "tl-inprogress-time" },
+    "completed":   { dot: "tl-dot-completed",   time: "tl-completed-time" },
+  };
+  if (map[status]) {
+    document.getElementById(map[status].dot).className = "tl-dot done";
+    document.getElementById(map[status].time).textContent = now;
+  }
+}
+
+async function cboUpdateTaskStatus(newStatus) {
+  const d = cboReferralData;
+  if (!d || !d.taskId) { setCBOAlert("No Task ID available.", "error"); return; }
+
+  // Disable all action buttons during request
+  ["btnAccept","btnInProgress","btnComplete","btnCancel"].forEach(id => {
+    const b = document.getElementById(id);
+    if (b) b.disabled = true;
+  });
+  setCBOAlert(`Updating Task status to "${newStatus}"…`, "info");
+  document.getElementById("cboAlert").style.display = "block";
+
+  try {
+    await patchFHIRResource("Task", d.taskId, [
+      { op: "replace", path: "/status", value: newStatus }
+    ], getCBOServerBase());
+
+    cboCurrentTaskStatus = newStatus;
+    updateTaskBadge(newStatus);
+    updateTaskStatusFlow(newStatus);
+    updateTimeline(newStatus);
+
+    // Update button availability
+    document.getElementById("btnAccept").disabled = (newStatus !== "requested");
+    document.getElementById("btnInProgress").disabled = (newStatus !== "accepted");
+    document.getElementById("btnComplete").disabled = (newStatus !== "in-progress");
+    document.getElementById("btnCancel").disabled = ["completed","cancelled"].includes(newStatus);
+
+    if (newStatus === "cancelled") {
+      setCBOAlert("Referral declined/cancelled. Task updated on server.", "error");
+      document.getElementById("cboSRStatus").innerHTML = `<span class="task-status-badge status-cancelled">cancelled</span>`;
+    } else {
+      setCBOAlert(`✅ Task status updated to "${newStatus}" on FHIR server.`, "success");
+    }
+    document.getElementById("cboAlert").style.display = "block";
+
+  } catch (err) {
+    setCBOAlert(`Error updating Task: ${err.message}`, "error");
+    document.getElementById("cboAlert").style.display = "block";
+    // Re-enable appropriate buttons on error
+    document.getElementById("btnAccept").disabled = (cboCurrentTaskStatus !== "requested");
+    document.getElementById("btnInProgress").disabled = (cboCurrentTaskStatus !== "accepted");
+    document.getElementById("btnComplete").disabled = (cboCurrentTaskStatus !== "in-progress");
+    document.getElementById("btnCancel").disabled = false;
+  }
+}
+
+function showProcedureForm() {
+  document.getElementById("procedureForm").classList.add("show");
+  document.getElementById("btnComplete").disabled = true;
+}
+
+function hideProcedureForm() {
+  document.getElementById("procedureForm").classList.remove("show");
+  document.getElementById("btnComplete").disabled = false;
+}
+
+async function cboCompleteReferral() {
+  const d = cboReferralData;
+  if (!d || !d.taskId) { setCBOAlert("No Task ID available.", "error"); return; }
+
+  const procDesc = document.getElementById("procDesc").value.trim();
+  const procDate = document.getElementById("procDate").value;
+  const procNotes = document.getElementById("procNotes").value.trim();
+
+  if (!procDesc || !procDate) {
+    setCBOAlert("Please provide a service description and delivery date.", "error");
+    document.getElementById("cboAlert").style.display = "block";
+    return;
+  }
+
+  document.getElementById("btnSubmitCompletion").disabled = true;
+  document.getElementById("btnSubmitCompletion").textContent = "Submitting…";
+  setCBOAlert("Creating Procedure and completing Task…", "info");
+  document.getElementById("cboAlert").style.display = "block";
+
+  try {
+    // 1. Create Procedure
+    const procedureId = generateId("ccc-procedure");
+    const procedure = {
+      resourceType: "Procedure",
+      id: procedureId,
+      meta: {
+        profile: ["http://hl7.org/fhir/us/sdoh-clinicalcare/StructureDefinition/SDOHCC-Procedure"]
+      },
+      status: "completed",
+      category: {
+        coding: [{
+          system: "http://snomed.info/sct",
+          code: "410606002",
+          display: "Social service procedure"
+        }]
+      },
+      code: {
+        text: procDesc
+      },
+      subject: {
+        reference: `Patient/${d.patientId}`,
+        display: `${d.firstName} ${d.lastName}`
+      },
+      performedDateTime: new Date(procDate).toISOString().slice(0,10),
+      basedOn: [{
+        reference: `ServiceRequest/${d.serviceRequestId}`
+      }]
+    };
+    if (procNotes) {
+      procedure.note = [{ text: procNotes }];
+    }
+
+    const procResponse = await createFHIRResource("Procedure", procedure, 'PUT', getCBOServerBase());
+    console.log("Procedure created:", procResponse);
+    document.getElementById("cboFhirProcId").textContent = procedureId;
+
+    // 2. Update Task to completed with output pointing to Procedure
+    await patchFHIRResource("Task", d.taskId, [
+      { op: "replace", path: "/status", value: "completed" },
+      {
+        op: "add",
+        path: "/output",
+        value: [{
+          type: {
+            coding: [{
+              system: "http://hl7.org/fhir/us/sdoh-clinicalcare/CodeSystem/SDOHCC-CodeSystemTemporaryCodes",
+              code: "resulting-activity"
+            }]
+          },
+          valueReference: {
+            reference: `Procedure/${procedureId}`
+          }
+        }]
+      }
+    ], getCBOServerBase());
+
+    // 3. Update ServiceRequest status to completed
+    await patchFHIRResource("ServiceRequest", d.serviceRequestId, [
+      { op: "replace", path: "/status", value: "completed" }
+    ]);
+
+    cboCurrentTaskStatus = "completed";
+    updateTaskBadge("completed");
+    updateTaskStatusFlow("completed");
+    updateTimeline("completed");
+
+    // Update ServiceRequest badge
+    document.getElementById("cboSRStatus").innerHTML = `<span class="task-status-badge status-completed">completed</span>`;
+
+    // Disable all action buttons
+    ["btnAccept","btnInProgress","btnComplete","btnCancel"].forEach(id => {
+      const b = document.getElementById(id);
+      if (b) b.disabled = true;
+    });
+    hideProcedureForm();
+
+    setCBOAlert(`🎉 Referral completed! Procedure/${procedureId} created, Task and ServiceRequest marked completed on FHIR server.`, "success");
+    document.getElementById("cboAlert").style.display = "block";
+
+  } catch (err) {
+    console.error("CBO completion error:", err);
+    setCBOAlert(`Error: ${err.message}`, "error");
+    document.getElementById("cboAlert").style.display = "block";
+    document.getElementById("btnSubmitCompletion").disabled = false;
+    document.getElementById("btnSubmitCompletion").textContent = "Submit & Complete Referral";
+  }
+}
+
+// ================================================================
 // Init
 loadConfigFromStorage();
 renderServices();
