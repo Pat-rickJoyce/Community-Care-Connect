@@ -645,10 +645,334 @@
     .modal { padding: 1.5rem; }
     .hero { padding: 2rem 1rem 2.5rem; }
   }
+
+  /* ============================================================
+     CBO PORTAL
+     ============================================================ */
+  #cboPortal { display: none; }
+  #cboPortal.active { display: block; }
+
+  .cbo-header {
+    background: linear-gradient(135deg, #1a3a5c 0%, #185FA5 100%);
+    color: white;
+    padding: 0 1.5rem;
+  }
+  .cbo-header-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1.25rem 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .cbo-badge {
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+  .cbo-header-text h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    font-weight: 400;
+  }
+  .cbo-header-text p {
+    font-size: 0.78rem;
+    opacity: 0.8;
+    margin-top: 2px;
+  }
+  .back-to-patient-btn {
+    margin-left: auto;
+    padding: 0.4rem 0.9rem;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.35);
+    color: white;
+    border-radius: var(--radius-sm);
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .back-to-patient-btn:hover { background: rgba(255,255,255,0.28); }
+
+  .cbo-main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  @media (max-width: 740px) {
+    .cbo-main { grid-template-columns: 1fr; }
+  }
+
+  .cbo-panel {
+    background: white;
+    border-radius: var(--radius);
+    border: 1px solid #e8e6df;
+    padding: 1.5rem;
+  }
+  .cbo-panel + .cbo-panel { margin-top: 1.25rem; }
+
+  .cbo-panel-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.05rem;
+    font-weight: 400;
+    color: var(--teal-800);
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #ece9e0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cbo-kv {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 0.35rem 0.75rem;
+    font-size: 0.85rem;
+  }
+  .cbo-kv dt {
+    color: var(--gray-600);
+    font-weight: 600;
+  }
+  .cbo-kv dd {
+    margin: 0;
+    color: var(--gray-800);
+    overflow-wrap: anywhere;
+  }
+
+  .cbo-section-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue-600);
+    margin: 1.25rem 0 0.6rem;
+  }
+
+  /* Task status flow */
+  .task-status-flow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+  }
+  .status-step {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 999px;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .status-step.completed-step {
+    background: var(--teal-50);
+    border-color: var(--teal-400);
+    color: var(--teal-600);
+  }
+  .status-step.current-step {
+    background: var(--blue-600);
+    border-color: var(--blue-600);
+    color: white;
+  }
+  .status-step.pending-step {
+    background: white;
+    border-color: var(--gray-100);
+    color: var(--gray-400);
+  }
+  .status-arrow {
+    color: var(--gray-400);
+    font-size: 0.8rem;
+  }
+
+  .task-action-btn {
+    width: 100%;
+    padding: 0.65rem 1rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 0.5rem;
+  }
+  .task-action-btn.accept {
+    background: var(--blue-50);
+    color: var(--blue-600);
+    border: 1.5px solid var(--blue-400);
+  }
+  .task-action-btn.accept:hover { background: var(--blue-400); color: white; }
+  .task-action-btn.in-progress {
+    background: var(--amber-50);
+    color: var(--amber-400);
+    border: 1.5px solid var(--amber-400);
+  }
+  .task-action-btn.in-progress:hover { background: var(--amber-400); color: white; }
+  .task-action-btn.complete {
+    background: var(--teal-50);
+    color: var(--teal-600);
+    border: 1.5px solid var(--teal-400);
+  }
+  .task-action-btn.complete:hover { background: var(--teal-400); color: white; }
+  .task-action-btn.cancel {
+    background: var(--coral-50);
+    color: var(--coral-400);
+    border: 1.5px solid var(--coral-400);
+  }
+  .task-action-btn.cancel:hover { background: var(--coral-400); color: white; }
+  .task-action-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .task-status-badge {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+  .status-requested { background: var(--gray-50); color: var(--gray-600); }
+  .status-accepted { background: var(--blue-50); color: var(--blue-600); }
+  .status-in-progress { background: var(--amber-50); color: var(--amber-400); }
+  .status-completed { background: var(--teal-50); color: var(--teal-600); }
+  .status-cancelled { background: var(--coral-50); color: var(--coral-400); }
+
+  /* Procedure form */
+  .procedure-form {
+    display: none;
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--teal-50);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--teal-100);
+  }
+  .procedure-form.show { display: block; }
+  .procedure-form h4 {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--teal-800);
+    margin-bottom: 0.75rem;
+  }
+  .procedure-form .form-group label { font-size: 0.8rem; }
+  .procedure-form .form-group input,
+  .procedure-form .form-group select,
+  .procedure-form .form-group textarea {
+    font-size: 0.85rem;
+    padding: 0.45rem 0.65rem;
+  }
+
+  .cbo-alert {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.84rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+    display: none;
+  }
+  .cbo-alert.show { display: block; }
+  .cbo-alert.success {
+    background: var(--teal-50);
+    border: 1px solid var(--teal-100);
+    color: var(--teal-800);
+  }
+  .cbo-alert.error {
+    background: var(--coral-50);
+    border: 1px solid var(--coral-400);
+    color: #7a1a0a;
+  }
+  .cbo-alert.info {
+    background: var(--blue-50);
+    border: 1px solid var(--blue-400);
+    color: var(--blue-600);
+  }
+
+  .prapare-item {
+    padding: 0.6rem 0;
+    border-bottom: 1px solid #f0ede5;
+    font-size: 0.84rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem;
+    align-items: start;
+  }
+  .prapare-item:last-child { border-bottom: none; }
+  .prapare-q { color: var(--gray-600); line-height: 1.4; }
+  .prapare-a { color: var(--gray-800); font-weight: 600; text-align: right; }
+
+  .resource-id-chip {
+    display: inline-block;
+    background: #f0ede5;
+    color: var(--gray-600);
+    font-size: 0.7rem;
+    font-family: monospace;
+    padding: 2px 7px;
+    border-radius: 4px;
+    overflow-wrap: anywhere;
+  }
+
+  .cbo-timeline {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: relative;
+  }
+  .cbo-timeline::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background: #e8e6df;
+  }
+  .cbo-timeline li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+    position: relative;
+  }
+  .tl-dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    position: relative;
+    z-index: 1;
+  }
+  .tl-dot.done { background: var(--teal-50); border: 2px solid var(--teal-400); color: var(--teal-600); }
+  .tl-dot.pending { background: white; border: 2px solid var(--gray-100); color: var(--gray-400); }
+  .tl-text { font-size: 0.82rem; padding-top: 2px; }
+  .tl-text strong { display: block; color: var(--gray-800); }
+  .tl-text span { color: var(--gray-400); font-size: 0.78rem; }
 </style>
 </head>
 <body>
 
+<div id="patientPortal">
 <header>
   <div class="header-inner">
     <div class="logo-mark">🤝</div>
@@ -699,7 +1023,7 @@
           <span>Simulate CBO Workflow (Testing Only)</span>
         </label>
         <p style="font-size:0.72rem;color:var(--gray-600);margin-top:0.25rem">
-          When enabled, automatically completes CBO steps (accepted → in-progress → completed + Procedure). Leave disabled for real referral workflows where CBOs manage Tasks manually.
+          When enabled, after submitting a referral the page reloads as the <strong>CBO Referral Inbox</strong> — allowing you to act on the referral as the receiving CBO (accept, work, complete, create Procedure). Leave disabled for real referral workflows where CBOs manage Tasks via their own system.
         </p>
       </div>
     </div>
@@ -913,6 +1237,233 @@
     Creates Patient, QuestionnaireResponse, ServiceRequest, and Task resources per SDOH IG
   </span>
 </footer>
+</div><!-- end #patientPortal -->
+
+<!-- ================================================================
+     CBO PORTAL  (shown after submit when simulateCBOWorkflow = true)
+     ================================================================ -->
+<div id="cboPortal">
+
+  <header class="cbo-header">
+    <div class="cbo-header-inner">
+      <div class="logo-mark" style="background:rgba(255,255,255,0.18)">🏢</div>
+      <div class="cbo-header-text">
+        <h1 id="cboOrgName">CBO Referral Inbox</h1>
+        <p>Gravity SDOH — Referral Recipient View</p>
+      </div>
+      <span class="cbo-badge">CBO Portal</span>
+      <button class="back-to-patient-btn" onclick="exitCBOPortal()">← Back to Patient Portal</button>
+    </div>
+  </header>
+
+  <div style="background:var(--blue-50);border-bottom:2px solid var(--blue-400);padding:0.6rem 1.5rem;">
+    <div style="max-width:960px;margin:0 auto;font-size:0.82rem;color:var(--blue-600);display:flex;align-items:center;gap:8px;">
+      <span>🧪</span>
+      <strong>Simulation Mode:</strong> You are now acting as the CBO receiving this referral. Manage the Task and document services below.
+    </div>
+  </div>
+
+  <div class="cbo-main">
+
+    <!-- LEFT COLUMN: referral details -->
+    <div>
+      <!-- Task Status Panel -->
+      <div class="cbo-panel">
+        <div class="cbo-panel-title">📋 Referral Task — Status Management</div>
+
+        <div class="cbo-alert info" id="cboAlert" style="display:none"></div>
+
+        <div style="margin-bottom:1rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span style="font-size:0.82rem;color:var(--gray-600);font-weight:500">Current status:</span>
+          <span class="task-status-badge status-requested" id="taskStatusBadge">requested</span>
+          <span style="font-size:0.75rem;color:var(--gray-400)" id="taskIdChip"></span>
+        </div>
+
+        <div class="task-status-flow" id="taskStatusFlow">
+          <div class="status-step current-step" id="step-requested">📨 Requested</div>
+          <span class="status-arrow">›</span>
+          <div class="status-step pending-step" id="step-accepted">✅ Accepted</div>
+          <span class="status-arrow">›</span>
+          <div class="status-step pending-step" id="step-in-progress">⚙️ In Progress</div>
+          <span class="status-arrow">›</span>
+          <div class="status-step pending-step" id="step-completed">🏁 Completed</div>
+        </div>
+
+        <button class="task-action-btn accept" id="btnAccept" onclick="cboUpdateTaskStatus('accepted')">
+          ✅ Accept Referral (requested → accepted)
+        </button>
+        <button class="task-action-btn in-progress" id="btnInProgress" onclick="cboUpdateTaskStatus('in-progress')" disabled>
+          ⚙️ Begin Services (accepted → in-progress)
+        </button>
+        <button class="task-action-btn complete" id="btnComplete" onclick="showProcedureForm()" disabled>
+          🏁 Complete &amp; Document Services
+        </button>
+        <button class="task-action-btn cancel" id="btnCancel" onclick="cboUpdateTaskStatus('cancelled')">
+          ✕ Decline / Cancel Referral
+        </button>
+
+        <!-- Procedure + completion form -->
+        <div class="procedure-form" id="procedureForm">
+          <h4>📝 Document Services Rendered (Procedure)</h4>
+          <div class="form-group">
+            <label>Service description *</label>
+            <input type="text" id="procDesc" placeholder="e.g., Food box distributed; 3-day emergency supply" />
+          </div>
+          <div class="form-group">
+            <label>Service delivery date *</label>
+            <input type="date" id="procDate" />
+          </div>
+          <div class="form-group">
+            <label>Outcome notes (optional)</label>
+            <textarea id="procNotes" rows="2" placeholder="Any additional notes about the service delivered…" style="resize:vertical"></textarea>
+          </div>
+          <button class="task-action-btn complete" id="btnSubmitCompletion" onclick="cboCompleteReferral()" style="margin-top:0.5rem">
+            Submit &amp; Complete Referral
+          </button>
+          <button style="width:100%;padding:0.5rem;background:none;border:none;color:var(--gray-400);font-size:0.82rem;cursor:pointer;margin-top:2px" onclick="hideProcedureForm()">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Patient info -->
+      <div class="cbo-panel">
+        <div class="cbo-panel-title">👤 Patient Information</div>
+        <dl class="cbo-kv" id="cboPatientKV">
+          <dt>Name</dt><dd id="cboPatientName">—</dd>
+          <dt>Date of birth</dt><dd id="cboPatientDOB">—</dd>
+          <dt>Phone</dt><dd id="cboPatientPhone">—</dd>
+          <dt>Email</dt><dd id="cboPatientEmail">—</dd>
+          <dt>ZIP code</dt><dd id="cboPatientZip">—</dd>
+          <dt>Preferred contact</dt><dd id="cboPatientContactPref">—</dd>
+          <dt>Patient FHIR ID</dt><dd id="cboPatientId">—</dd>
+        </dl>
+      </div>
+
+      <!-- ServiceRequest info -->
+      <div class="cbo-panel">
+        <div class="cbo-panel-title">📄 ServiceRequest Details</div>
+        <dl class="cbo-kv" id="cboSRKV">
+          <dt>Service requested</dt><dd id="cboSRService">—</dd>
+          <dt>Category</dt><dd id="cboSRCategory">—</dd>
+          <dt>Status</dt><dd id="cboSRStatus">—</dd>
+          <dt>Intent</dt><dd id="cboSRIntent">order</dd>
+          <dt>Authored on</dt><dd id="cboSRAuthored">—</dd>
+          <dt>Requester</dt><dd id="cboSRRequester">—</dd>
+          <dt>ServiceRequest ID</dt><dd id="cboSRId">—</dd>
+        </dl>
+      </div>
+
+      <!-- PRAPARE Screening results -->
+      <div class="cbo-panel">
+        <div class="cbo-panel-title">📊 PRAPARE Screening Results</div>
+        <div id="prapareSummary">
+          <div class="prapare-item">
+            <span class="prapare-q">Housing situation today</span>
+            <span class="prapare-a" id="pp-housing">—</span>
+          </div>
+          <div class="prapare-item">
+            <span class="prapare-q">Worried about losing housing?</span>
+            <span class="prapare-a" id="pp-housing-worry">—</span>
+          </div>
+          <div class="prapare-item">
+            <span class="prapare-q">Unable to get material needs in past year</span>
+            <span class="prapare-a" id="pp-material">—</span>
+          </div>
+          <div class="prapare-item">
+            <span class="prapare-q">Transportation barriers</span>
+            <span class="prapare-a" id="pp-transport">—</span>
+          </div>
+          <div class="prapare-item">
+            <span class="prapare-q">Stress level</span>
+            <span class="prapare-a" id="pp-stress">—</span>
+          </div>
+          <div class="prapare-item" style="border-bottom:none">
+            <span class="prapare-q">Feels safe at home?</span>
+            <span class="prapare-a" id="pp-safety">—</span>
+          </div>
+        </div>
+        <div style="margin-top:0.75rem">
+          <span style="font-size:0.75rem;color:var(--gray-400)">QuestionnaireResponse ID: </span>
+          <span class="resource-id-chip" id="cboQRId">—</span>
+        </div>
+        <div id="cboNotesRow" style="display:none;margin-top:0.5rem;font-size:0.84rem">
+          <span style="font-weight:600;color:var(--gray-600)">Notes from patient: </span>
+          <span id="cboNotes" style="color:var(--gray-800)"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: timeline + task details -->
+    <div>
+      <div class="cbo-panel">
+        <div class="cbo-panel-title">📅 Referral Timeline</div>
+        <ul class="cbo-timeline" id="cboTimeline">
+          <li>
+            <div class="tl-dot done">📨</div>
+            <div class="tl-text">
+              <strong>Referral submitted</strong>
+              <span id="tl-submitted-time">—</span>
+            </div>
+          </li>
+          <li>
+            <div class="tl-dot pending" id="tl-dot-accepted">✅</div>
+            <div class="tl-text">
+              <strong>Accepted by CBO</strong>
+              <span id="tl-accepted-time">Pending</span>
+            </div>
+          </li>
+          <li>
+            <div class="tl-dot pending" id="tl-dot-inprogress">⚙️</div>
+            <div class="tl-text">
+              <strong>Services in progress</strong>
+              <span id="tl-inprogress-time">Pending</span>
+            </div>
+          </li>
+          <li>
+            <div class="tl-dot pending" id="tl-dot-completed">🏁</div>
+            <div class="tl-text">
+              <strong>Referral completed</strong>
+              <span id="tl-completed-time">Pending</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="cbo-panel" style="margin-top:1.25rem">
+        <div class="cbo-panel-title">🔗 FHIR Resource IDs</div>
+        <dl class="cbo-kv">
+          <dt>Task</dt><dd><span class="resource-id-chip" id="cboFhirTaskId">—</span></dd>
+          <dt>ServiceRequest</dt><dd><span class="resource-id-chip" id="cboFhirSRId">—</span></dd>
+          <dt>Patient</dt><dd><span class="resource-id-chip" id="cboFhirPatientId">—</span></dd>
+          <dt>QR (PRAPARE)</dt><dd><span class="resource-id-chip" id="cboFhirQRId">—</span></dd>
+          <dt>Procedure</dt><dd><span class="resource-id-chip" id="cboFhirProcId">—</span></dd>
+        </dl>
+        <div style="margin-top:0.75rem">
+          <a id="cboServerLink" href="#" target="_blank" style="font-size:0.78rem;color:var(--teal-600);text-decoration:none">🔍 Browse Task on FHIR server ↗</a>
+        </div>
+      </div>
+
+      <div class="cbo-panel" style="margin-top:1.25rem">
+        <div class="cbo-panel-title">ℹ️ About This View</div>
+        <p style="font-size:0.8rem;color:var(--gray-600);line-height:1.65">
+          In a real deployment, the CBO would receive this referral via their own FHIR-enabled system. This simulation lets you walk through the CBO side of the <strong>Gravity SDOH Scenario 1 self-referral workflow</strong> — accepting, working, and completing the Task with a documented Procedure per the SDOH Clinical Care IG.
+        </p>
+        <p style="font-size:0.78rem;color:var(--gray-400);margin-top:0.5rem;line-height:1.5">
+          Task owner: <span id="cboPanelOwner">—</span>
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <strong>Community Care Connect — CBO Portal</strong><br>
+    Gravity Project SDOH Connectathon — Scenario 1: Individual Self-Referral<br>
+    <span style="font-size:0.75rem;opacity:0.6">
+      Acting as Referral Recipient | Updates Task status and creates Procedure per SDOH IG
+    </span>
+  </footer>
+
+</div><!-- end #cboPortal -->
 
 <script>
 // FHIR Configuration for Gravity SDOH Connectathon
@@ -1376,6 +1927,8 @@ async function submitForm() {
       stressLevel: stressLevel,
       safety: safety,
       service: selectedService.name,
+      serviceCategory: selectedService.cat,
+      serviceRequestId: serviceRequestId,
       referenceNumber: ref,
       taskId: taskId,
       qrId: qrId,
@@ -1650,74 +2203,26 @@ async function submitForm() {
     const taskResponse = await createFHIRResource("Task", task);
     console.log("Task created:", taskResponse);
 
-    // Optional: Simulate CBO Workflow (for testing only)
+    // Optional: Simulate CBO Workflow — switch to CBO portal view
     if (FHIR_CONFIG.simulateCBOWorkflow) {
-      console.log("Simulating CBO workflow...");
+      console.log("CBO simulation mode: switching to CBO portal view...");
 
-      // Update Task to "accepted"
-      await patchFHIRResource("Task", taskId, [
-        { op: "replace", path: "/status", value: "accepted" }
-      ]);
-      console.log("Task status updated to: accepted");
+      // Update submissionData with final patient info before handing off
+      submissionData.patientId = actualPatientId;
+      submissionData.patientDisplay = actualPatientDisplay;
 
-      // Update Task to "in-progress"
-      await patchFHIRResource("Task", taskId, [
-        { op: "replace", path: "/status", value: "in-progress" }
-      ]);
-      console.log("Task status updated to: in-progress");
-
-      // Create Procedure (service delivered)
-      const procedureId = generateId("ccc-procedure");
-      const procedure = {
-        resourceType: "Procedure",
-        id: procedureId,
-        status: "completed",
-        category: {
-          coding: [{
-            system: "http://snomed.info/sct",
-            code: "410606002",
-            display: "Social service procedure"
-          }]
-        },
-        code: {
-          text: `${selectedService.name} - Service Delivered`
-        },
-        subject: {
-          reference: `Patient/${actualPatientId}`,
-          display: actualPatientDisplay
-        },
-        performedDateTime: new Date().toISOString()
-      };
-
-      const procedureResponse = await createFHIRResource("Procedure", procedure);
-      console.log("Procedure created:", procedureResponse);
-
-      // Update Task to "completed" with Procedure output
-      await patchFHIRResource("Task", taskId, [
-        { op: "replace", path: "/status", value: "completed" },
-        {
-          op: "add",
-          path: "/output",
-          value: [{
-            type: {
-              coding: [{
-                system: "http://hl7.org/fhir/us/sdoh-clinicalcare/CodeSystem/SDOHCC-CodeSystemTemporaryCodes",
-                code: "resulting-activity"
-              }]
-            },
-            valueReference: {
-              reference: `Procedure/${procedureId}`
-            }
-          }]
-        }
-      ]);
-      console.log("Task completed with Procedure output");
+      // Close modal, transition to CBO portal
+      closeModal();
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit referral request";
+      switchToCBOPortal(submissionData);
+      return; // Don't show the normal confirmation
     }
 
     // Update UI with success
     let fhirResourcesHtml = `
       ServiceRequest ID: ${serviceRequestId}<br>
-      Task ID: ${taskId} (status: ${FHIR_CONFIG.simulateCBOWorkflow ? 'completed' : 'requested'})<br>
+      Task ID: ${taskId} (status: requested)<br>
       QuestionnaireResponse ID: ${qrId}
     `;
     if (FHIR_CONFIG.mode === "create-patient") {
@@ -1744,6 +2249,305 @@ async function submitForm() {
   }
 }
 
+// ================================================================
+// CBO PORTAL LOGIC
+// ================================================================
+
+let cboReferralData = null; // populated when portal activates
+let cboCurrentTaskStatus = "requested";
+
+function switchToCBOPortal(referralData) {
+  cboReferralData = referralData;
+  cboCurrentTaskStatus = "requested";
+
+  // Populate patient info
+  document.getElementById("cboOrgName").textContent = FHIR_CONFIG.cboOrgDisplay + " — Inbox";
+  document.getElementById("cboPanelOwner").textContent = `${FHIR_CONFIG.cboOrgDisplay} (Organization/${FHIR_CONFIG.cboOrgId})`;
+
+  const d = referralData;
+  document.getElementById("cboPatientName").textContent = `${d.firstName} ${d.lastName}`;
+  document.getElementById("cboPatientDOB").textContent = d.dob || "Not provided";
+  document.getElementById("cboPatientPhone").textContent = d.phone || "Not provided";
+  document.getElementById("cboPatientEmail").textContent = d.email || "Not provided";
+  document.getElementById("cboPatientZip").textContent = d.zip;
+  document.getElementById("cboPatientContactPref").textContent = d.contactPref;
+  document.getElementById("cboPatientId").innerHTML = `<span class="resource-id-chip">${d.patientId}</span>`;
+
+  // ServiceRequest
+  const catLabel = d.service ? (CAT_CONFIG[d.serviceCategory] ? CAT_CONFIG[d.serviceCategory].label : d.serviceCategory) : "—";
+  document.getElementById("cboSRService").textContent = d.service || "—";
+  document.getElementById("cboSRCategory").textContent = catLabel;
+  document.getElementById("cboSRStatus").innerHTML = `<span class="task-status-badge status-requested">active</span>`;
+  document.getElementById("cboSRAuthored").textContent = d.timestamp ? new Date(d.timestamp).toLocaleString() : "—";
+  document.getElementById("cboSRRequester").textContent = FHIR_CONFIG.orgDisplay;
+  document.getElementById("cboSRId").innerHTML = `<span class="resource-id-chip">${d.serviceRequestId || "—"}</span>`;
+
+  // PRAPARE
+  const codingDisplay = (coding) => coding ? coding.display || coding.code : "Not answered";
+  const codingsDisplay = (codings) => codings && codings.length ? codings.map(c => c.display || c.code).join(", ") : "Not answered";
+
+  document.getElementById("pp-housing").textContent = codingDisplay(d.housingStatus);
+  document.getElementById("pp-housing-worry").textContent = codingDisplay(d.housingWorry);
+  document.getElementById("pp-material").textContent = codingsDisplay(d.materialNeeds);
+  document.getElementById("pp-transport").textContent = codingsDisplay(d.transportationBarriers);
+  document.getElementById("pp-stress").textContent = codingDisplay(d.stressLevel);
+  document.getElementById("pp-safety").textContent = codingDisplay(d.safety);
+  document.getElementById("cboQRId").textContent = d.qrId || "—";
+
+  if (d.notes) {
+    document.getElementById("cboNotesRow").style.display = "block";
+    document.getElementById("cboNotes").textContent = d.notes;
+  }
+
+  // Task badge + chips
+  document.getElementById("taskStatusBadge").textContent = "requested";
+  document.getElementById("taskStatusBadge").className = "task-status-badge status-requested";
+  document.getElementById("taskIdChip").innerHTML = `<span class="resource-id-chip">${d.taskId || "—"}</span>`;
+  document.getElementById("tl-submitted-time").textContent = d.timestamp ? new Date(d.timestamp).toLocaleString() : "—";
+
+  // FHIR IDs panel
+  document.getElementById("cboFhirTaskId").textContent = d.taskId || "—";
+  document.getElementById("cboFhirSRId").textContent = d.serviceRequestId || "—";
+  document.getElementById("cboFhirPatientId").textContent = d.patientId || "—";
+  document.getElementById("cboFhirQRId").textContent = d.qrId || "—";
+  document.getElementById("cboFhirProcId").textContent = "—";
+
+  const serverLink = document.getElementById("cboServerLink");
+  serverLink.href = `${FHIR_CONFIG.cpServerBase}/Task/${d.taskId}`;
+  serverLink.textContent = `🔍 Browse Task/${d.taskId} on FHIR server ↗`;
+
+  // Pre-fill procedure date to today
+  document.getElementById("procDate").value = new Date().toISOString().slice(0, 10);
+  document.getElementById("procDesc").value = `${d.service} — services rendered`;
+
+  // Hide patient portal, show CBO portal
+  document.getElementById("patientPortal").style.display = "none";
+  document.getElementById("cboPortal").classList.add("active");
+  window.scrollTo(0, 0);
+}
+
+function exitCBOPortal() {
+  document.getElementById("cboPortal").classList.remove("active");
+  document.getElementById("patientPortal").style.display = "block";
+  window.scrollTo(0, 0);
+}
+
+function setCBOAlert(msg, type) {
+  const el = document.getElementById("cboAlert");
+  el.textContent = msg;
+  el.className = `cbo-alert ${type} show`;
+}
+
+function clearCBOAlert() {
+  document.getElementById("cboAlert").className = "cbo-alert";
+  document.getElementById("cboAlert").style.display = "none";
+}
+
+function updateTaskStatusFlow(status) {
+  const steps = ["requested", "accepted", "in-progress", "completed"];
+  const currentIdx = steps.indexOf(status);
+  if (status === "cancelled") {
+    // Grey out all steps
+    steps.forEach(s => {
+      const el = document.getElementById(`step-${s}`);
+      if (el) el.className = "status-step pending-step";
+    });
+    return;
+  }
+  steps.forEach((s, i) => {
+    const el = document.getElementById(`step-${s}`);
+    if (!el) return;
+    if (i < currentIdx) el.className = "status-step completed-step";
+    else if (i === currentIdx) el.className = "status-step current-step";
+    else el.className = "status-step pending-step";
+  });
+}
+
+function updateTaskBadge(status) {
+  const badge = document.getElementById("taskStatusBadge");
+  badge.textContent = status;
+  badge.className = `task-status-badge status-${status.replace("-", "-")}`;
+}
+
+function updateTimeline(status) {
+  const now = new Date().toLocaleString();
+  const map = {
+    "accepted":    { dot: "tl-dot-accepted",   time: "tl-accepted-time" },
+    "in-progress": { dot: "tl-dot-inprogress",  time: "tl-inprogress-time" },
+    "completed":   { dot: "tl-dot-completed",   time: "tl-completed-time" },
+  };
+  if (map[status]) {
+    document.getElementById(map[status].dot).className = "tl-dot done";
+    document.getElementById(map[status].time).textContent = now;
+  }
+}
+
+async function cboUpdateTaskStatus(newStatus) {
+  const d = cboReferralData;
+  if (!d || !d.taskId) { setCBOAlert("No Task ID available.", "error"); return; }
+
+  // Disable all action buttons during request
+  ["btnAccept","btnInProgress","btnComplete","btnCancel"].forEach(id => {
+    const b = document.getElementById(id);
+    if (b) b.disabled = true;
+  });
+  setCBOAlert(`Updating Task status to "${newStatus}"…`, "info");
+  document.getElementById("cboAlert").style.display = "block";
+
+  try {
+    await patchFHIRResource("Task", d.taskId, [
+      { op: "replace", path: "/status", value: newStatus }
+    ]);
+
+    cboCurrentTaskStatus = newStatus;
+    updateTaskBadge(newStatus);
+    updateTaskStatusFlow(newStatus);
+    updateTimeline(newStatus);
+
+    // Update button availability
+    document.getElementById("btnAccept").disabled = (newStatus !== "requested");
+    document.getElementById("btnInProgress").disabled = (newStatus !== "accepted");
+    document.getElementById("btnComplete").disabled = (newStatus !== "in-progress");
+    document.getElementById("btnCancel").disabled = ["completed","cancelled"].includes(newStatus);
+
+    if (newStatus === "cancelled") {
+      setCBOAlert("Referral declined/cancelled. Task updated on server.", "error");
+      document.getElementById("cboSRStatus").innerHTML = `<span class="task-status-badge status-cancelled">cancelled</span>`;
+    } else {
+      setCBOAlert(`✅ Task status updated to "${newStatus}" on FHIR server.`, "success");
+    }
+    document.getElementById("cboAlert").style.display = "block";
+
+  } catch (err) {
+    setCBOAlert(`Error updating Task: ${err.message}`, "error");
+    document.getElementById("cboAlert").style.display = "block";
+    // Re-enable appropriate buttons on error
+    document.getElementById("btnAccept").disabled = (cboCurrentTaskStatus !== "requested");
+    document.getElementById("btnInProgress").disabled = (cboCurrentTaskStatus !== "accepted");
+    document.getElementById("btnComplete").disabled = (cboCurrentTaskStatus !== "in-progress");
+    document.getElementById("btnCancel").disabled = false;
+  }
+}
+
+function showProcedureForm() {
+  document.getElementById("procedureForm").classList.add("show");
+  document.getElementById("btnComplete").disabled = true;
+}
+
+function hideProcedureForm() {
+  document.getElementById("procedureForm").classList.remove("show");
+  document.getElementById("btnComplete").disabled = false;
+}
+
+async function cboCompleteReferral() {
+  const d = cboReferralData;
+  if (!d || !d.taskId) { setCBOAlert("No Task ID available.", "error"); return; }
+
+  const procDesc = document.getElementById("procDesc").value.trim();
+  const procDate = document.getElementById("procDate").value;
+  const procNotes = document.getElementById("procNotes").value.trim();
+
+  if (!procDesc || !procDate) {
+    setCBOAlert("Please provide a service description and delivery date.", "error");
+    document.getElementById("cboAlert").style.display = "block";
+    return;
+  }
+
+  document.getElementById("btnSubmitCompletion").disabled = true;
+  document.getElementById("btnSubmitCompletion").textContent = "Submitting…";
+  setCBOAlert("Creating Procedure and completing Task…", "info");
+  document.getElementById("cboAlert").style.display = "block";
+
+  try {
+    // 1. Create Procedure
+    const procedureId = generateId("ccc-procedure");
+    const procedure = {
+      resourceType: "Procedure",
+      id: procedureId,
+      meta: {
+        profile: ["http://hl7.org/fhir/us/sdoh-clinicalcare/StructureDefinition/SDOHCC-Procedure"]
+      },
+      status: "completed",
+      category: {
+        coding: [{
+          system: "http://snomed.info/sct",
+          code: "410606002",
+          display: "Social service procedure"
+        }]
+      },
+      code: {
+        text: procDesc
+      },
+      subject: {
+        reference: `Patient/${d.patientId}`,
+        display: `${d.firstName} ${d.lastName}`
+      },
+      performedDateTime: new Date(procDate).toISOString().slice(0,10),
+      basedOn: [{
+        reference: `ServiceRequest/${d.serviceRequestId}`
+      }]
+    };
+    if (procNotes) {
+      procedure.note = [{ text: procNotes }];
+    }
+
+    const procResponse = await createFHIRResource("Procedure", procedure);
+    console.log("Procedure created:", procResponse);
+    document.getElementById("cboFhirProcId").textContent = procedureId;
+
+    // 2. Update Task to completed with output pointing to Procedure
+    await patchFHIRResource("Task", d.taskId, [
+      { op: "replace", path: "/status", value: "completed" },
+      {
+        op: "add",
+        path: "/output",
+        value: [{
+          type: {
+            coding: [{
+              system: "http://hl7.org/fhir/us/sdoh-clinicalcare/CodeSystem/SDOHCC-CodeSystemTemporaryCodes",
+              code: "resulting-activity"
+            }]
+          },
+          valueReference: {
+            reference: `Procedure/${procedureId}`
+          }
+        }]
+      }
+    ]);
+
+    // 3. Update ServiceRequest status to completed
+    await patchFHIRResource("ServiceRequest", d.serviceRequestId, [
+      { op: "replace", path: "/status", value: "completed" }
+    ]);
+
+    cboCurrentTaskStatus = "completed";
+    updateTaskBadge("completed");
+    updateTaskStatusFlow("completed");
+    updateTimeline("completed");
+
+    // Update ServiceRequest badge
+    document.getElementById("cboSRStatus").innerHTML = `<span class="task-status-badge status-completed">completed</span>`;
+
+    // Disable all action buttons
+    ["btnAccept","btnInProgress","btnComplete","btnCancel"].forEach(id => {
+      const b = document.getElementById(id);
+      if (b) b.disabled = true;
+    });
+    hideProcedureForm();
+
+    setCBOAlert(`🎉 Referral completed! Procedure/${procedureId} created, Task and ServiceRequest marked completed on FHIR server.`, "success");
+    document.getElementById("cboAlert").style.display = "block";
+
+  } catch (err) {
+    console.error("CBO completion error:", err);
+    setCBOAlert(`Error: ${err.message}`, "error");
+    document.getElementById("cboAlert").style.display = "block";
+    document.getElementById("btnSubmitCompletion").disabled = false;
+    document.getElementById("btnSubmitCompletion").textContent = "Submit & Complete Referral";
+  }
+}
+
+// ================================================================
 // Init
 loadConfigFromStorage();
 renderServices();
