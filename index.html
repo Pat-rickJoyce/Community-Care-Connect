@@ -621,6 +621,17 @@
     background: var(--teal-400);
   }
 
+  /* ROLE AND PATIENT MODE CARDS */
+  .role-card:hover {
+    border-color: var(--teal-400) !important;
+    box-shadow: 0 2px 8px rgba(15, 110, 86, 0.15);
+  }
+
+  .patient-mode-card:hover {
+    border-color: var(--teal-400) !important;
+    box-shadow: 0 2px 8px rgba(15, 110, 86, 0.15);
+  }
+
   /* FOOTER */
   footer {
     background: var(--gray-800);
@@ -989,83 +1000,100 @@
       <h3>FHIR Configuration (Gravity SDOH Connectathon)</h3>
       <button class="config-close" onclick="toggleConfig()">✕</button>
     </div>
+
+    <!-- Role Selector Cards -->
+    <div style="margin-bottom:1.5rem">
+      <label style="font-size:0.875rem;font-weight:600;color:var(--gray-700);margin-bottom:0.5rem;display:block">Select Your Role</label>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem">
+        <div class="role-card" id="roleDemo" onclick="selectRole('demo')" style="cursor:pointer;padding:0.875rem;border:2px solid var(--gray-300);border-radius:8px;transition:all 0.2s">
+          <div style="font-size:1.25rem;margin-bottom:0.25rem">🧪</div>
+          <div style="font-weight:600;font-size:0.8rem;margin-bottom:0.25rem">Connectathon Demo</div>
+          <div style="font-size:0.7rem;color:var(--gray-600);line-height:1.4">Pre-configured to use the shared connectathon servers. Just see it work.</div>
+        </div>
+        <div class="role-card" id="roleCP" onclick="selectRole('cp')" style="cursor:pointer;padding:0.875rem;border:2px solid var(--gray-300);border-radius:8px;transition:all 0.2s">
+          <div style="font-size:1.25rem;margin-bottom:0.25rem">🏥</div>
+          <div style="font-weight:600;font-size:0.8rem;margin-bottom:0.25rem">I'm a Coordination Platform</div>
+          <div style="font-size:0.7rem;color:var(--gray-600);line-height:1.4">I have my own FHIR server. I'm sending referrals to CBOs.</div>
+        </div>
+        <div class="role-card" id="roleCBO" onclick="selectRole('cbo')" style="cursor:pointer;padding:0.875rem;border:2px solid var(--gray-300);border-radius:8px;transition:all 0.2s">
+          <div style="font-size:1.25rem;margin-bottom:0.25rem">🏢</div>
+          <div style="font-weight:600;font-size:0.8rem;margin-bottom:0.25rem">I'm a CBO</div>
+          <div style="font-size:0.7rem;color:var(--gray-600);line-height:1.4">I'm receiving referrals on my own FHIR server.</div>
+        </div>
+      </div>
+    </div>
+
     <div class="config-grid">
       <div class="config-field">
         <label>CP Server Base URL</label>
         <input type="text" id="configCpBase" value="https://sdoh-cp-server.victoriousbay-86ce63e0.southcentralus.azurecontainerapps.io/fhir" />
       </div>
-      <div class="config-field">
-        <label>CBO Server Base URL</label>
-        <input type="text" id="configCboServerBase" value="https://sdoh-ehr-server.victoriousbay-86ce63e0.southcentralus.azurecontainerapps.io/fhir" />
+      <div class="config-field" id="configCboServerBaseField" style="display:none">
+        <label id="configCboServerBaseLabel">CBO Server Base URL</label>
+        <input type="text" id="configCboServerBase" placeholder="Your own FHIR server URL" />
       </div>
-      <div class="config-field">
-        <label>Organization ID</label>
+      <div class="config-field" id="configOrgIdField" style="display:none">
+        <label id="configOrgIdLabel">Organization ID</label>
         <input type="text" id="configOrgId" value="SDOHCC-OrganizationCoordinationPlatformExample" />
       </div>
-      <div class="config-field" style="grid-column: 1 / -1">
-        <label>Patient Mode</label>
-        <select id="configMode" onchange="toggleTestPatientFields()">
-          <option value="create-patient">Create New Patient (Real Self-Referral)</option>
-          <option value="test-patient">Use Test Patient (Connectathon Testing)</option>
-        </select>
-        <p style="font-size:0.72rem;color:var(--gray-600);margin-top:0.25rem">
-          <strong>Create New Patient:</strong> Each referral creates a new Patient resource from form data (realistic scenario)<br>
-          <strong>Use Test Patient:</strong> All referrals use a pre-seeded test patient (for Connectathon testing)
-        </p>
+
+      <!-- Patient Mode Selector -->
+      <div class="config-field" style="grid-column: 1 / -1;margin-top:1rem">
+        <label style="font-size:0.875rem;font-weight:600;color:var(--gray-700);margin-bottom:0.5rem;display:block">Patient Mode</label>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;margin-bottom:0.75rem">
+          <div class="patient-mode-card" id="patientModeCreate" onclick="selectPatientMode('create')" style="cursor:pointer;padding:0.75rem;border:2px solid var(--gray-300);border-radius:6px;transition:all 0.2s">
+            <div style="font-size:1.1rem;margin-bottom:0.25rem">📝</div>
+            <div style="font-weight:600;font-size:0.75rem">Create New Patient</div>
+          </div>
+          <div class="patient-mode-card" id="patientModeTest" onclick="selectPatientMode('test')" style="cursor:pointer;padding:0.75rem;border:2px solid var(--gray-300);border-radius:6px;transition:all 0.2s">
+            <div style="font-size:1.1rem;margin-bottom:0.25rem">👤</div>
+            <div style="font-weight:600;font-size:0.75rem">Use Test Patient</div>
+          </div>
+          <div class="patient-mode-card" id="patientModeSearch" onclick="selectPatientMode('search')" style="cursor:pointer;padding:0.75rem;border:2px solid var(--gray-300);border-radius:6px;transition:all 0.2s">
+            <div style="font-size:1.1rem;margin-bottom:0.25rem">🔍</div>
+            <div style="font-weight:600;font-size:0.75rem">Search Existing</div>
+          </div>
+        </div>
+
+        <!-- Test Patient Dropdown -->
+        <div id="testPatientDropdownField" style="display:none;margin-top:0.5rem">
+          <label style="font-size:0.8rem;color:var(--gray-700);margin-bottom:0.25rem;display:block">Select Test Patient</label>
+          <select id="testPatientSelect" onchange="onTestPatientSelect()" style="width:100%;padding:0.5rem;border:1px solid var(--gray-300);border-radius:4px;font-size:0.875rem">
+            <option value="">— select —</option>
+          </select>
+        </div>
+
+        <!-- Search Patient Field -->
+        <div id="searchPatientField" style="display:none;margin-top:0.5rem">
+          <label style="font-size:0.8rem;color:var(--gray-700);margin-bottom:0.5rem;display:block">Search for Patient</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.5rem">
+            <div>
+              <label style="font-size:0.7rem;color:var(--gray-600);margin-bottom:0.25rem;display:block">First name</label>
+              <input type="text" id="searchPatientFirst" placeholder="Grover" style="width:100%;padding:0.5rem;border:1px solid var(--gray-300);border-radius:4px;font-size:0.875rem" />
+            </div>
+            <div>
+              <label style="font-size:0.7rem;color:var(--gray-600);margin-bottom:0.25rem;display:block">Last name</label>
+              <input type="text" id="searchPatientLast" placeholder="Cleveland" style="width:100%;padding:0.5rem;border:1px solid var(--gray-300);border-radius:4px;font-size:0.875rem" />
+            </div>
+          </div>
+          <div style="margin-bottom:0.5rem">
+            <label style="font-size:0.7rem;color:var(--gray-600);margin-bottom:0.25rem;display:block">Patient ID</label>
+            <input type="text" id="searchPatientInput" placeholder="gravity-patient-grover-cleveland" style="width:100%;padding:0.5rem;border:1px solid var(--gray-300);border-radius:4px;font-size:0.875rem" />
+          </div>
+          <button onclick="lookupPatient()" style="width:100%;padding:0.5rem 1rem;background:var(--teal-600);color:white;border:none;border-radius:4px;cursor:pointer;font-size:0.875rem;font-weight:500">Look up Patient</button>
+          <div id="searchPatientResult" style="margin-top:0.5rem;font-size:0.8rem"></div>
+        </div>
       </div>
-      <div class="config-field" id="testPatientFields" style="display:none">
-        <label>Test Patient ID</label>
-        <input type="text" id="configTestPatientId" value="gravity-patient-grover-cleveland" />
-      </div>
-      <div class="config-field" id="testPatientDisplayField" style="display:none">
-        <label>Test Patient Display Name</label>
-        <input type="text" id="configTestPatientDisplay" value="Grover Cleveland" />
-      </div>
-      <div class="config-field" id="testPatientFirstField" style="display:none">
-        <label>Test Patient First Name</label>
-        <input type="text" id="configTestPatientFirst" value="Grover" />
-      </div>
-      <div class="config-field" id="testPatientLastField" style="display:none">
-        <label>Test Patient Last Name</label>
-        <input type="text" id="configTestPatientLast" value="Cleveland" />
-      </div>
-      <div class="config-field" id="testPatientZipField" style="display:none">
-        <label>Test Patient ZIP Code</label>
-        <input type="text" id="configTestPatientZip" value="64105" />
-      </div>
-      <div class="config-field" id="testPatientDOBField" style="display:none">
-        <label>Test Patient Date of Birth</label>
-        <input type="date" id="configTestPatientDOB" value="1837-03-18" />
-      </div>
-      <div class="config-field" id="testPatientPhoneField" style="display:none">
-        <label>Test Patient Phone</label>
-        <input type="tel" id="configTestPatientPhone" value="(816) 555-0100" />
-      </div>
-      <div class="config-field" id="testPatientEmailField" style="display:none">
-        <label>Test Patient Email</label>
-        <input type="email" id="configTestPatientEmail" value="grover.cleveland@example.com" />
-      </div>
-      <div class="config-field" id="testPatientContactPrefField" style="display:none">
-        <label>Test Patient Contact Preference</label>
-        <select id="configTestPatientContactPref">
-          <option value="Phone call">Phone call</option>
-          <option value="Text message">Text message</option>
-          <option value="Email">Email</option>
-        </select>
-      </div>
-      <div class="config-field" style="grid-column: 1 / -1">
+      <div class="config-field" id="configSimulateCBOField" style="grid-column: 1 / -1;display:none">
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
           <input type="checkbox" id="configSimulateCBO" style="width:auto;margin:0" />
           <span>Simulate CBO Workflow (Testing Only)</span>
         </label>
-        <p style="font-size:0.72rem;color:var(--gray-600);margin-top:0.25rem">
-          When enabled, after submitting a referral the page reloads as the <strong>CBO Referral Inbox</strong> — allowing you to act on the referral as the receiving CBO (accept, work, complete, create Procedure). Leave disabled for real referral workflows where CBOs manage Tasks via their own system.
-        </p>
       </div>
     </div>
     <button class="config-save" onclick="saveConfig()">Save Configuration</button>
-    <p style="font-size:0.75rem;color:var(--gray-600);margin-top:0.75rem">
-      💡 <strong>Scenario 1 Individual Self-Referral:</strong> This portal creates IG-compliant FHIR resources (Patient, QuestionnaireResponse, ServiceRequest, Task) and submits them to the CP Server. Tasks start with status "requested" for CBOs to manage, unless CBO simulation is enabled for testing.
+    <p id="roleExplanation" style="font-size:0.75rem;color:var(--gray-600);margin-top:0.75rem;line-height:1.6">
+      💡 <strong>Connectathon Demo:</strong> Creates Patient, QR, ServiceRequest, and Task on the shared CP server, then switches to the CBO inbox so you can accept, work, and complete the referral.
     </p>
   </div>
 </div>
@@ -1500,8 +1528,10 @@ const FHIR_CONFIG = {
   orgId: "SDOHCC-OrganizationCoordinationPlatformExample",
   orgDisplay: "ABC Coordination Platform",
   prapareQuestionnaireUrl: "http://hl7.org/fhir/us/sdoh-clinicalcare/Questionnaire/SDOHCC-QuestionnairePRAPARE",
-  // Mode: 'test-patient' uses pre-seeded patient, 'create-patient' creates new patient from form data
-  mode: "create-patient",
+  // Role: 'demo', 'cp', or 'cbo'
+  role: "demo",
+  // Patient mode: 'create', 'test', or 'search'
+  patientMode: "create",
   testPatientId: "gravity-patient-grover-cleveland",
   testPatientDisplay: "Grover Cleveland",
   testPatientFirst: "Grover",
@@ -1511,11 +1541,27 @@ const FHIR_CONFIG = {
   testPatientPhone: "(816) 555-0100",
   testPatientEmail: "grover.cleveland@example.com",
   testPatientContactPref: "Phone call",
+  searchPatientId: "",
+  searchPatientData: null,  // Stores the full Patient resource when found
   // CBO workflow simulation: if true, automatically completes CBO steps (for testing)
   simulateCBOWorkflow: false,
   cboOrgId: "cbo-org-example",
   cboOrgDisplay: "Community Based Organization"
 };
+
+const TEST_PATIENTS = [
+  {
+    id: "gravity-patient-grover-cleveland",
+    display: "Grover Cleveland",
+    first: "Grover",
+    last: "Cleveland",
+    dob: "1837-03-18",
+    zip: "64105",
+    phone: "(816) 555-0100",
+    email: "grover.cleveland@example.com",
+    contactPref: "Phone call"
+  }
+];
 
 const SERVICES = [
   // FOOD
@@ -1565,6 +1611,12 @@ let submissionData = null;
 // FHIR Helper Functions
 function getCBOServerBase() {
   return FHIR_CONFIG.cboServerBase || FHIR_CONFIG.cpServerBase;
+}
+
+function getPatientServer() {
+  // Demo and CP roles: patients on cpServerBase
+  // CBO role: patients on cboServerBase
+  return FHIR_CONFIG.role === "cbo" ? getCBOServerBase() : FHIR_CONFIG.cpServerBase;
 }
 
 // FHIR Client Functions
@@ -1758,8 +1810,8 @@ function getCategoryCodeForService(serviceCat) {
 }
 
 function autoFillTestPatient() {
-  // Only auto-fill if in test-patient mode
-  if (FHIR_CONFIG.mode !== "test-patient") return;
+  // Only auto-fill if in test patient mode
+  if (FHIR_CONFIG.patientMode !== "test") return;
 
   // Fill in the form fields with test patient data
   const formFields = {
@@ -1780,6 +1832,59 @@ function autoFillTestPatient() {
   });
 }
 
+function autoFillSearchPatient() {
+  // Only auto-fill if in search patient mode and patient data is available
+  if (FHIR_CONFIG.patientMode !== "search" || !FHIR_CONFIG.searchPatientData) return;
+
+  const patient = FHIR_CONFIG.searchPatientData;
+
+  // Extract patient data
+  const name = patient.name && patient.name[0];
+  const firstName = name && name.given ? name.given[0] : '';
+  const lastName = name && name.family ? name.family : '';
+
+  const dob = patient.birthDate || '';
+
+  const phoneContact = patient.telecom ? patient.telecom.find(t => t.system === 'phone') : null;
+  const phone = phoneContact ? phoneContact.value : '';
+
+  const emailContact = patient.telecom ? patient.telecom.find(t => t.system === 'email') : null;
+  const email = emailContact ? emailContact.value : '';
+
+  const address = patient.address && patient.address[0];
+  const zip = address && address.postalCode ? address.postalCode : '';
+
+  // Fill in the form fields
+  const formFields = {
+    firstName: firstName,
+    lastName: lastName,
+    zipCode: zip,
+    dob: dob,
+    phone: phone,
+    email: email
+  };
+
+  Object.entries(formFields).forEach(([fieldId, value]) => {
+    const field = document.getElementById(fieldId);
+    if (field && value) {
+      field.value = value;
+    }
+  });
+
+  console.log('Auto-filled form with searched patient data:', formFields);
+}
+
+function clearPatientForm() {
+  // Clear all patient form fields
+  const formFieldIds = ['firstName', 'lastName', 'zipCode', 'dob', 'phone', 'email', 'contactPref'];
+  formFieldIds.forEach(fieldId => {
+    const field = document.getElementById(fieldId);
+    if (field) {
+      field.value = '';
+    }
+  });
+}
+
 function toggleConfig() {
   const panel = document.getElementById("configPanel");
   panel.classList.toggle("open");
@@ -1792,66 +1897,302 @@ function loadConfigToUI() {
   document.getElementById("configCpBase").value = FHIR_CONFIG.cpServerBase;
   document.getElementById("configCboServerBase").value = FHIR_CONFIG.cboServerBase || FHIR_CONFIG.cpServerBase;
   document.getElementById("configOrgId").value = FHIR_CONFIG.orgId;
-  document.getElementById("configMode").value = FHIR_CONFIG.mode;
-  document.getElementById("configTestPatientId").value = FHIR_CONFIG.testPatientId;
-  document.getElementById("configTestPatientDisplay").value = FHIR_CONFIG.testPatientDisplay;
-  document.getElementById("configTestPatientFirst").value = FHIR_CONFIG.testPatientFirst || "Grover";
-  document.getElementById("configTestPatientLast").value = FHIR_CONFIG.testPatientLast || "Cleveland";
-  document.getElementById("configTestPatientZip").value = FHIR_CONFIG.testPatientZip || "64105";
-  document.getElementById("configTestPatientDOB").value = FHIR_CONFIG.testPatientDOB || "1837-03-18";
-  document.getElementById("configTestPatientPhone").value = FHIR_CONFIG.testPatientPhone || "(816) 555-0100";
-  document.getElementById("configTestPatientEmail").value = FHIR_CONFIG.testPatientEmail || "grover.cleveland@example.com";
-  document.getElementById("configTestPatientContactPref").value = FHIR_CONFIG.testPatientContactPref || "Phone call";
   document.getElementById("configSimulateCBO").checked = FHIR_CONFIG.simulateCBOWorkflow || false;
-  toggleTestPatientFields();
-}
 
-function toggleTestPatientFields() {
-  const mode = document.getElementById("configMode").value;
-  const fieldIds = [
-    "testPatientFields",
-    "testPatientDisplayField",
-    "testPatientFirstField",
-    "testPatientLastField",
-    "testPatientZipField",
-    "testPatientDOBField",
-    "testPatientPhoneField",
-    "testPatientEmailField",
-    "testPatientContactPrefField"
-  ];
-
-  fieldIds.forEach(id => {
-    const field = document.getElementById(id);
-    if (field) {
-      field.style.display = mode === "test-patient" ? "flex" : "none";
-    }
+  // Populate test patient dropdown
+  const testPatientSelect = document.getElementById('testPatientSelect');
+  testPatientSelect.innerHTML = '<option value="">— select —</option>';
+  TEST_PATIENTS.forEach(p => {
+    const option = document.createElement('option');
+    option.value = p.id;
+    option.textContent = p.display;
+    if (p.id === FHIR_CONFIG.testPatientId) option.selected = true;
+    testPatientSelect.appendChild(option);
   });
 
-  // Call autoFillTestPatient when switching to test-patient mode
-  if (mode === "test-patient") {
-    autoFillTestPatient();
+  // Load search patient ID if applicable
+  if (FHIR_CONFIG.searchPatientId) {
+    document.getElementById('searchPatientInput').value = FHIR_CONFIG.searchPatientId;
   }
+
+  // Restore role and patient mode selections
+  selectRole(FHIR_CONFIG.role || 'demo');
+  selectPatientMode(FHIR_CONFIG.patientMode || 'create');
+}
+
+function selectRole(role) {
+  FHIR_CONFIG.role = role;
+
+  // Update visual selection
+  document.querySelectorAll('.role-card').forEach(card => {
+    card.style.borderColor = 'var(--gray-300)';
+    card.style.background = 'white';
+  });
+  let selectedCard;
+  if (role === 'demo') selectedCard = document.getElementById('roleDemo');
+  else if (role === 'cp') selectedCard = document.getElementById('roleCP');
+  else if (role === 'cbo') selectedCard = document.getElementById('roleCBO');
+  if (selectedCard) {
+    selectedCard.style.borderColor = 'var(--teal-600)';
+    selectedCard.style.background = 'var(--teal-50)';
+  }
+
+  // Handle field visibility and readonly states
+  const cpBaseInput = document.getElementById('configCpBase');
+  const cboServerField = document.getElementById('configCboServerBaseField');
+  const orgIdField = document.getElementById('configOrgIdField');
+  const simulateCBOField = document.getElementById('configSimulateCBOField');
+  const simulateCBOCheckbox = document.getElementById('configSimulateCBO');
+  const cboServerLabel = document.getElementById('configCboServerBaseLabel');
+  const orgIdLabel = document.getElementById('configOrgIdLabel');
+
+  if (role === 'demo') {
+    // Demo: CP server readonly, reset to default
+    cpBaseInput.value = "https://sdoh-cp-server.victoriousbay-86ce63e0.southcentralus.azurecontainerapps.io/fhir";
+    cpBaseInput.readOnly = true;
+    cpBaseInput.style.background = 'var(--gray-100)';
+    cboServerField.style.display = 'none';
+    orgIdField.style.display = 'none';
+    simulateCBOField.style.display = 'none';
+    simulateCBOCheckbox.checked = true;
+    simulateCBOCheckbox.disabled = true;
+    updateRoleExplanation('demo');
+  } else if (role === 'cp') {
+    // CP: CP server editable, hide CBO server
+    cpBaseInput.readOnly = false;
+    cpBaseInput.style.background = 'white';
+    cboServerField.style.display = 'none';
+    orgIdField.style.display = 'flex';
+    orgIdLabel.textContent = 'Organization ID';
+    simulateCBOField.style.display = 'flex';
+    simulateCBOCheckbox.disabled = false;
+    simulateCBOCheckbox.checked = false;
+    updateRoleExplanation('cp');
+  } else if (role === 'cbo') {
+    // CBO: both servers shown
+    cpBaseInput.readOnly = false;
+    cpBaseInput.style.background = 'white';
+    cboServerField.style.display = 'flex';
+    cboServerLabel.textContent = 'Your FHIR Server Base URL';
+    document.getElementById('configCpBase').parentElement.querySelector('label').textContent = 'CP Server Base URL';
+    orgIdField.style.display = 'flex';
+    orgIdLabel.textContent = 'Your Organization ID';
+    simulateCBOField.style.display = 'none';
+    simulateCBOCheckbox.checked = true;
+    simulateCBOCheckbox.disabled = true;
+    updateRoleExplanation('cbo');
+  }
+}
+
+function updateRoleExplanation(role) {
+  const explanation = document.getElementById('roleExplanation');
+  if (role === 'demo') {
+    explanation.innerHTML = '💡 <strong>Connectathon Demo:</strong> Creates Patient, QR, ServiceRequest, and Task on the shared CP server, then switches to the CBO inbox so you can accept, work, and complete the referral.';
+  } else if (role === 'cp') {
+    explanation.innerHTML = '💡 <strong>Coordination Platform:</strong> Creates Patient, QR, ServiceRequest on your CP server and POSTs the Task to the receiving CBO. Uncheck Simulate CBO for real workflows where the CBO manages the Task on their own system.';
+  } else if (role === 'cbo') {
+    explanation.innerHTML = '💡 <strong>CBO:</strong> The Task will be created on your CBO server. After submission the page switches to the CBO inbox so you can accept, work, and complete it and create a Procedure documenting services rendered.';
+  }
+}
+
+function selectPatientMode(mode) {
+  FHIR_CONFIG.patientMode = mode;
+
+  // Update visual selection
+  document.querySelectorAll('.patient-mode-card').forEach(card => {
+    card.style.borderColor = 'var(--gray-300)';
+    card.style.background = 'white';
+  });
+  const selectedCard = document.getElementById('patientMode' + mode.charAt(0).toUpperCase() + mode.slice(1));
+  selectedCard.style.borderColor = 'var(--teal-600)';
+  selectedCard.style.background = 'var(--teal-50)';
+
+  // Show/hide mode-specific fields
+  document.getElementById('testPatientDropdownField').style.display = mode === 'test' ? 'block' : 'none';
+  document.getElementById('searchPatientField').style.display = mode === 'search' ? 'block' : 'none';
+  document.getElementById('searchPatientResult').innerHTML = '';
+}
+
+function onTestPatientSelect() {
+  const select = document.getElementById('testPatientSelect');
+  const patientId = select.value;
+  if (!patientId) return;
+
+  const patient = TEST_PATIENTS.find(p => p.id === patientId);
+  if (patient) {
+    FHIR_CONFIG.testPatientId = patient.id;
+    FHIR_CONFIG.testPatientDisplay = patient.display;
+    FHIR_CONFIG.testPatientFirst = patient.first;
+    FHIR_CONFIG.testPatientLast = patient.last;
+    FHIR_CONFIG.testPatientZip = patient.zip;
+    FHIR_CONFIG.testPatientDOB = patient.dob;
+    FHIR_CONFIG.testPatientPhone = patient.phone;
+    FHIR_CONFIG.testPatientEmail = patient.email;
+    FHIR_CONFIG.testPatientContactPref = patient.contactPref;
+  }
+}
+
+async function lookupPatient() {
+  const patientId = document.getElementById('searchPatientInput').value.trim();
+  const firstName = document.getElementById('searchPatientFirst').value.trim();
+  const lastName = document.getElementById('searchPatientLast').value.trim();
+  const resultDiv = document.getElementById('searchPatientResult');
+
+  if (!patientId && !firstName && !lastName) {
+    resultDiv.innerHTML = '<span style="color:var(--red-600)">Please enter patient ID or name</span>';
+    return;
+  }
+
+  try {
+    const server = getPatientServer();
+    console.log('Looking up patient on server:', server);
+    console.log('Search criteria - ID:', patientId, 'First:', firstName, 'Last:', lastName);
+
+    let url;
+    let searchParams = [];
+
+    // If patient ID is provided, search by ID directly
+    if (patientId) {
+      url = `${server}/Patient/${patientId}`;
+      console.log('Searching by ID:', url);
+
+      const response = await fetch(url, {
+        headers: { 'Accept': 'application/fhir+json' }
+      });
+
+      if (!response.ok) {
+        console.error('Patient not found with ID:', patientId, 'Status:', response.status);
+        resultDiv.innerHTML = `<span style="color:var(--red-600)">❌ Patient not found with ID: ${patientId}</span>`;
+        FHIR_CONFIG.searchPatientId = '';
+        return;
+      }
+
+      const patient = await response.json();
+      console.log('Found patient:', patient);
+      const name = patient.name && patient.name[0] ?
+        `${patient.name[0].given ? patient.name[0].given.join(' ') : ''} ${patient.name[0].family || ''}`.trim() :
+        'Unknown Name';
+
+      resultDiv.innerHTML = `<span style="color:var(--green-600)">✓ Found: ${name} (ID: ${patient.id})<br><span style="font-size:0.75rem">You can now close this panel and request a referral.</span></span>`;
+      FHIR_CONFIG.searchPatientId = patient.id;
+      FHIR_CONFIG.searchPatientData = patient;
+      console.log("Patient selected for referral:", patient.id, name);
+      return;
+    }
+
+    // Search by name
+    if (firstName) searchParams.push(`given=${encodeURIComponent(firstName)}`);
+    if (lastName) searchParams.push(`family=${encodeURIComponent(lastName)}`);
+
+    url = `${server}/Patient?${searchParams.join('&')}`;
+    console.log('Searching by name:', url);
+
+    const response = await fetch(url, {
+      headers: { 'Accept': 'application/fhir+json' }
+    });
+
+    if (!response.ok) {
+      console.error('Search failed. Status:', response.status);
+      resultDiv.innerHTML = `<span style="color:var(--red-600)">❌ Error searching for patient (HTTP ${response.status})</span>`;
+      FHIR_CONFIG.searchPatientId = '';
+      return;
+    }
+
+    const bundle = await response.json();
+    console.log('Search results:', bundle);
+
+    if (!bundle.entry || bundle.entry.length === 0) {
+      const searchStr = [firstName, lastName].filter(n => n).join(' ');
+      resultDiv.innerHTML = `<span style="color:var(--red-600)">❌ No patients found matching: ${searchStr}</span>`;
+      FHIR_CONFIG.searchPatientId = '';
+      return;
+    }
+
+    // If multiple results, show them
+    if (bundle.entry.length > 1) {
+      console.log(`Found ${bundle.entry.length} patients`);
+      let html = '<div style="color:var(--gray-800)"><strong>Found ' + bundle.entry.length + ' patients:</strong><br>';
+      bundle.entry.slice(0, 5).forEach(entry => {
+        const p = entry.resource;
+        const name = p.name && p.name[0] ?
+          `${p.name[0].given ? p.name[0].given.join(' ') : ''} ${p.name[0].family || ''}`.trim() :
+          'Unknown';
+        const dob = p.birthDate ? ` (DOB: ${p.birthDate})` : '';
+        html += `<div style="margin-top:0.5rem;padding:0.5rem;background:var(--gray-50);border-radius:4px">
+          <div style="font-weight:600">${name}${dob}</div>
+          <div style="font-size:0.7rem;color:var(--gray-600);margin-top:0.1rem">ID: ${p.id}</div>
+          <button onclick="selectSearchPatient('${p.id}')" style="font-size:0.75rem;padding:0.3rem 0.6rem;background:var(--teal-600);color:white;border:none;border-radius:3px;cursor:pointer;margin-top:0.3rem">Select this patient</button>
+        </div>`;
+      });
+      if (bundle.entry.length > 5) {
+        html += `<div style="margin-top:0.5rem;font-size:0.75rem;color:var(--gray-600);font-style:italic">...and ${bundle.entry.length - 5} more. Refine your search for fewer results.</div>`;
+      }
+      html += '</div>';
+      resultDiv.innerHTML = html;
+      return;
+    }
+
+    // Single result
+    const patient = bundle.entry[0].resource;
+    console.log('Found single patient:', patient);
+    const name = patient.name && patient.name[0] ?
+      `${patient.name[0].given ? patient.name[0].given.join(' ') : ''} ${patient.name[0].family || ''}`.trim() :
+      'Unknown Name';
+
+    resultDiv.innerHTML = `<span style="color:var(--green-600)">✓ Found: ${name} (ID: ${patient.id})<br><span style="font-size:0.75rem">You can now close this panel and request a referral.</span></span>`;
+    FHIR_CONFIG.searchPatientId = patient.id;
+    FHIR_CONFIG.searchPatientData = patient;
+    console.log("Patient selected for referral:", patient.id, name);
+  } catch (error) {
+    console.error('Patient lookup error:', error);
+    resultDiv.innerHTML = `<span style="color:var(--red-600)">❌ Error: ${error.message}</span>`;
+    FHIR_CONFIG.searchPatientId = '';
+  }
+}
+
+function selectSearchPatient(patientId) {
+  FHIR_CONFIG.searchPatientId = patientId;
+  document.getElementById('searchPatientInput').value = patientId;
+  lookupPatient();
 }
 
 function saveConfig() {
   FHIR_CONFIG.cpServerBase = document.getElementById("configCpBase").value.trim();
   FHIR_CONFIG.cboServerBase = document.getElementById("configCboServerBase").value.trim();
   FHIR_CONFIG.orgId = document.getElementById("configOrgId").value.trim();
-  FHIR_CONFIG.mode = document.getElementById("configMode").value;
-  FHIR_CONFIG.testPatientId = document.getElementById("configTestPatientId").value.trim();
-  FHIR_CONFIG.testPatientDisplay = document.getElementById("configTestPatientDisplay").value.trim();
-  FHIR_CONFIG.testPatientFirst = document.getElementById("configTestPatientFirst").value.trim();
-  FHIR_CONFIG.testPatientLast = document.getElementById("configTestPatientLast").value.trim();
-  FHIR_CONFIG.testPatientZip = document.getElementById("configTestPatientZip").value.trim();
-  FHIR_CONFIG.testPatientDOB = document.getElementById("configTestPatientDOB").value;
-  FHIR_CONFIG.testPatientPhone = document.getElementById("configTestPatientPhone").value.trim();
-  FHIR_CONFIG.testPatientEmail = document.getElementById("configTestPatientEmail").value.trim();
-  FHIR_CONFIG.testPatientContactPref = document.getElementById("configTestPatientContactPref").value;
+  // role and patientMode are set by selection functions
   FHIR_CONFIG.simulateCBOWorkflow = document.getElementById("configSimulateCBO").checked;
 
-  // Save to localStorage for persistence
-  localStorage.setItem('fhirConfig', JSON.stringify(FHIR_CONFIG));
+  // Note: searchPatientId and searchPatientData are managed by lookupPatient()
+  // and don't need to be saved here - they persist in FHIR_CONFIG automatically
 
+  // Create a config object for localStorage (excluding searchPatientData which is too large)
+  const configToSave = {
+    cpServerBase: FHIR_CONFIG.cpServerBase,
+    cboServerBase: FHIR_CONFIG.cboServerBase,
+    orgId: FHIR_CONFIG.orgId,
+    orgDisplay: FHIR_CONFIG.orgDisplay,
+    role: FHIR_CONFIG.role,
+    patientMode: FHIR_CONFIG.patientMode,
+    testPatientId: FHIR_CONFIG.testPatientId,
+    testPatientDisplay: FHIR_CONFIG.testPatientDisplay,
+    testPatientFirst: FHIR_CONFIG.testPatientFirst,
+    testPatientLast: FHIR_CONFIG.testPatientLast,
+    testPatientZip: FHIR_CONFIG.testPatientZip,
+    testPatientDOB: FHIR_CONFIG.testPatientDOB,
+    testPatientPhone: FHIR_CONFIG.testPatientPhone,
+    testPatientEmail: FHIR_CONFIG.testPatientEmail,
+    testPatientContactPref: FHIR_CONFIG.testPatientContactPref,
+    searchPatientId: FHIR_CONFIG.searchPatientId,
+    simulateCBOWorkflow: FHIR_CONFIG.simulateCBOWorkflow,
+    cboOrgId: FHIR_CONFIG.cboOrgId,
+    cboOrgDisplay: FHIR_CONFIG.cboOrgDisplay
+  };
+
+  // Save to localStorage for persistence
+  localStorage.setItem('fhirConfig', JSON.stringify(configToSave));
+
+  console.log("Config saved:", configToSave);
   alert("FHIR Configuration saved successfully!");
   toggleConfig();
 }
@@ -1933,9 +2274,14 @@ function openModal(serviceId) {
   document.getElementById("modalOverlay").classList.add("open");
   document.body.style.overflow = "hidden";
 
-  // Auto-fill form if in test-patient mode
-  if (FHIR_CONFIG.mode === "test-patient") {
+  // Auto-fill form based on patient mode
+  if (FHIR_CONFIG.patientMode === "test") {
     autoFillTestPatient();
+  } else if (FHIR_CONFIG.patientMode === "search") {
+    autoFillSearchPatient();
+  } else {
+    // Create mode - clear the form
+    clearPatientForm();
   }
 }
 
@@ -1976,8 +2322,8 @@ async function submitForm() {
   const email = document.getElementById("email").value.trim();
   const notes = document.getElementById("notes").value.trim();
 
-  // Use test patient data as fallbacks when in test-patient mode
-  if (FHIR_CONFIG.mode === "test-patient") {
+  // Use test patient data as fallbacks when in test patient mode
+  if (FHIR_CONFIG.patientMode === "test") {
     first = first || FHIR_CONFIG.testPatientFirst;
     last = last || FHIR_CONFIG.testPatientLast;
     zip = zip || FHIR_CONFIG.testPatientZip;
@@ -2049,11 +2395,17 @@ async function submitForm() {
       timestamp: new Date().toISOString()
     };
 
-    // Determine which patient to use
+    // Determine which patient to use based on patient mode
     let actualPatientId, actualPatientDisplay;
     let patientWasReused = false;
+    const patientServer = getPatientServer();
 
-    if (FHIR_CONFIG.mode === "create-patient") {
+    console.log("Patient mode:", FHIR_CONFIG.patientMode);
+    console.log("Search patient ID:", FHIR_CONFIG.searchPatientId);
+    console.log("Search patient data:", FHIR_CONFIG.searchPatientData);
+
+    if (FHIR_CONFIG.patientMode === "create") {
+      // Create mode: check for existing, or create new
       const existingPatient = await findExistingPatient({ first, last, dob, phone, email, zip });
 
       if (existingPatient) {
@@ -2062,12 +2414,16 @@ async function submitForm() {
         patientWasReused = true;
         console.log("Reusing existing Patient:", existingPatient);
       } else {
-        // Step 1: Create a new Patient resource from form data
+        // Create a new Patient resource from form data
         const patient = {
           resourceType: "Patient",
           id: patientId,
           meta: {
             profile: ["http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"]
+          },
+          text: {
+            status: "generated",
+            div: `<div xmlns="http://www.w3.org/1999/xhtml">${first} ${last}</div>`
           },
           identifier: [{
             system: "http://community-care-connect.example.org/patient-id",
@@ -2077,9 +2433,19 @@ async function submitForm() {
           name: [{
             use: "official",
             family: last,
-            given: [first]
+            given: [first],
+            text: `${first} ${last}`
           }],
-          telecom: []
+          telecom: [],
+          gender: "unknown",
+          address: [{
+            use: "home",
+            line: ["Address not provided"],
+            city: "Unknown",
+            state: "MO",
+            postalCode: zip || "00000",
+            country: "US"
+          }]
         };
 
         if (phone) {
@@ -2102,25 +2468,87 @@ async function submitForm() {
           patient.birthDate = dob;
         }
 
-        if (zip) {
-          patient.address = [{
-            use: "home",
-            postalCode: zip,
-            country: "US"
-          }];
-        }
-
         console.log("Creating new Patient...", patient);
-        const patientResponse = await createFHIRResource("Patient", patient);
+        const patientResponse = await createFHIRResource("Patient", patient, 'PUT', patientServer);
         console.log("Patient created:", patientResponse);
 
         actualPatientId = patientId;
         actualPatientDisplay = `${first} ${last}`;
       }
-    } else {
-      // Use pre-configured test patient
+    } else if (FHIR_CONFIG.patientMode === "test") {
+      // Test mode: check if test patient exists, if not PUT it with stable ID
       actualPatientId = FHIR_CONFIG.testPatientId;
       actualPatientDisplay = FHIR_CONFIG.testPatientDisplay;
+
+      try {
+        const checkUrl = `${patientServer}/Patient/${actualPatientId}`;
+        const checkResponse = await fetch(checkUrl, { headers: { 'Accept': 'application/fhir+json' } });
+
+        if (!checkResponse.ok) {
+          // Test patient doesn't exist, create it
+          const testPatient = {
+            resourceType: "Patient",
+            id: FHIR_CONFIG.testPatientId,
+            meta: {
+              profile: ["http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"]
+            },
+            text: {
+              status: "generated",
+              div: `<div xmlns="http://www.w3.org/1999/xhtml">${FHIR_CONFIG.testPatientFirst} ${FHIR_CONFIG.testPatientLast}</div>`
+            },
+            identifier: [{
+              system: "http://community-care-connect.example.org/patient-id",
+              value: FHIR_CONFIG.testPatientId
+            }],
+            active: true,
+            name: [{
+              use: "official",
+              family: FHIR_CONFIG.testPatientLast,
+              given: [FHIR_CONFIG.testPatientFirst],
+              text: `${FHIR_CONFIG.testPatientFirst} ${FHIR_CONFIG.testPatientLast}`
+            }],
+            gender: "unknown",
+            birthDate: FHIR_CONFIG.testPatientDOB,
+            telecom: [
+              { system: "phone", value: FHIR_CONFIG.testPatientPhone, use: "mobile" },
+              { system: "email", value: FHIR_CONFIG.testPatientEmail, use: "home" }
+            ],
+            address: [{
+              use: "home",
+              line: ["1600 Pennsylvania Avenue"],
+              city: "Kansas City",
+              state: "MO",
+              postalCode: FHIR_CONFIG.testPatientZip,
+              country: "US"
+            }]
+          };
+          console.log("Creating test patient with stable ID...", testPatient);
+          await createFHIRResource("Patient", testPatient, 'PUT', patientServer);
+          console.log("Test patient created");
+        } else {
+          patientWasReused = true;
+          console.log("Test patient already exists, reusing");
+        }
+      } catch (error) {
+        console.warn("Error checking test patient:", error);
+      }
+    } else if (FHIR_CONFIG.patientMode === "search") {
+      // Search mode: use the looked-up patient ID
+      if (!FHIR_CONFIG.searchPatientId || !FHIR_CONFIG.searchPatientData) {
+        alert("Please search for and select a patient in the FHIR Config panel before submitting a referral.");
+        throw new Error("No patient selected in search mode. Please use FHIR Config to search for a patient first.");
+      }
+      actualPatientId = FHIR_CONFIG.searchPatientId;
+
+      // Get patient display name from the stored patient data
+      const patientName = FHIR_CONFIG.searchPatientData.name && FHIR_CONFIG.searchPatientData.name[0];
+      const displayName = patientName ?
+        `${patientName.given ? patientName.given.join(' ') : ''} ${patientName.family || ''}`.trim() :
+        `Patient/${actualPatientId}`;
+
+      actualPatientDisplay = displayName;
+      patientWasReused = true;
+      console.log("Using searched patient:", actualPatientId, displayName);
     }
 
     submissionData.patientId = actualPatientId;
@@ -2338,7 +2766,7 @@ async function submitForm() {
       Task ID: ${taskId} (status: requested)<br>
       QuestionnaireResponse ID: ${qrId}
     `;
-    if (FHIR_CONFIG.mode === "create-patient") {
+    if (FHIR_CONFIG.patientMode === "create" || FHIR_CONFIG.patientMode === "test") {
       fhirResourcesHtml = `
         Patient ID: ${actualPatientId}<br>
         ${fhirResourcesHtml}
@@ -2375,7 +2803,6 @@ function switchToCBOPortal(referralData) {
 
   // Populate patient info with actual CBO organization from referral
   document.getElementById("cboOrgName").textContent = referralData.cboOrgDisplay + " — Referral Inbox";
-  document.getElementById("cboPanelOwner").textContent = `${referralData.cboOrgDisplay} (Organization/${referralData.cboOrgId})`;
   document.getElementById("cboSimulationBanner").textContent = `You are now acting as ${referralData.cboOrgDisplay} receiving this referral.`;
   document.getElementById("cboTaskPanelTitle").textContent = `📋 Referral Task for ${referralData.cboOrgDisplay} — Status Management`;
 
