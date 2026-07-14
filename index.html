@@ -2808,9 +2808,38 @@ async function submitForm() {
 let cboReferralData = null; // populated when portal activates
 let cboCurrentTaskStatus = "requested";
 
+function resetCBOPortalState() {
+  cboCurrentTaskStatus = "requested";
+  clearCBOAlert();
+  updateTaskBadge("requested");
+  updateTaskStatusFlow("requested");
+
+  [
+    { dot: "tl-dot-accepted", time: "tl-accepted-time" },
+    { dot: "tl-dot-inprogress", time: "tl-inprogress-time" },
+    { dot: "tl-dot-completed", time: "tl-completed-time" },
+  ].forEach(({ dot, time }) => {
+    const dotEl = document.getElementById(dot);
+    const timeEl = document.getElementById(time);
+    if (dotEl) dotEl.className = "tl-dot pending";
+    if (timeEl) timeEl.textContent = "Pending";
+  });
+
+  document.getElementById("cboFhirProcId").textContent = "—";
+  document.getElementById("procedureForm").classList.remove("show");
+  document.getElementById("procNotes").value = "";
+  document.getElementById("btnSubmitCompletion").disabled = false;
+  document.getElementById("btnSubmitCompletion").textContent = "Submit & Complete Referral";
+
+  document.getElementById("btnAccept").disabled = false;
+  document.getElementById("btnInProgress").disabled = true;
+  document.getElementById("btnComplete").disabled = true;
+  document.getElementById("btnCancel").disabled = false;
+}
+
 function switchToCBOPortal(referralData) {
   cboReferralData = referralData;
-  cboCurrentTaskStatus = "requested";
+  resetCBOPortalState();
 
   // Populate patient info with actual CBO organization from referral
   document.getElementById("cboOrgName").textContent = referralData.cboOrgDisplay + " — Referral Inbox";
@@ -2850,6 +2879,9 @@ function switchToCBOPortal(referralData) {
   if (d.notes) {
     document.getElementById("cboNotesRow").style.display = "block";
     document.getElementById("cboNotes").textContent = d.notes;
+  } else {
+    document.getElementById("cboNotesRow").style.display = "none";
+    document.getElementById("cboNotes").textContent = "";
   }
 
   // Task badge + chips
@@ -2892,8 +2924,10 @@ function setCBOAlert(msg, type) {
 }
 
 function clearCBOAlert() {
-  document.getElementById("cboAlert").className = "cbo-alert";
-  document.getElementById("cboAlert").style.display = "none";
+  const el = document.getElementById("cboAlert");
+  el.textContent = "";
+  el.className = "cbo-alert";
+  el.style.display = "none";
 }
 
 function updateTaskStatusFlow(status) {
