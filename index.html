@@ -2699,7 +2699,17 @@ async function submitForm() {
           display: CAT_CONFIG[selectedService.cat].label
         }]
       }],
+      // SDOHCC-ServiceRequest binds code to USCoreProcedureCodes 7.0.0 (required),
+      // so a text-only code is non-conformant. It is also what the RI dashboards
+      // label the referral link with: cp/cbo/rs read code.coding.first.display and
+      // render the raw anchor href when it is absent. SNOMED 410606002 is the same
+      // concept the portal already sends on its Procedure.
       code: {
+        coding: [{
+          system: "http://snomed.info/sct",
+          code: "410606002",
+          display: "Social service procedure"
+        }],
         text: selectedService.name
       },
       subject: {
