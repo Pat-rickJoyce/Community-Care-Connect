@@ -1826,15 +1826,66 @@ async function ensureReferralOrganizations(selectedService) {
   return { coordinationPlatform, cbo };
 }
 
+// SDOHCC-ValueSetSDOHCategory has no mental health concept, so services in that
+// UI category fall through to sdoh-category-unspecified rather than emitting a
+// code that is not in the value set.
 function getCategoryCodeForService(serviceCat) {
   const mapping = {
     "food": "food-insecurity",
     "housing": "housing-instability",
-    "mental-health": "mental-health",
     "transportation": "transportation-insecurity",
     "parenting": "social-connection"
   };
   return mapping[serviceCat] || "sdoh-category-unspecified";
+}
+
+// Displays come from the value set, not from the portal's own UI labels: a
+// display that disagrees with its code is a validator finding and shows up
+// verbatim in the recipient dashboards.
+const SDOH_CATEGORY_DISPLAYS = {
+  "food-insecurity": "Food Insecurity",
+  "housing-instability": "Housing Instability",
+  "transportation-insecurity": "Transportation Insecurity",
+  "social-connection": "Social Connection",
+  "sdoh-category-unspecified": "SDOH Category Unspecified"
+};
+
+// SNOMED CT procedure codes for ServiceRequest.code, keyed by service id.
+// SDOHCC-ServiceRequest binds code to USCoreProcedureCodes 7.0.0 (required).
+// Every code here is one this ecosystem already uses: the SDOHCC IG's own
+// ServiceRequest examples, or the referral source client's request options.
+// Codes in the 46xxxxxxxxxxxx range are US Edition extensions, so validator
+// runs against these resources need -sct us.
+// Mental health services have no vetted code in either source and fall back to
+// the generic social service procedure concept until one is chosen.
+const SERVICE_REQUEST_CODES = {
+  1: ["710925007", "Provision of food"],
+  2: ["710925007", "Provision of food"],
+  3: ["467771000124109", "Assistance with application for food pantry program"],
+  4: ["710925007", "Provision of food"],
+  5: ["710911006", "Referral to housing service"],
+  6: ["710911006", "Referral to housing service"],
+  7: ["710911006", "Referral to housing service"],
+  8: ["710911006", "Referral to housing service"],
+  16: ["428632005", "Transportation request"],
+  17: ["428632005", "Transportation request"],
+  18: ["428632005", "Transportation request"],
+  19: ["410365006", "Transportation case management"],
+  20: ["428632005", "Transportation request"],
+  21: ["464161000124109", "Referral to community resource network program"],
+  22: ["464161000124109", "Referral to community resource network program"],
+  23: ["464161000124109", "Referral to community resource network program"],
+  24: ["464161000124109", "Referral to community resource network program"],
+  25: ["464161000124109", "Referral to community resource network program"]
+};
+
+const GENERIC_SERVICE_CODE = ["410606002", "Social service procedure"];
+
+// The RI dashboards label the referral row with code.coding.first.display, so
+// this is both the conformance fix and the human-readable label.
+function serviceRequestCoding(selectedService) {
+  const entry = SERVICE_REQUEST_CODES[selectedService.id] || GENERIC_SERVICE_CODE;
+  return { system: "http://snomed.info/sct", code: entry[0], display: entry[1] };
 }
 
 function autoFillTestPatient() {
@@ -2692,24 +2743,27 @@ async function submitForm() {
       },
       status: "active",
       intent: "order",
-      category: [{
-        coding: [{
-          system: "http://hl7.org/fhir/us/sdoh-clinicalcare/CodeSystem/SDOHCC-CodeSystemTemporaryCodes",
-          code: getCategoryCodeForService(selectedService.cat),
-          display: CAT_CONFIG[selectedService.cat].label
-        }]
-      }],
-      // SDOHCC-ServiceRequest binds code to USCoreProcedureCodes 7.0.0 (required),
-      // so a text-only code is non-conformant. It is also what the RI dashboards
-      // label the referral link with: cp/cbo/rs read code.coding.first.display and
-      // render the raw anchor href when it is absent. SNOMED 410606002 is the same
-      // concept the portal already sends on its Procedure.
+      // Two categories, as in the IG's own ServiceRequest examples and the
+      // referral source client: the SNOMED social service procedure concept
+      // alongside the SDOH domain.
+      category: [
+        {
+          coding: [{
+            system: "http://snomed.info/sct",
+            code: GENERIC_SERVICE_CODE[0],
+            display: GENERIC_SERVICE_CODE[1]
+          }]
+        },
+        {
+          coding: [{
+            system: "http://hl7.org/fhir/us/sdoh-clinicalcare/CodeSystem/SDOHCC-CodeSystemTemporaryCodes",
+            code: getCategoryCodeForService(selectedService.cat),
+            display: SDOH_CATEGORY_DISPLAYS[getCategoryCodeForService(selectedService.cat)]
+          }]
+        }
+      ],
       code: {
-        coding: [{
-          system: "http://snomed.info/sct",
-          code: "410606002",
-          display: "Social service procedure"
-        }],
+        coding: [serviceRequestCoding(selectedService)],
         text: selectedService.name
       },
       subject: {
