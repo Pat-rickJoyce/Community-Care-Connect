@@ -1674,6 +1674,20 @@ async function createFHIRResource(resourceType, resource, method = 'PUT', server
   }
 }
 
+async function readFHIRResource(resourceType, id, serverBase = null) {
+  const server = serverBase || getReferralServerBase();
+  try {
+    const response = await fetch(`${server}/${resourceType}/${id}`, {
+      headers: { 'Accept': 'application/fhir+json' }
+    });
+    if (!response.ok) return null;
+    return await response.json();
+  } catch (error) {
+    console.warn(`Error reading ${resourceType}/${id}:`, error);
+    return null;
+  }
+}
+
 async function searchFHIRResources(resourceType, params) {
   const query = new URLSearchParams(params);
   const url = `${getReferralServerBase()}/${resourceType}?${query.toString()}`;
@@ -1803,6 +1817,9 @@ async function ensureReferralOrganizations(selectedService) {
   const coordinationPlatform = {
     resourceType: "Organization",
     id: FHIR_CONFIG.orgId,
+    meta: {
+      profile: [US_CORE_ORGANIZATION]
+    },
     active: true,
     name: FHIR_CONFIG.orgDisplay,
     type: [{
@@ -1814,6 +1831,9 @@ async function ensureReferralOrganizations(selectedService) {
   const cbo = {
     resourceType: "Organization",
     id: referralCboOrgId(selectedService),
+    meta: {
+      profile: [US_CORE_ORGANIZATION]
+    },
     active: true,
     name: selectedService.name,
     type: [{
@@ -1880,6 +1900,33 @@ const SERVICE_REQUEST_CODES = {
 };
 
 const GENERIC_SERVICE_CODE = ["410606002", "Social service procedure"];
+
+// Task.requester and Consent.organization are both constrained to
+// USCoreOrganizationProfile 7.0.0, which requires active and name. Both are set
+// on the organizations this portal writes, so they only needed to declare the
+// profile.
+const US_CORE_ORGANIZATION = "http://hl7.org/fhir/us/core/StructureDefinition/us-core-organization";
+
+// SDOHCC-TaskForReferralManagement requires statusReason.text when statusReason
+// is present, and the IG asks for a reason whenever a task is rejected,
+// cancelled, on-hold or failed. Both recipient clients render it.
+const STATUS_REASON_TEXT = {
+  "cancelled": "Referral cancelled by the receiving organization.",
+  "rejected": "Referral declined by the receiving organization.",
+  "on-hold": "Referral placed on hold by the receiving organization.",
+  "failed": "Referral could not be completed by the receiving organization."
+};
+
+// The screening question whose answer justifies a referral in each SDOH domain,
+// used for ServiceRequest.reasonReference. Only the domains this portal actually
+// screens for are listed: a referral in any other domain is sent without a
+// reason rather than with an invented one.
+// [LOINC question code, question text, radio or checkbox group name]
+const REASON_QUESTIONS = {
+  "food-insecurity": ["93031-3", "In the past year, have you or any family members you live with been unable to get any of the following when it was really needed?", "q_material_need"],
+  "housing-instability": ["71802-3", "Housing status", "q_housing_status"],
+  "transportation-insecurity": ["93030-5", "Has lack of transportation kept you from medical appointments, meetings, work, or from getting things needed for daily living?", "q_transport"]
+};
 
 // The RI dashboards label the referral row with code.coding.first.display, so
 // this is both the conformance fix and the human-readable label.
@@ -2449,6 +2496,8 @@ async function submitForm() {
     const qrId = generateId("ccc-qr-prapare");
     const patientId = generateId("ccc-patient");
     const serviceRequestId = generateId("ccc-servicerequest");
+    const consentId = generateId("ccc-consent");
+    const observationId = generateId("ccc-observation");
     const ref = "CCC-" + Math.random().toString(36).substr(2,4).toUpperCase() + "-" + Date.now().toString().slice(-4);
 
     // Store submission data
@@ -2734,6 +2783,141 @@ async function submitForm() {
     const qrResponse = await createFHIRResource("QuestionnaireResponse", questionnaireResponse);
     console.log("QuestionnaireResponse created:", qrResponse);
 
+    // Step 2b: Create Consent. Both recipient clients resolve consent through
+    // ServiceRequest.supportingInfo, so without this the Consent column is empty
+    // on every referral this portal sends. SDOHCC-Consent accepts a
+    // QuestionnaireResponse as source[x], which is what the individual completed.
+    const consent = {
+      resourceType: "Consent",
+      id: consentId,
+      meta: {
+        profile: ["http://hl7.org/fhir/us/sdoh-clinicalcare/StructureDefinition/SDOHCC-Consent"]
+      },
+      status: "active",
+      scope: {
+        coding: [{
+          system: "http://terminology.hl7.org/CodeSystem/consentscope",
+          code: "patient-privacy",
+          display: "Privacy Consent"
+        }]
+      },
+      category: [{
+        coding: [{
+          system: "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+          code: "IDSCL",
+          display: "information disclosure"
+        }]
+      }],
+      patient: {
+        reference: `Patient/${actualPatientId}`,
+        display: actualPatientDisplay
+      },
+      dateTime: new Date().toISOString(),
+      organization: [{
+        reference: `Organization/${FHIR_CONFIG.orgId}`,
+        display: FHIR_CONFIG.orgDisplay
+      }],
+      sourceReference: {
+        reference: `QuestionnaireResponse/${qrId}`
+      },
+      policyRule: {
+        coding: [{
+          system: "http://terminology.hl7.org/CodeSystem/consentpolicycodes",
+          code: "hipaa-auth",
+          display: "HIPAA Authorization"
+        }]
+      }
+    };
+
+    console.log("Creating Consent...", consent);
+    const consentResponse = await createFHIRResource("Consent", consent);
+    console.log("Consent created:", consentResponse);
+
+    // Step 2c: Create the screening response that justifies the referral, for
+    // ServiceRequest.reasonReference. Only the domains this portal actually
+    // screens for get one; a referral in any other domain is sent without a
+    // reason rather than with an invented one.
+    const sdohCategoryCode = getCategoryCodeForService(selectedService.cat);
+    const reasonQuestion = REASON_QUESTIONS[sdohCategoryCode];
+    let reasonObservationId = null;
+
+    if (reasonQuestion) {
+      const reasonAnswers = {
+        "food-insecurity": materialNeeds.find(c => c && c.code === "LA30125-1") || materialNeeds[0],
+        "housing-instability": housingStatus,
+        "transportation-insecurity": transportationBarriers[0]
+      };
+      const answerCoding = reasonAnswers[sdohCategoryCode];
+
+      if (answerCoding) {
+        const observation = {
+          resourceType: "Observation",
+          id: observationId,
+          meta: {
+            profile: ["http://hl7.org/fhir/us/sdoh-clinicalcare/StructureDefinition/SDOHCC-ObservationScreeningResponse"]
+          },
+          status: "final",
+          // Three categories: survey is required by US Core, the us-core-category
+          // sdoh code fills the screening-assessment slice, and the SDOH domain
+          // fills the SDOHCC slice.
+          category: [
+            {
+              coding: [{
+                system: "http://terminology.hl7.org/CodeSystem/observation-category",
+                code: "survey",
+                display: "Survey"
+              }]
+            },
+            {
+              coding: [{
+                system: "http://hl7.org/fhir/us/core/CodeSystem/us-core-category",
+                code: "sdoh",
+                display: "SDOH"
+              }]
+            },
+            {
+              coding: [{
+                system: "http://hl7.org/fhir/us/sdoh-clinicalcare/CodeSystem/SDOHCC-CodeSystemTemporaryCodes",
+                code: sdohCategoryCode,
+                display: SDOH_CATEGORY_DISPLAYS[sdohCategoryCode]
+              }]
+            }
+          ],
+          // The question and answer are the ones the individual just answered on
+          // the screening form, so no new terminology is introduced here. No
+          // display is sent on the question code: the form carries the question
+          // text, not the LOINC short name.
+          code: {
+            coding: [{
+              system: "http://loinc.org",
+              code: reasonQuestion[0]
+            }],
+            text: reasonQuestion[1]
+          },
+          subject: {
+            reference: `Patient/${actualPatientId}`,
+            display: actualPatientDisplay
+          },
+          effectiveDateTime: new Date().toISOString(),
+          performer: [{
+            reference: `Patient/${actualPatientId}`,
+            display: actualPatientDisplay
+          }],
+          valueCodeableConcept: {
+            coding: [answerCoding]
+          },
+          derivedFrom: [{
+            reference: `QuestionnaireResponse/${qrId}`
+          }]
+        };
+
+        console.log("Creating Observation (screening response)...", observation);
+        const observationResponse = await createFHIRResource("Observation", observation);
+        console.log("Observation created:", observationResponse);
+        reasonObservationId = observationId;
+      }
+    }
+
     // Step 3: Create ServiceRequest (SDOH IG Self-Referral Workflow)
     const serviceRequest = {
       resourceType: "ServiceRequest",
@@ -2771,11 +2955,22 @@ async function submitForm() {
         display: actualPatientDisplay
       },
       authoredOn: new Date().toISOString(),
+      // refer-8: the individual is the entity asking for the service. The
+      // platform managing the referral workflow is identified by Task.requester.
       requester: {
-        reference: `Organization/${FHIR_CONFIG.orgId}`,
-        display: FHIR_CONFIG.orgDisplay
-      }
+        reference: `Patient/${actualPatientId}`,
+        display: actualPatientDisplay
+      },
+      supportingInfo: [{
+        reference: `Consent/${consentId}`
+      }]
     };
+
+    if (reasonObservationId) {
+      serviceRequest.reasonReference = [{
+        reference: `Observation/${reasonObservationId}`
+      }];
+    }
 
     console.log("Creating ServiceRequest...", serviceRequest);
     const srResponse = await createFHIRResource("ServiceRequest", serviceRequest);
@@ -3064,9 +3259,17 @@ async function cboUpdateTaskStatus(newStatus) {
   document.getElementById("cboAlert").style.display = "block";
 
   try {
-    await patchFHIRResource("Task", d.taskId, [
-      { op: "replace", path: "/status", value: newStatus }
-    ], getReferralServerBase());
+    const statusPatchOps = [{ op: "replace", path: "/status", value: newStatus }];
+
+    if (STATUS_REASON_TEXT[newStatus]) {
+      statusPatchOps.push({
+        op: "add",
+        path: "/statusReason",
+        value: { text: STATUS_REASON_TEXT[newStatus] }
+      });
+    }
+
+    await patchFHIRResource("Task", d.taskId, statusPatchOps, getReferralServerBase());
 
     cboCurrentTaskStatus = newStatus;
     updateTaskBadge(newStatus);
@@ -3164,24 +3367,31 @@ async function cboCompleteReferral() {
     console.log("Procedure created:", procResponse);
     document.getElementById("cboFhirProcId").textContent = procedureId;
 
-    // 2. Update Task to completed with output pointing to Procedure
+    // 2. Update Task to completed with output pointing to Procedure.
+    // refer-10 asks for one or more outputs describing the outcome, so a second
+    // completion has to add to the list rather than replace it. JSON Patch can
+    // only append to an array that already exists, so the Task on the server
+    // decides which path is used.
+    const outputEntry = {
+      type: {
+        coding: [{
+          system: "http://hl7.org/fhir/us/sdoh-clinicalcare/CodeSystem/SDOHCC-CodeSystemTemporaryCodes",
+          code: "resulting-activity"
+        }]
+      },
+      valueReference: {
+        reference: `Procedure/${procedureId}`
+      }
+    };
+
+    const existingTask = await readFHIRResource("Task", d.taskId);
+    const hasOutput = Array.isArray(existingTask && existingTask.output) && existingTask.output.length > 0;
+
     await patchFHIRResource("Task", d.taskId, [
       { op: "replace", path: "/status", value: "completed" },
-      {
-        op: "add",
-        path: "/output",
-        value: [{
-          type: {
-            coding: [{
-              system: "http://hl7.org/fhir/us/sdoh-clinicalcare/CodeSystem/SDOHCC-CodeSystemTemporaryCodes",
-              code: "resulting-activity"
-            }]
-          },
-          valueReference: {
-            reference: `Procedure/${procedureId}`
-          }
-        }]
-      }
+      hasOutput
+        ? { op: "add", path: "/output/-", value: outputEntry }
+        : { op: "add", path: "/output", value: [outputEntry] }
     ], getReferralServerBase());
 
     // 3. Update ServiceRequest status to completed
