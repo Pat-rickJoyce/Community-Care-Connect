@@ -1032,6 +1032,10 @@
         <label id="configCboServerBaseLabel">CBO Server Base URL</label>
         <input type="text" id="configCboServerBase" placeholder="Your own FHIR server URL" />
       </div>
+      <div class="config-field">
+        <label>CBO Organization ID (optional)</label>
+        <input type="text" id="configCboOrgId" placeholder="Defaults to the selected service's organization" />
+      </div>
       <div class="config-field" id="configOrgIdField" style="display:none">
         <label id="configOrgIdLabel">Organization ID</label>
         <input type="text" id="configOrgId" value="SDOHCC-OrganizationCoordinationPlatformExample" />
@@ -1545,7 +1549,10 @@ const FHIR_CONFIG = {
   searchPatientData: null,  // Stores the full Patient resource when found
   // CBO workflow simulation: if true, automatically completes CBO steps (for testing)
   simulateCBOWorkflow: false,
-  cboOrgId: "cbo-org-example",
+  // Optional override for the owning CBO Organization id. Blank uses the id from the
+  // selected service. Set it to the Organization the CBO client logs in as, otherwise
+  // that client's owner-filtered Task search will not return the referral.
+  cboOrgId: "",
   cboOrgDisplay: "Community Based Organization"
 };
 
@@ -1624,15 +1631,25 @@ function getCBOServerBase() {
   return FHIR_CONFIG.cboServerBase || FHIR_CONFIG.cpServerBase;
 }
 
-function getPatientServer() {
-  // Demo and CP roles: patients on cpServerBase
-  // CBO role: patients on cboServerBase
+// Every resource in one referral is written to this single server. Task.focus and
+// Task.input carry relative references, which only resolve against the server the
+// Task itself lives on, so splitting a referral across two servers leaves them
+// dangling and the CP and CBO clients render empty rows.
+// Demo and CP roles: the CP server. CBO role: the CBO's own server.
+function getReferralServerBase() {
   return FHIR_CONFIG.role === "cbo" ? getCBOServerBase() : FHIR_CONFIG.cpServerBase;
+}
+
+// The CBO client searches for Tasks with owner=Organization/<the org it is logged in
+// as>, so the owning Organization id has to match that org. The CBO Organization ID
+// field in the config panel overrides the per-service id when it is set.
+function referralCboOrgId(selectedService) {
+  return (FHIR_CONFIG.cboOrgId || "").trim() || selectedService.cboOrgId;
 }
 
 // FHIR Client Functions
 async function createFHIRResource(resourceType, resource, method = 'PUT', serverBase = null) {
-  const server = serverBase || FHIR_CONFIG.cpServerBase;
+  const server = serverBase || getReferralServerBase();
   const url = `${server}/${resourceType}/${resource.id}`;
   try {
     const response = await fetch(url, {
@@ -1659,7 +1676,7 @@ async function createFHIRResource(resourceType, resource, method = 'PUT', server
 
 async function searchFHIRResources(resourceType, params) {
   const query = new URLSearchParams(params);
-  const url = `${FHIR_CONFIG.cpServerBase}/${resourceType}?${query.toString()}`;
+  const url = `${getReferralServerBase()}/${resourceType}?${query.toString()}`;
   try {
     const response = await fetch(url, {
       method: 'GET',
@@ -1683,7 +1700,7 @@ async function searchFHIRResources(resourceType, params) {
 }
 
 async function patchFHIRResource(resourceType, id, patchOps, serverBase = null) {
-  const server = serverBase || FHIR_CONFIG.cpServerBase;
+  const server = serverBase || getReferralServerBase();
   const url = `${server}/${resourceType}/${id}`;
   try {
     const response = await fetch(url, {
@@ -1782,7 +1799,7 @@ async function findExistingPatient(formData) {
 }
 
 async function ensureReferralOrganizations(selectedService) {
-  // PUT coordination platform to cpServerBase
+  // PUT coordination platform to the referral server
   const coordinationPlatform = {
     resourceType: "Organization",
     id: FHIR_CONFIG.orgId,
@@ -1793,10 +1810,10 @@ async function ensureReferralOrganizations(selectedService) {
     }]
   };
 
-  // PUT CBO organization to cboServerBase
+  // PUT CBO organization to the referral server
   const cbo = {
     resourceType: "Organization",
-    id: selectedService.cboOrgId,
+    id: referralCboOrgId(selectedService),
     active: true,
     name: selectedService.name,
     type: [{
@@ -1804,8 +1821,8 @@ async function ensureReferralOrganizations(selectedService) {
     }]
   };
 
-  await createFHIRResource("Organization", coordinationPlatform, 'PUT', FHIR_CONFIG.cpServerBase);
-  await createFHIRResource("Organization", cbo, 'PUT', getCBOServerBase());
+  await createFHIRResource("Organization", coordinationPlatform, 'PUT', getReferralServerBase());
+  await createFHIRResource("Organization", cbo, 'PUT', getReferralServerBase());
   return { coordinationPlatform, cbo };
 }
 
@@ -1907,6 +1924,7 @@ function toggleConfig() {
 function loadConfigToUI() {
   document.getElementById("configCpBase").value = FHIR_CONFIG.cpServerBase;
   document.getElementById("configCboServerBase").value = FHIR_CONFIG.cboServerBase || FHIR_CONFIG.cpServerBase;
+  document.getElementById("configCboOrgId").value = FHIR_CONFIG.cboOrgId || "";
   document.getElementById("configOrgId").value = FHIR_CONFIG.orgId;
   document.getElementById("configSimulateCBO").checked = FHIR_CONFIG.simulateCBOWorkflow || false;
 
@@ -2055,7 +2073,7 @@ async function lookupPatient() {
   }
 
   try {
-    const server = getPatientServer();
+    const server = getReferralServerBase();
     console.log('Looking up patient on server:', server);
     console.log('Search criteria - ID:', patientId, 'First:', firstName, 'Last:', lastName);
 
@@ -2170,6 +2188,7 @@ function selectSearchPatient(patientId) {
 function saveConfig() {
   FHIR_CONFIG.cpServerBase = document.getElementById("configCpBase").value.trim();
   FHIR_CONFIG.cboServerBase = document.getElementById("configCboServerBase").value.trim();
+  FHIR_CONFIG.cboOrgId = document.getElementById("configCboOrgId").value.trim();
   FHIR_CONFIG.orgId = document.getElementById("configOrgId").value.trim();
   // role and patientMode are set by selection functions
   FHIR_CONFIG.simulateCBOWorkflow = document.getElementById("configSimulateCBO").checked;
@@ -2214,6 +2233,9 @@ function loadConfigFromStorage() {
     try {
       const config = JSON.parse(stored);
       Object.assign(FHIR_CONFIG, config);
+      // Older configs persisted the placeholder CBO organization id before it became
+      // an optional override. Treat it as unset so the per-service organization wins.
+      if (FHIR_CONFIG.cboOrgId === "cbo-org-example") FHIR_CONFIG.cboOrgId = "";
       console.log("Loaded FHIR config from localStorage:", FHIR_CONFIG);
     } catch (e) {
       console.error("Error loading config:", e);
@@ -2396,7 +2418,7 @@ async function submitForm() {
       safety: safety,
       service: selectedService.name,
       serviceCategory: selectedService.cat,
-      cboOrgId: selectedService.cboOrgId,
+      cboOrgId: referralCboOrgId(selectedService),
       cboOrgDisplay: selectedService.name,
       serviceRequestId: serviceRequestId,
       referenceNumber: ref,
@@ -2409,7 +2431,7 @@ async function submitForm() {
     // Determine which patient to use based on patient mode
     let actualPatientId, actualPatientDisplay;
     let patientWasReused = false;
-    const patientServer = getPatientServer();
+    const patientServer = getReferralServerBase();
 
     console.log("Patient mode:", FHIR_CONFIG.patientMode);
     console.log("Search patient ID:", FHIR_CONFIG.searchPatientId);
@@ -2700,7 +2722,7 @@ async function submitForm() {
       resourceType: "Task",
       id: taskId,
       meta: {
-        profile: ["http://hl7.org/fhir/us/sdoh-clinicalcare/StructureDefinition/SDOHCC-Task-For-Referral-Management"]
+        profile: ["http://hl7.org/fhir/us/sdoh-clinicalcare/StructureDefinition/SDOHCC-TaskForReferralManagement"]
       },
       status: "requested", // Per SDOH IG: starts as requested, CBO will update
       intent: "order",
@@ -2722,21 +2744,17 @@ async function submitForm() {
         display: FHIR_CONFIG.orgDisplay
       },
       owner: {
-        reference: `Organization/${selectedService.cboOrgId}`,
+        reference: `Organization/${referralCboOrgId(selectedService)}`,
+        display: selectedService.name
+      },
+      // SDOHCC-TaskForReferralManagement constrains focus to 1..1
+      // Reference(SDOHCCServiceRequest). Every SDOH RI consumer resolves the referral
+      // through Task.focus, so a Task without it renders as a blank row.
+      focus: {
+        reference: `ServiceRequest/${serviceRequestId}`,
         display: selectedService.name
       },
       input: [
-        {
-          type: {
-            coding: [{
-              system: "http://hl7.org/fhir/us/sdoh-clinicalcare/CodeSystem/SDOHCC-CodeSystemTemporaryCodes",
-              code: "service-request"
-            }]
-          },
-          valueReference: {
-            reference: `ServiceRequest/${serviceRequestId}`
-          }
-        },
         {
           type: {
             coding: [{
@@ -2752,7 +2770,7 @@ async function submitForm() {
     };
 
     console.log("Creating Task (status: requested)...", task);
-    const taskResponse = await createFHIRResource("Task", task, 'PUT', getCBOServerBase());
+    const taskResponse = await createFHIRResource("Task", task, 'PUT', getReferralServerBase());
     console.log("Task created:", taskResponse);
 
     // Optional: Simulate CBO Workflow — switch to CBO portal view
@@ -2898,7 +2916,7 @@ function switchToCBOPortal(referralData) {
   document.getElementById("cboFhirProcId").textContent = "—";
 
   const serverLink = document.getElementById("cboServerLink");
-  serverLink.href = `${getCBOServerBase()}/Task/${d.taskId}`;
+  serverLink.href = `${getReferralServerBase()}/Task/${d.taskId}`;
   serverLink.textContent = `🔍 Browse Task/${d.taskId} on FHIR server ↗`;
 
   // Pre-fill procedure date to today
@@ -2984,7 +3002,7 @@ async function cboUpdateTaskStatus(newStatus) {
   try {
     await patchFHIRResource("Task", d.taskId, [
       { op: "replace", path: "/status", value: newStatus }
-    ], getCBOServerBase());
+    ], getReferralServerBase());
 
     cboCurrentTaskStatus = newStatus;
     updateTaskBadge(newStatus);
@@ -3078,7 +3096,7 @@ async function cboCompleteReferral() {
       procedure.note = [{ text: procNotes }];
     }
 
-    const procResponse = await createFHIRResource("Procedure", procedure, 'PUT', getCBOServerBase());
+    const procResponse = await createFHIRResource("Procedure", procedure, 'PUT', getReferralServerBase());
     console.log("Procedure created:", procResponse);
     document.getElementById("cboFhirProcId").textContent = procedureId;
 
@@ -3100,7 +3118,7 @@ async function cboCompleteReferral() {
           }
         }]
       }
-    ], getCBOServerBase());
+    ], getReferralServerBase());
 
     // 3. Update ServiceRequest status to completed
     await patchFHIRResource("ServiceRequest", d.serviceRequestId, [
